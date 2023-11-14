@@ -6,4 +6,6 @@ pub enum Errors {
     MaxLengthExceeded,
     #[msg("Signer Mismatch")]
     InvalidSigner,
+    #[msg("project not verified")]
+    InvalidProjectVerification,
 }

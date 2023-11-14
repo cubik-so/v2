@@ -63,4 +63,29 @@ pub mod cubik_v2 {
     ) -> Result<()> {
         update_event::handler(ctx, event_key, matching_pool, metadata)
     }
+
+    pub fn create_event_join(
+        ctx: Context<EventJoinContext>,
+        counter: u64,
+        event_key: Pubkey,
+        metadata: String,
+    ) -> Result<()> {
+        create_event_join::handler(ctx, counter, event_key, metadata)
+    }
+    pub fn approve_event_join(
+        ctx: Context<UpdateEventJoinContext>,
+        counter: u64,
+        event_key: Pubkey,
+        owner: Pubkey,
+    ) -> Result<()> {
+        update_event_join::update_approve_handler(ctx, counter, event_key, owner)
+    }
+    pub fn rejected_event_join(
+        ctx: Context<UpdateEventJoinContext>,
+        counter: u64,
+        event_key: Pubkey,
+        owner: Pubkey,
+    ) -> Result<()> {
+        update_event_join::update_reject_handler(ctx, counter, event_key, owner)
+    }
 }

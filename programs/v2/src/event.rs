@@ -28,3 +28,13 @@ pub struct UpdateEvent {
     pub authority: Pubkey,
     pub metadata: String,
 }
+#[event]
+pub struct NewEventJoin {
+    pub authority: Pubkey,
+    pub metadata: String,
+}
+#[event]
+pub struct UpdateEventJoin {
+    pub authority: Pubkey,
+    pub metadata: String,
+}
