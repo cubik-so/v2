@@ -47,6 +47,7 @@ pub fn handler(
 
     project_account.owner = user_account.authority.key();
     project_account.status = ProjectVerification::UnderReview;
+    project_account.counter = counter;
     project_account.multisig = multi_sig;
     project_account.bump = ctx.bumps.project_account;
 

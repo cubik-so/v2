@@ -88,4 +88,11 @@ pub mod cubik_v2 {
     ) -> Result<()> {
         update_event_join::update_reject_handler(ctx, counter, event_key, owner)
     }
+
+    pub fn tip_user(ctx: Context<TipUserContext>, amount: u64) -> Result<()> {
+        tip_user::handler(ctx, amount)
+    }
+    pub fn tip_project(ctx: Context<TipProjectContext>, amount: u64) -> Result<()> {
+        tip_project::handler(ctx, amount)
+    }
 }

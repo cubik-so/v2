@@ -5,6 +5,7 @@ use anchor_lang::prelude::*;
 pub struct Project {
     pub owner: Pubkey,
     pub status: ProjectVerification,
+    pub counter: u64,
     pub multisig: Pubkey,
     pub bump: u8,
 }
