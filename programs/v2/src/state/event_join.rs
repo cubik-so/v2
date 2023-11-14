@@ -11,12 +11,12 @@ pub struct EventJoin {
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq, InitSpace)]
 pub enum RoundProjectStatus {
-    PENDING,
-    APPROVED,
-    REJECTED,
+    PendingApproval,
+    Approved,
+    Rejected,
 }
 impl Default for RoundProjectStatus {
     fn default() -> Self {
-        RoundProjectStatus::PENDING
+        RoundProjectStatus::PendingApproval
     }
 }

@@ -29,4 +29,38 @@ pub mod cubik_v2 {
         create_project::handler(ctx, counter, multi_sig, metadata);
         Ok(())
     }
+
+    pub fn update_project_status_verified(
+        ctx: Context<UpdateProjectContext>,
+        counter: u64,
+        owner: Pubkey,
+    ) -> Result<()> {
+        update_project_status::verified_handler(ctx, counter, owner);
+        Ok(())
+    }
+    pub fn update_project_status_failed(
+        ctx: Context<UpdateProjectContext>,
+        counter: u64,
+        owner: Pubkey,
+    ) -> Result<()> {
+        update_project_status::verification_failed_handler(ctx, counter, owner);
+        Ok(())
+    }
+
+    pub fn create_event(
+        ctx: Context<CreateEventContext>,
+        event_key: Pubkey,
+        matching_pool: u64,
+        metadata: String,
+    ) -> Result<()> {
+        create_event::handler(ctx, event_key, matching_pool, metadata)
+    }
+    pub fn update_event(
+        ctx: Context<UpdateEventContext>,
+        event_key: Pubkey,
+        matching_pool: u64,
+        metadata: String,
+    ) -> Result<()> {
+        update_event::handler(ctx, event_key, matching_pool, metadata)
+    }
 }

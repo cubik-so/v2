@@ -17,3 +17,14 @@ pub struct UpdateProjectStatus {
     pub authority: Pubkey,
     pub status: ProjectVerification,
 }
+#[event]
+pub struct NewEvent {
+    pub authority: Pubkey,
+    pub metadata: String,
+    pub event_key: Pubkey,
+}
+#[event]
+pub struct UpdateEvent {
+    pub authority: Pubkey,
+    pub metadata: String,
+}
