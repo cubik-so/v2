@@ -14,7 +14,7 @@ pub struct CreateProjectContext<'info> {
     #[account(init,
         payer = owners,
         space = 8 + Project::INIT_SPACE,
-        seeds = [b"project".as_ref(),owners.key().as_ref(),counter.to_le_bytes().as_ref()],
+        seeds = [b"project".as_ref(),owners.key().as_ref(),&counter.to_le_bytes()],
         bump
     )]
     pub project_account: Box<Account<'info, Project>>,

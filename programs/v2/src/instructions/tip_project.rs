@@ -11,7 +11,7 @@ pub struct TipProjectContext<'info> {
     pub authority: Signer<'info>,
 
     #[account(mut,
-    seeds = [b"project",project_account.owner.key().as_ref(),project_account.counter.to_le_bytes().as_ref()],
+    seeds = [b"project",project_account.owner.key().as_ref(),&project_account.counter.to_le_bytes()],
     bump = project_account.bump
     )]
     pub project_account: Box<Account<'info, Project>>,
