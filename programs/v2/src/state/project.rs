@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
 #[account]
-#[derive(Default)]
+#[derive(Default, InitSpace)]
 pub struct Project {
     pub owner: Pubkey,
     pub authority: Pubkey,
@@ -10,7 +10,7 @@ pub struct Project {
     pub bump: u8,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq, Debug)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq, Debug, InitSpace)]
 pub enum ProjectVerification {
     REVIEW,
     VERIFIED,
