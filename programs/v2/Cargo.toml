@@ -17,5 +17,8 @@ default = []
 
 [dependencies]
 anchor-lang = "0.29.0"
-squads-multisig-program = "0.2.1"
+squads-multisig-program = { version = "0.2.1", features = [
+    "cpi",
+    "no-entrypoint",
+] }
 anchor-spl = "0.29.0"

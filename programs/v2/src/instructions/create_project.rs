@@ -2,7 +2,8 @@ use crate::event::NewProject;
 use crate::state::{user, Admin, Project, ProjectVerification, User};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
-// use solana_program::system_instruction::};
+use squads_multisig_program::program::SquadsMultisigProgram;
+use squads_multisig_program::{self, MultisigCreate};
 
 #[derive(Accounts)]
 #[instruction(counter:u64)]
@@ -29,6 +30,7 @@ pub struct CreateProjectContext<'info> {
     bump = user_account.bump
     )]
     pub user_account: Box<Account<'info, User>>,
+
     // Misc Accounts
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
@@ -44,6 +46,17 @@ pub fn handler(
 ) -> Result<()> {
     let project_account = &mut ctx.accounts.project_account;
     let user_account = &mut ctx.accounts.user_account;
+
+    // squads_multisig_program::cpi::multisig_create(
+    //     ctx,
+    //     squads_multisig_program::MultisigCreateArgs {
+    //         members,
+    //         threshold,
+    //         config_authority,
+    //         time_lock,
+    //         memo,
+    //     },
+    // );
 
     project_account.owner = user_account.authority.key();
     project_account.status = ProjectVerification::UnderReview;
