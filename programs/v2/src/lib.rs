@@ -19,4 +19,14 @@ pub mod cubik_v2 {
         create_user::handler(ctx, username, metadata);
         Ok(())
     }
+
+    pub fn create_project(
+        ctx: Context<CreateProjectContext>,
+        counter: u64,
+        multi_sig: Pubkey,
+        metadata: String,
+    ) -> Result<()> {
+        create_project::handler(ctx, counter, multi_sig, metadata);
+        Ok(())
+    }
 }

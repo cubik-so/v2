@@ -4,4 +4,6 @@ use anchor_lang::prelude::*;
 pub enum Errors {
     #[msg("max length is 32")]
     MaxLengthExceeded,
+    #[msg("Signer Mismatch")]
+    InvalidSigner,
 }
