@@ -1,0 +1,28 @@
+{
+  "name": "@cubik/sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "generate": "pnpm solita",
+    "ts": "tsc --noEmit",
+    "prepare:canary": "pnpm build && npm version --prerelease --preid=canary"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@metaplex-foundation/solita": "^0.20.0",
+    "@types/bn.js": "^5.1.5",
+    "@types/node": "^20.9.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@metaplex-foundation/beet": "^0.7.1",
+    "@metaplex-foundation/beet-solana": "^0.4.0",
+    "@solana/spl-token": "^0.3.9",
+    "@solana/web3.js": "^1.87.6",
+    "bn.js": "^5.2.1"
+  }
+}
