@@ -2,7 +2,6 @@ use crate::event::NewProject;
 use crate::state::{user, Admin, Project, ProjectVerification, User};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
-use squads_multisig_program::program::SquadsMultisigProgram;
 use squads_multisig_program::{self, MultisigCreate};
 
 #[derive(Accounts)]
