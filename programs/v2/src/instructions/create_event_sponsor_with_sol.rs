@@ -52,8 +52,6 @@ pub fn handler(ctx: Context<EventSponsorSolContext>,vault:Pubkey,token:Pubkey,to
             ],
         );
 
-
-
     let sponsor_account = &mut ctx.accounts.sponsor_account;
     sponsor_account.authority = ctx.accounts.authority.key();
     sponsor_account.token = token;

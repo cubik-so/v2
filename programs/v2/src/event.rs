@@ -1,4 +1,4 @@
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, solana_program::pubkey};
 
 use crate::state::ProjectVerification;
 #[event]
@@ -37,4 +37,15 @@ pub struct NewEventJoin {
 pub struct UpdateEventJoin {
     pub authority: Pubkey,
     pub metadata: String,
+}
+
+#[event]
+pub struct NewContribution {
+    pub user: Pubkey,
+    pub create_key: Pubkey,
+    pub amount: u64,
+    pub split: u64,
+    pub event_join_account: Pubkey,
+    pub event_account: Pubkey,
+    pub project_account: Pubkey,
 }

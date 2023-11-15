@@ -5,5 +5,6 @@ use anchor_lang::prelude::*;
 pub struct Event {
     pub authority: Pubkey,
     pub matching_pool: u64,
+    pub event_key: Pubkey,
     pub bump: u8,
 }

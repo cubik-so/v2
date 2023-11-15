@@ -1,3 +1,4 @@
+pub mod create_contribution;
 pub mod create_event;
 pub mod create_event_join;
 pub mod create_event_sponsor_with_sol;
@@ -10,6 +11,7 @@ pub mod update_event;
 pub mod update_event_join;
 pub mod update_project_status;
 
+pub use create_contribution::*;
 pub use create_event::*;
 pub use create_event_join::*;
 pub use create_event_join::*;
