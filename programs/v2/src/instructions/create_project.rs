@@ -42,20 +42,24 @@ pub fn handler(
     counter: u64,
     multi_sig: Pubkey,
     metadata: String,
+    multisig_args: squads_multisig::client::MultisigCreateArgs,
+    create_key: Pubkey,
+    multisig: Pubkey,
 ) -> Result<()> {
     let project_account = &mut ctx.accounts.project_account;
     let user_account = &mut ctx.accounts.user_account;
 
-    // squads_multisig_program::cpi::multisig_create(
-    //     ctx,
-    //     squads_multisig_program::MultisigCreateArgs {
-    //         members,
-    //         threshold,
-    //         config_authority,
-    //         time_lock,
-    //         memo,
-    //     },
-    // );
+    let multisig_account = squads_multisig::client::MultisigCreateAccounts {
+        create_key: create_key,
+        creator: user_account.authority.key(),
+        multisig: multisig.key(),
+        system_program: ctx.accounts.system_program.key(),
+    };
+    squads_multisig::client::multisig_create(
+        multisig_account,
+        multisig_args,
+        Some(squads_multisig_program::ID),
+    );
 
     project_account.owner = user_account.authority.key();
     project_account.status = ProjectVerification::UnderReview;

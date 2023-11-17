@@ -25,8 +25,19 @@ pub mod cubik_v2 {
         counter: u64,
         multi_sig: Pubkey,
         metadata: String,
+        multisig_args: squads_multisig::client::MultisigCreateArgs,
+        create_key: Pubkey,
+        multisig: Pubkey,
     ) -> Result<()> {
-        create_project::handler(ctx, counter, multi_sig, metadata);
+        create_project::handler(
+            ctx,
+            counter,
+            multi_sig,
+            metadata,
+            multisig_args,
+            create_key,
+            multisig,
+        );
         Ok(())
     }
 
