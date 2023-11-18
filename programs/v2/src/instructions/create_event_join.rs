@@ -36,7 +36,7 @@ pub fn handler(ctx: Context<EventJoinContext>,counter:u64,event_key:Pubkey,metad
     event_join_account.authority = ctx.accounts.authority.key();
     event_join_account.donation = 0;
     event_join_account.status = RoundProjectStatus::PendingApproval;
-    event_join_account.bump = ctx.bumps.event_join_account;
+    event_join_account.bump = *ctx.bumps.get("event_join_account").unwrap();
 
     emit!(NewEventJoin {
         authority: ctx.accounts.authority.key(),

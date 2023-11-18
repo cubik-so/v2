@@ -3,12 +3,15 @@ mod errors;
 pub mod event;
 pub mod instructions;
 use instructions::*;
+pub use squads_multisig_program::Member;
 pub mod state;
 
 declare_id!("3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS");
 
 #[program]
 pub mod cubik_v2 {
+    use squads_multisig_program::Member;
+
     use super::*;
 
     pub fn create_user(
@@ -25,8 +28,23 @@ pub mod cubik_v2 {
         counter: u64,
         multi_sig: Pubkey,
         metadata: String,
+        members: Vec<Member>,
+        threshold: u16,
+        config_authority: Option<Pubkey>,
+        time_lock: u32,
+        memo: Option<String>,
     ) -> Result<()> {
-        create_project::handler(ctx, counter, multi_sig, metadata);
+        create_project::handler(
+            ctx,
+            counter,
+            multi_sig,
+            metadata,
+            members,
+            threshold,
+            config_authority,
+            time_lock,
+            memo,
+        );
         Ok(())
     }
 

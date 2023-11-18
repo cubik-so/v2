@@ -27,7 +27,7 @@ pub fn handler(ctx: Context<CreateEventContext>, event_key: Pubkey,matching_pool
     let event_account = &mut ctx.accounts.event_account;
     event_account.authority = ctx.accounts.authority.key();
     event_account.matching_pool = matching_pool;
-    event_account.bump = ctx.bumps.event_account;
+    event_account.bump = *ctx.bumps.get("event_account").unwrap();
     emit!(NewEvent{
         authority: ctx.accounts.authority.key(),
         metadata,
