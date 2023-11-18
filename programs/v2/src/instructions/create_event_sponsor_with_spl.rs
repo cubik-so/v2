@@ -57,7 +57,7 @@ pub fn handler(ctx: Context<EventSponsorContext>,vault:Pubkey,token:Pubkey,total
     sponsor_account.total_amount = total_amount;
     sponsor_account.total_amount_paid = total_amount_paid;
     sponsor_account.vault = vault;
-    sponsor_account.bump = ctx.bumps.sponsor_account;
+    sponsor_account.bump = *ctx.bumps.get("sponsor_account").unwrap();
  
     Ok(())
 }
