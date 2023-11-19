@@ -8,3 +8,6 @@ test-ledger
 .yarn
 lib
 .crates
+
+
+wallets.json

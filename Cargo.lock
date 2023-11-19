@@ -898,8 +898,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "cubik_v2"
-version = "0.1.0"
+name = "cubik"
+version = "0.0.0"
 dependencies = [
  "anchor-lang",
  "anchor-spl",

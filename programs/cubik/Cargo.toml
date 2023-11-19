@@ -1,12 +1,12 @@
 [package]
-name = "cubik_v2"
-version = "0.1.0"
+name = "cubik"
+version = "0.0.0"
 description = "Created with Anchor"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "v2"
+name = "cubik"
 
 [features]
 no-entrypoint = []

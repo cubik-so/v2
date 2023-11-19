@@ -1,8 +1,10 @@
+use std::vec;
+
 use crate::event::NewProject;
 use crate::state::{user, Admin, Project, ProjectVerification, User};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
-use squads_multisig_program::{self, cpi, Member, Multisig, MultisigCreate};
+use squads_multisig_program::{self, cpi, Member, Multisig, MultisigCreate, Permission, Permissions};
 
 #[derive(Accounts)]
 #[instruction( 
@@ -80,6 +82,8 @@ pub fn handler(
         system_program: ctx.accounts.system_program.to_account_info(),
     };
 
+   
+
     let cpi_ctx_squads = CpiContext::new(
         ctx.accounts.squads_program.to_account_info(),
         create_multisig,
@@ -88,11 +92,11 @@ pub fn handler(
     squads_multisig_program::cpi::multisig_create(
         cpi_ctx_squads,
         squads_multisig_program::MultisigCreateArgs {
-            members,
-            threshold,
             config_authority,
-            time_lock,
+            members,
             memo,
+            threshold,
+            time_lock
         },
     );
 
