@@ -5,15 +5,27 @@ pub mod event;
 pub mod instructions;
 use instructions::*;
 pub mod state;
+use state::*;
 
 declare_id!("CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7");
 
 #[program]
 pub mod cubik {
 
-    use squads_multisig_program::Member;
-
     use super::*;
+
+    pub fn create_admin(ctx: Context<CreateAdminContext>) -> Result<()> {
+        create_admin::handler(ctx);
+        Ok(())
+    }
+    pub fn create_sub_admin(
+        ctx: Context<CreateSubAdminContext>,
+        create_key: Pubkey,
+        permission: AdminPermission,
+    ) -> Result<()> {
+        create_sub_admin::handler(ctx, create_key, permission);
+        Ok(())
+    }
 
     pub fn create_user(
         ctx: Context<CreateUserContext>,
@@ -57,6 +69,7 @@ pub mod cubik {
         update_project_status::verified_handler(ctx, counter, owner);
         Ok(())
     }
+
     pub fn update_project_status_failed(
         ctx: Context<UpdateProjectContext>,
         counter: u64,
@@ -74,6 +87,7 @@ pub mod cubik {
     ) -> Result<()> {
         create_event::handler(ctx, event_key, matching_pool, metadata)
     }
+
     pub fn update_event(
         ctx: Context<UpdateEventContext>,
         event_key: Pubkey,
@@ -91,6 +105,7 @@ pub mod cubik {
     ) -> Result<()> {
         create_event_join::handler(ctx, counter, event_key, metadata)
     }
+
     pub fn approve_event_join(
         ctx: Context<UpdateEventJoinContext>,
         counter: u64,
@@ -99,6 +114,7 @@ pub mod cubik {
     ) -> Result<()> {
         update_event_join::update_approve_handler(ctx, counter, event_key, owner)
     }
+
     pub fn rejected_event_join(
         ctx: Context<UpdateEventJoinContext>,
         counter: u64,
@@ -111,6 +127,7 @@ pub mod cubik {
     pub fn tip_user(ctx: Context<TipUserContext>, amount: u64) -> Result<()> {
         tip_user::handler(ctx, amount)
     }
+
     pub fn tip_project(ctx: Context<TipProjectContext>, amount: u64) -> Result<()> {
         tip_project::handler(ctx, amount)
     }

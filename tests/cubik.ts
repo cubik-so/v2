@@ -21,17 +21,17 @@ describe('cubik_v2', () => {
 
   it('Create User', async () => {
     console.log(keypair);
-    // const [userAccount] = anchor.web3.PublicKey.findProgramAddressSync(
-    //   [Buffer.from('user'),],
-    //   program.programId
-    // );
-    // const tx = await program.methods
-    //   .createUser('username', 'admin')
-    //   .accounts({
-    //     userAccount: userAccount,
-    //   })
-    //   .rpc();
-    // console.log('Your transaction signature', tx);
+    const [userAccount] = anchor.web3.PublicKey.findProgramAddressSync(
+      [Buffer.from('user')],
+      program.programId
+    );
+    const tx = await program.methods
+      .createUser('username', 'admin')
+      .accounts({
+        userAccount: userAccount,
+      })
+      .rpc();
+    console.log('Your transaction signature', tx);
   });
   // it('Create User', async () => {
   //   const [] = anchor.web3.PublicKey.findProgramAddressSync(

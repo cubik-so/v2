@@ -8,4 +8,6 @@ pub enum Errors {
     InvalidSigner,
     #[msg("project not verified")]
     InvalidProjectVerification,
+    #[msg("Invalid Admin")]
+    InvalidAdmin,
 }
