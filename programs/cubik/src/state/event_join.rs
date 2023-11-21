@@ -5,7 +5,7 @@ use anchor_lang::prelude::*;
 pub struct EventJoin {
     pub authority: Pubkey,
     pub status: RoundProjectStatus,
-    pub donation: u128,
+    pub donation: u64,
     pub bump: u8,
 }
 

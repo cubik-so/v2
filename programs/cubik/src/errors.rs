@@ -2,12 +2,14 @@ use anchor_lang::prelude::*;
 
 #[error_code]
 pub enum Errors {
-    #[msg("max length is 32")]
+    #[msg("Error: Maximum length of 32 characters exceeded")]
     MaxLengthExceeded,
-    #[msg("Signer Mismatch")]
+    #[msg("Error: Mismatch in signer credentials")]
     InvalidSigner,
-    #[msg("project not verified")]
+    #[msg("Error: Project verification failed or not present")]
     InvalidProjectVerification,
-    #[msg("Invalid Admin")]
+    #[msg("Error: Admin credentials invalid or not recognized")]
     InvalidAdmin,
+    #[msg("Error: Unauthorized access attempt detected")]
+    Permission,
 }

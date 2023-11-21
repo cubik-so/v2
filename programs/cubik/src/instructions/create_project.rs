@@ -18,34 +18,32 @@ use squads_multisig_program::{self, cpi, Member, Multisig, MultisigCreate, Permi
     memo: Option<String>
 )]
 pub struct CreateProjectContext<'info> {
+
     #[account(mut)]
-    pub owners: Signer<'info>,
+    pub owner: Signer<'info>,
+    
+    #[account(mut)]
+    pub create_key: Signer<'info>,
+
 
     #[account(init,
-        payer = owners,
+        payer = owner,
         space = 8 + Project::INIT_SPACE,
-        seeds = [b"project".as_ref(),owners.key().as_ref(),&counter.to_le_bytes()],
+        seeds = [b"project".as_ref(),owner.key().as_ref(),&counter.to_le_bytes()],
         bump
     )]
     pub project_account: Box<Account<'info, Project>>,
 
     #[account(mut,
-        seeds = [b"admin".as_ref()],
-        bump = admin_account.bump
-    )]
-    pub admin_account: Box<Account<'info, Admin>>,
-
-    #[account(mut,
-    seeds = [b"user".as_ref(),owners.key().as_ref()],
-    bump = user_account.bump
+        seeds = [b"user".as_ref(),owner.key().as_ref()],
+        bump = user_account.bump
     )]
     pub user_account: Box<Account<'info, User>>,
 
-    pub create_key: Signer<'info>,
 
     #[account(
         init,
-        payer = owners,
+        payer = owner,
         space = Multisig::size(members.len()),
         seeds = [squads_multisig_program::SEED_PREFIX, squads_multisig_program::SEED_MULTISIG, create_key.key().as_ref()],
         bump
@@ -77,7 +75,7 @@ pub fn handler(
 
     let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreate {
         create_key: ctx.accounts.create_key.to_account_info(), // this is example
-        creator: ctx.accounts.owners.to_account_info(),
+        creator: ctx.accounts.owner.to_account_info(),
         multisig: user_account.to_account_info(), //
         system_program: ctx.accounts.system_program.to_account_info(),
     };

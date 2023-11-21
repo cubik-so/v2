@@ -11,7 +11,7 @@ pub struct CreateUserContext<'info> {
 
     #[account(init,
         payer = authority,
-        space = 8 +User::INIT_SPACE,
+        space = 8 + User::INIT_SPACE,
         seeds = [b"user".as_ref(),authority.key().as_ref()],
         bump 
     )]
@@ -28,7 +28,7 @@ pub fn handler(ctx: Context<CreateUserContext>, username: String,metadata:String
     
     let user_account = &mut ctx.accounts.user_account;
 
-    require!(username.len() < 32, Errors::MaxLengthExceeded);
+    require!(username.len() <= 32, Errors::MaxLengthExceeded);
     user_account.authority = ctx.accounts.authority.key();
     user_account.bump = *ctx.bumps.get("user_account").unwrap();
     

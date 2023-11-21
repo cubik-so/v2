@@ -17,7 +17,10 @@ pub struct EventJoinContext<'info> {
     )]
     pub event_join_account: Box<Account<'info, EventJoin>>,
 
-    #[account(mut,seeds=[b"project",authority.key().as_ref(),counter.to_le_bytes().as_ref()],bump = project_account.bump)]
+    #[account(mut,
+            seeds=[b"project",authority.key().as_ref(),counter.to_le_bytes().as_ref()],
+            bump = project_account.bump
+        )]
     pub project_account: Box<Account<'info,Project>>,
 
 

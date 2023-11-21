@@ -1,5 +1,6 @@
-use crate::event::NewContribution;
-use crate::state::{Admin, Event, EventJoin, Project};
+use crate::errors::Errors;
+use crate::event::{self, NewContribution};
+use crate::state::{Admin, Event, EventJoin, Project, RoundProjectStatus};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
@@ -18,15 +19,6 @@ pub struct CreateContributionContext<'info> {
 
     #[account(mut, constraint = token_ata_receiver.mint ==  token_mint.key(), constraint = token_ata_receiver.owner == project_account.multisig.key())]
     pub token_ata_receiver: Box<Account<'info, TokenAccount>>,
-
-    #[account(mut, constraint = token_ata_admin.mint ==  token_mint.key(), constraint = token_ata_admin.owner == admin_account.authority.key())]
-    pub token_ata_admin: Box<Account<'info, TokenAccount>>,
-
-    #[account(mut,
-        seeds = [b"admin".as_ref()],
-        bump = admin_account.bump
-    )]
-    pub admin_account: Account<'info, Admin>,
 
     #[account(mut,
         seeds = [b"project".as_ref(),project_account.owner.key().as_ref(),&project_account.counter.to_le_bytes()],
@@ -57,6 +49,13 @@ pub fn handler(
     split: u64,
     create_key: Pubkey,
 ) -> Result<()> {
+    let event_join = &mut ctx.accounts.event_join_account.clone();
+
+    require!(
+        event_join.status != RoundProjectStatus::Approved,
+        Errors::InvalidProjectVerification
+    );
+
     let transfer_instruction = anchor_spl::token::Transfer {
         from: ctx.accounts.token_ata_sender.to_account_info(),
         to: ctx.accounts.token_ata_receiver.to_account_info(),
@@ -68,9 +67,7 @@ pub fn handler(
     );
     anchor_spl::token::transfer(cpi_ctx_trans, amount)?;
 
-    if split > 0 {
-        //  put the split logic here
-    }
+    event_join.donation = event_join.donation + amount;
 
     emit!(NewContribution {
         user: ctx.accounts.authority.key(),
