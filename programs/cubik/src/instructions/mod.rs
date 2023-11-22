@@ -4,8 +4,6 @@ pub mod event;
 pub mod project;
 pub mod sponsor;
 pub mod tip;
-pub mod update_event_sponsor_with_sol;
-pub mod update_event_sponsor_with_spl;
 pub mod user;
 
 pub use admin::*;
@@ -14,6 +12,4 @@ pub use event::*;
 pub use project::*;
 pub use sponsor::*;
 pub use tip::*;
-pub use update_event_sponsor_with_sol::*;
-pub use update_event_sponsor_with_spl::*;
 pub use user::*;
