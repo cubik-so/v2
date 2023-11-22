@@ -1,8 +1,10 @@
-use crate::state::{User};
+use crate::errors::Errors;
+use crate::event::*;
+use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
-use crate::errors::Errors;
-use crate::event::NewUser;
+
+
 
 #[derive(Accounts)]
 pub struct CreateUserContext<'info> {
@@ -24,7 +26,7 @@ pub struct CreateUserContext<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-pub fn handler(ctx: Context<CreateUserContext>, username: String,metadata:String) -> Result<()> {
+pub fn create_user(ctx: Context<CreateUserContext>, username: String,metadata:String) -> Result<()> {
     
     let user_account = &mut ctx.accounts.user_account;
 
