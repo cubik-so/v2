@@ -30,11 +30,13 @@ pub fn handler(ctx: Context<CreateUserContext>, username: String,metadata:String
 
     require!(username.len() <= 32, Errors::MaxLengthExceeded);
     user_account.authority = ctx.accounts.authority.key();
+    
     user_account.bump = *ctx.bumps.get("user_account").unwrap();
     
     emit!(NewUser {
         authority: ctx.accounts.authority.key(),
-        metadata:metadata
+        metadata:metadata,
+        username,
     });
     Ok(())
 }

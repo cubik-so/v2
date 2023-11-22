@@ -12,4 +12,6 @@ pub enum Errors {
     InvalidAdmin,
     #[msg("Error: Unauthorized access attempt detected")]
     Permission,
+    #[msg("Error: Owner of project cannot tip the Project itself")]
+    InvalidTip,
 }

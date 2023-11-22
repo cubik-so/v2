@@ -39,6 +39,7 @@ pub struct EventSponsorSolContext<'info> {
 pub fn handler(ctx: Context<EventSponsorSolContext>,vault:Pubkey,token:Pubkey,total_amount:u64,total_amount_paid:u64,amount:u64) -> Result<()> {
      let authority = &mut ctx.accounts.authority;
  let receiver_account = &mut ctx.accounts.receiver_account;
+ 
      let ix = transfer(
             &authority.key(),
             &vault.key(),

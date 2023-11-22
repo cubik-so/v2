@@ -4,19 +4,19 @@ use anchor_lang::prelude::*;
 #[derive(Default, InitSpace)]
 pub struct EventJoin {
     pub authority: Pubkey,
-    pub status: RoundProjectStatus,
+    pub status: EventProjectStatus,
     pub donation: u64,
     pub bump: u8,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq, InitSpace)]
-pub enum RoundProjectStatus {
+pub enum EventProjectStatus {
     PendingApproval,
     Approved,
     Rejected,
 }
-impl Default for RoundProjectStatus {
+impl Default for EventProjectStatus {
     fn default() -> Self {
-        RoundProjectStatus::PendingApproval
+        EventProjectStatus::PendingApproval
     }
 }

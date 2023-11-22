@@ -3,11 +3,12 @@ use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
 
-use crate::state::Project;
+use crate::errors::Errors;
+use crate::state::{Project, User};
 
 #[derive(Accounts)]
 pub struct TipProjectContext<'info> {
-    #[account(mut)]
+    #[account(mut, constraint = project_account.owner.key() != authority.key() @ Errors::InvalidTip)]
     pub authority: Signer<'info>,
 
     #[account(mut,
@@ -15,6 +16,12 @@ pub struct TipProjectContext<'info> {
     bump = project_account.bump
     )]
     pub project_account: Box<Account<'info, Project>>,
+
+    #[account(mut,
+        seeds = [b"user".as_ref(),authority.key().as_ref()],
+        bump = user_account.bump
+    )]
+    pub user_account: Box<Account<'info, User>>,
 
     #[account(mut)]
     pub token_mint: Account<'info, Mint>,
@@ -40,6 +47,7 @@ pub fn handler(ctx: Context<TipProjectContext>, amount: u64) -> Result<()> {
         to: ctx.accounts.token_ata_receiver.to_account_info(),
         authority: ctx.accounts.authority.to_account_info(),
     };
+
     let cpi_ctx_trans = CpiContext::new(
         ctx.accounts.token_program.to_account_info(),
         transfer_instruction,

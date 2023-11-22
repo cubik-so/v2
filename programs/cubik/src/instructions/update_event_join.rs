@@ -1,5 +1,5 @@
 use crate::errors::Errors;
-use crate::state::{Admin, Event, EventJoin, Project, ProjectVerification, RoundProjectStatus};
+use crate::state::{Admin, Event, EventJoin, EventProjectStatus, Project, ProjectVerification};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 
@@ -52,7 +52,7 @@ pub fn update_approve_handler(
         Errors::InvalidProjectVerification
     );
 
-    event_join_account.status = RoundProjectStatus::Approved;
+    event_join_account.status = EventProjectStatus::Approved;
 
     Ok(())
 }
@@ -70,7 +70,7 @@ pub fn update_reject_handler(
         Errors::InvalidProjectVerification
     );
 
-    event_join_account.status = RoundProjectStatus::Rejected;
+    event_join_account.status = EventProjectStatus::Rejected;
 
     Ok(())
 }
