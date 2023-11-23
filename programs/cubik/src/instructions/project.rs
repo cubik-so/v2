@@ -5,7 +5,6 @@ use crate::event::{NewProject, UpdateProjectStatus, NewEventJoin};
 use crate::state::{user, Admin, Project, ProjectVerification, User, EventJoin, EventProjectStatus, Event};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
-use squads_multisig_program::{self, cpi, Member, Multisig, MultisigCreate, Permission, Permissions};
 
 
 
@@ -16,39 +15,39 @@ pub fn create_project(
     counter: u64,
     multi_sig: Pubkey,
     metadata: String,
-    members: Vec<Member>,
-    threshold: u16,
-    config_authority: Option<Pubkey>,
-    time_lock: u32,
-    memo: Option<String>,
+    // members: Vec<Member>,
+    // threshold: u16,
+    // config_authority: Option<Pubkey>,
+    // time_lock: u32,
+    // memo: Option<String>,
 ) -> Result<()> {
     let project_account = &mut ctx.accounts.project_account;
     let user_account = &mut ctx.accounts.user_account;
 
-    let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreate {
-        create_key: ctx.accounts.create_key.to_account_info(), // this is example
-        creator: ctx.accounts.owner.to_account_info(),
-        multisig: user_account.to_account_info(), //
-        system_program: ctx.accounts.system_program.to_account_info(),
-    };
+    // let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreate {
+    //     create_key: ctx.accounts.create_key.to_account_info(), // this is example
+    //     creator: ctx.accounts.owner.to_account_info(),
+    //     multisig: user_account.to_account_info(), //
+    //     system_program: ctx.accounts.system_program.to_account_info(),
+    // };
 
    
 
-    let cpi_ctx_squads = CpiContext::new(
-        ctx.accounts.squads_program.to_account_info(),
-        create_multisig,
-    );
+    // let cpi_ctx_squads = CpiContext::new(
+    //     ctx.accounts.squads_program.to_account_info(),
+    //     create_multisig,
+    // );
 
-    squads_multisig_program::cpi::multisig_create(
-        cpi_ctx_squads,
-        squads_multisig_program::MultisigCreateArgs {
-            config_authority,
-            members,
-            memo,
-            threshold,
-            time_lock
-        },
-    );
+    // squads_multisig_program::cpi::multisig_create(
+    //     cpi_ctx_squads,
+    //     squads_multisig_program::MultisigCreateArgs {
+    //         config_authority,
+    //         members,
+    //         memo,
+    //         threshold,
+    //         time_lock
+    //     },
+    // );
 
     project_account.owner = user_account.authority.key();
     project_account.status = ProjectVerification::UnderReview;
@@ -114,19 +113,19 @@ pub fn verification_failed_handler(
     counter: u64,
     multi_sig: Pubkey,
     metadata: String,
-    members: Vec<Member>,
-    threshold: u16,
-    config_authority: Option<Pubkey>,
-    time_lock: u32,
-    memo: Option<String>
+    // members: Vec<Member>,
+    // threshold: u16,
+    // config_authority: Option<Pubkey>,
+    // time_lock: u32,
+    // memo: Option<String>
 )]
 pub struct CreateProjectContext<'info> {
 
     #[account(mut)]
     pub owner: Signer<'info>,
     
-    #[account(mut)]
-    pub create_key: Signer<'info>,
+    // #[account(mut)]
+    // pub create_key: Signer<'info>,
 
 
     #[account(init,
@@ -144,17 +143,18 @@ pub struct CreateProjectContext<'info> {
     pub user_account: Box<Account<'info, User>>,
 
 
-    #[account(
-        init,
-        payer = owner,
-        space = Multisig::size(members.len()),
-        seeds = [squads_multisig_program::SEED_PREFIX, squads_multisig_program::SEED_MULTISIG, create_key.key().as_ref()],
-        bump
-    )]
-    pub multisig: Account<'info, Multisig>,
+    // #[account(
+    //     init,
+    //     payer = owner,
+    //     space = Multisig::size(members.len()),
+    //     seeds = [squads_multisig_program::SEED_PREFIX, squads_multisig_program::SEED_MULTISIG, create_key.key().as_ref()],
+    //     bump
+    // )]
+    // pub multisig: Account<'info, Multisig>,
 
-    #[account(address = squads_multisig_program::ID)]
-    pub squads_program: Program<'info, squads_multisig_program::program::SquadsMultisigProgram>,
+    // #[account(address = squads_multisig_program::ID)]
+    // pub squads_program: Program<'info, squads_multisig_program::program::SquadsMultisigProgram>,
+
     // Misc Accounts
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
