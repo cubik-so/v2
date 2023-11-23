@@ -2,6 +2,13 @@ use anchor_lang::prelude::*;
 
 #[account]
 #[derive(Default, InitSpace)]
+pub struct SponsorTeam {
+    pub authority: Pubkey,
+    pub bump: u8,
+}
+
+#[account]
+#[derive(Default, InitSpace)]
 pub struct Sponsor {
     pub authority: Pubkey,
     pub vault: Pubkey,

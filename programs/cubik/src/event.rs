@@ -8,6 +8,17 @@ pub struct NewUser {
     pub metadata: String,
 }
 #[event]
+pub struct NewSponsor {
+    pub authority: Pubkey,
+    pub metadata: String,
+}
+
+#[event]
+pub struct UpdateSponsorEvent {
+    pub authority: Pubkey,
+    pub metadata: String,
+}
+#[event]
 pub struct NewProject {
     pub authority: Pubkey,
     pub counter: u64,
