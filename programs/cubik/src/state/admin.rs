@@ -8,8 +8,7 @@ pub struct Admin {
     pub bump: u8,
 }
 
-#[account]
-#[derive(Default, InitSpace)]
+#[derive(Default,AnchorDeserialize,AnchorSerialize,Clone,InitSpace)]
 pub struct AdminPermission {
     pub full: bool,
     pub project_status: bool,
