@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as web3 from '@solana/web3.js'
-import * as beet from '@metaplex-foundation/beet'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as web3 from "@solana/web3.js";
+import * as beet from "@metaplex-foundation/beet";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
 
 /**
  * Arguments used to create {@link Event}
@@ -15,13 +15,13 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
  * @category generated
  */
 export type EventArgs = {
-  authority: web3.PublicKey
-  matchingPool: beet.bignum
-  eventKey: web3.PublicKey
-  bump: number
-}
+  authority: web3.PublicKey;
+  matchingPool: beet.bignum;
+  eventKey: web3.PublicKey;
+  bump: number;
+};
 
-export const eventDiscriminator = [125, 192, 125, 158, 9, 115, 152, 233]
+export const eventDiscriminator = [125, 192, 125, 158, 9, 115, 152, 233];
 /**
  * Holds the data for the {@link Event} Account and provides de/serialization
  * functionality for that data
@@ -46,7 +46,7 @@ export class Event implements EventArgs {
       args.matchingPool,
       args.eventKey,
       args.bump
-    )
+    );
   }
 
   /**
@@ -57,7 +57,7 @@ export class Event implements EventArgs {
     accountInfo: web3.AccountInfo<Buffer>,
     offset = 0
   ): [Event, number] {
-    return Event.deserialize(accountInfo.data, offset)
+    return Event.deserialize(accountInfo.data, offset);
   }
 
   /**
@@ -74,11 +74,11 @@ export class Event implements EventArgs {
     const accountInfo = await connection.getAccountInfo(
       address,
       commitmentOrConfig
-    )
+    );
     if (accountInfo == null) {
-      throw new Error(`Unable to find Event account at ${address}`)
+      throw new Error(`Unable to find Event account at ${address}`);
     }
-    return Event.fromAccountInfo(accountInfo, 0)[0]
+    return Event.fromAccountInfo(accountInfo, 0)[0];
   }
 
   /**
@@ -89,10 +89,10 @@ export class Event implements EventArgs {
    */
   static gpaBuilder(
     programId: web3.PublicKey = new web3.PublicKey(
-      '3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS'
+      "3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS"
     )
   ) {
-    return beetSolana.GpaBuilder.fromStruct(programId, eventBeet)
+    return beetSolana.GpaBuilder.fromStruct(programId, eventBeet);
   }
 
   /**
@@ -100,7 +100,7 @@ export class Event implements EventArgs {
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
   static deserialize(buf: Buffer, offset = 0): [Event, number] {
-    return eventBeet.deserialize(buf, offset)
+    return eventBeet.deserialize(buf, offset);
   }
 
   /**
@@ -111,7 +111,7 @@ export class Event implements EventArgs {
     return eventBeet.serialize({
       accountDiscriminator: eventDiscriminator,
       ...this,
-    })
+    });
   }
 
   /**
@@ -119,7 +119,7 @@ export class Event implements EventArgs {
    * {@link Event}
    */
   static get byteSize() {
-    return eventBeet.byteSize
+    return eventBeet.byteSize;
   }
 
   /**
@@ -135,7 +135,7 @@ export class Event implements EventArgs {
     return connection.getMinimumBalanceForRentExemption(
       Event.byteSize,
       commitment
-    )
+    );
   }
 
   /**
@@ -143,7 +143,7 @@ export class Event implements EventArgs {
    * hold {@link Event} data.
    */
   static hasCorrectByteSize(buf: Buffer, offset = 0) {
-    return buf.byteLength - offset === Event.byteSize
+    return buf.byteLength - offset === Event.byteSize;
   }
 
   /**
@@ -154,19 +154,19 @@ export class Event implements EventArgs {
     return {
       authority: this.authority.toBase58(),
       matchingPool: (() => {
-        const x = <{ toNumber: () => number }>this.matchingPool
-        if (typeof x.toNumber === 'function') {
+        const x = <{ toNumber: () => number }>this.matchingPool;
+        if (typeof x.toNumber === "function") {
           try {
-            return x.toNumber()
+            return x.toNumber();
           } catch (_) {
-            return x
+            return x;
           }
         }
-        return x
+        return x;
       })(),
       eventKey: this.eventKey.toBase58(),
       bump: this.bump,
-    }
+    };
   }
 }
 
@@ -177,16 +177,16 @@ export class Event implements EventArgs {
 export const eventBeet = new beet.BeetStruct<
   Event,
   EventArgs & {
-    accountDiscriminator: number[] /* size: 8 */
+    accountDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['accountDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['authority', beetSolana.publicKey],
-    ['matchingPool', beet.u64],
-    ['eventKey', beetSolana.publicKey],
-    ['bump', beet.u8],
+    ["accountDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["authority", beetSolana.publicKey],
+    ["matchingPool", beet.u64],
+    ["eventKey", beetSolana.publicKey],
+    ["bump", beet.u8],
   ],
   Event.fromArgs,
-  'Event'
-)
+  "Event"
+);

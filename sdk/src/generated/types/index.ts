@@ -1,2 +1,2 @@
-export * from './ProjectVerification'
-export * from './RoundProjectStatus'
+export * from "./ProjectVerification";
+export * from "./RoundProjectStatus";

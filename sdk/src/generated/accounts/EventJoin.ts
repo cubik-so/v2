@@ -5,13 +5,13 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as web3 from '@solana/web3.js'
-import * as beet from '@metaplex-foundation/beet'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as web3 from "@solana/web3.js";
+import * as beet from "@metaplex-foundation/beet";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
 import {
   RoundProjectStatus,
   roundProjectStatusBeet,
-} from '../types/RoundProjectStatus'
+} from "../types/RoundProjectStatus";
 
 /**
  * Arguments used to create {@link EventJoin}
@@ -19,13 +19,13 @@ import {
  * @category generated
  */
 export type EventJoinArgs = {
-  authority: web3.PublicKey
-  status: RoundProjectStatus
-  donation: beet.bignum
-  bump: number
-}
+  authority: web3.PublicKey;
+  status: RoundProjectStatus;
+  donation: beet.bignum;
+  bump: number;
+};
 
-export const eventJoinDiscriminator = [38, 238, 50, 133, 221, 124, 13, 106]
+export const eventJoinDiscriminator = [38, 238, 50, 133, 221, 124, 13, 106];
 /**
  * Holds the data for the {@link EventJoin} Account and provides de/serialization
  * functionality for that data
@@ -45,7 +45,7 @@ export class EventJoin implements EventJoinArgs {
    * Creates a {@link EventJoin} instance from the provided args.
    */
   static fromArgs(args: EventJoinArgs) {
-    return new EventJoin(args.authority, args.status, args.donation, args.bump)
+    return new EventJoin(args.authority, args.status, args.donation, args.bump);
   }
 
   /**
@@ -56,7 +56,7 @@ export class EventJoin implements EventJoinArgs {
     accountInfo: web3.AccountInfo<Buffer>,
     offset = 0
   ): [EventJoin, number] {
-    return EventJoin.deserialize(accountInfo.data, offset)
+    return EventJoin.deserialize(accountInfo.data, offset);
   }
 
   /**
@@ -73,11 +73,11 @@ export class EventJoin implements EventJoinArgs {
     const accountInfo = await connection.getAccountInfo(
       address,
       commitmentOrConfig
-    )
+    );
     if (accountInfo == null) {
-      throw new Error(`Unable to find EventJoin account at ${address}`)
+      throw new Error(`Unable to find EventJoin account at ${address}`);
     }
-    return EventJoin.fromAccountInfo(accountInfo, 0)[0]
+    return EventJoin.fromAccountInfo(accountInfo, 0)[0];
   }
 
   /**
@@ -88,10 +88,10 @@ export class EventJoin implements EventJoinArgs {
    */
   static gpaBuilder(
     programId: web3.PublicKey = new web3.PublicKey(
-      '3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS'
+      "3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS"
     )
   ) {
-    return beetSolana.GpaBuilder.fromStruct(programId, eventJoinBeet)
+    return beetSolana.GpaBuilder.fromStruct(programId, eventJoinBeet);
   }
 
   /**
@@ -99,7 +99,7 @@ export class EventJoin implements EventJoinArgs {
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
   static deserialize(buf: Buffer, offset = 0): [EventJoin, number] {
-    return eventJoinBeet.deserialize(buf, offset)
+    return eventJoinBeet.deserialize(buf, offset);
   }
 
   /**
@@ -110,7 +110,7 @@ export class EventJoin implements EventJoinArgs {
     return eventJoinBeet.serialize({
       accountDiscriminator: eventJoinDiscriminator,
       ...this,
-    })
+    });
   }
 
   /**
@@ -118,7 +118,7 @@ export class EventJoin implements EventJoinArgs {
    * {@link EventJoin}
    */
   static get byteSize() {
-    return eventJoinBeet.byteSize
+    return eventJoinBeet.byteSize;
   }
 
   /**
@@ -134,7 +134,7 @@ export class EventJoin implements EventJoinArgs {
     return connection.getMinimumBalanceForRentExemption(
       EventJoin.byteSize,
       commitment
-    )
+    );
   }
 
   /**
@@ -142,7 +142,7 @@ export class EventJoin implements EventJoinArgs {
    * hold {@link EventJoin} data.
    */
   static hasCorrectByteSize(buf: Buffer, offset = 0) {
-    return buf.byteLength - offset === EventJoin.byteSize
+    return buf.byteLength - offset === EventJoin.byteSize;
   }
 
   /**
@@ -152,20 +152,20 @@ export class EventJoin implements EventJoinArgs {
   pretty() {
     return {
       authority: this.authority.toBase58(),
-      status: 'RoundProjectStatus.' + RoundProjectStatus[this.status],
+      status: "RoundProjectStatus." + RoundProjectStatus[this.status],
       donation: (() => {
-        const x = <{ toNumber: () => number }>this.donation
-        if (typeof x.toNumber === 'function') {
+        const x = <{ toNumber: () => number }>this.donation;
+        if (typeof x.toNumber === "function") {
           try {
-            return x.toNumber()
+            return x.toNumber();
           } catch (_) {
-            return x
+            return x;
           }
         }
-        return x
+        return x;
       })(),
       bump: this.bump,
-    }
+    };
   }
 }
 
@@ -176,16 +176,16 @@ export class EventJoin implements EventJoinArgs {
 export const eventJoinBeet = new beet.BeetStruct<
   EventJoin,
   EventJoinArgs & {
-    accountDiscriminator: number[] /* size: 8 */
+    accountDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['accountDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['authority', beetSolana.publicKey],
-    ['status', roundProjectStatusBeet],
-    ['donation', beet.u128],
-    ['bump', beet.u8],
+    ["accountDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["authority", beetSolana.publicKey],
+    ["status", roundProjectStatusBeet],
+    ["donation", beet.u128],
+    ["bump", beet.u8],
   ],
   EventJoin.fromArgs,
-  'EventJoin'
-)
+  "EventJoin"
+);

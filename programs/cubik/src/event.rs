@@ -5,7 +5,7 @@ use crate::state::ProjectVerification;
 pub struct NewUser {
     pub authority: Pubkey,
     pub username: String,
-    pub metadata: String,
+    pub metadata: [u8; 32],
 }
 #[event]
 pub struct NewSponsor {

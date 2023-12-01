@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as web3 from '@solana/web3.js'
-import * as beet from '@metaplex-foundation/beet'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as web3 from "@solana/web3.js";
+import * as beet from "@metaplex-foundation/beet";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
 
 /**
  * @category Instructions
@@ -15,10 +15,10 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
  * @category generated
  */
 export type CreateEventInstructionArgs = {
-  eventKey: web3.PublicKey
-  matchingPool: beet.bignum
-  metadata: string
-}
+  eventKey: web3.PublicKey;
+  matchingPool: beet.bignum;
+  metadata: string;
+};
 /**
  * @category Instructions
  * @category CreateEvent
@@ -26,17 +26,17 @@ export type CreateEventInstructionArgs = {
  */
 export const createEventStruct = new beet.FixableBeetArgsStruct<
   CreateEventInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */
+    instructionDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['eventKey', beetSolana.publicKey],
-    ['matchingPool', beet.u64],
-    ['metadata', beet.utf8String],
+    ["instructionDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["eventKey", beetSolana.publicKey],
+    ["matchingPool", beet.u64],
+    ["metadata", beet.utf8String],
   ],
-  'CreateEventInstructionArgs'
-)
+  "CreateEventInstructionArgs"
+);
 /**
  * Accounts required by the _createEvent_ instruction
  *
@@ -47,16 +47,16 @@ export const createEventStruct = new beet.FixableBeetArgsStruct<
  * @category generated
  */
 export type CreateEventInstructionAccounts = {
-  authority: web3.PublicKey
-  eventAccount: web3.PublicKey
-  systemProgram?: web3.PublicKey
-  rent?: web3.PublicKey
-  anchorRemainingAccounts?: web3.AccountMeta[]
-}
+  authority: web3.PublicKey;
+  eventAccount: web3.PublicKey;
+  systemProgram?: web3.PublicKey;
+  rent?: web3.PublicKey;
+  anchorRemainingAccounts?: web3.AccountMeta[];
+};
 
 export const createEventInstructionDiscriminator = [
   49, 219, 29, 203, 22, 98, 100, 87,
-]
+];
 
 /**
  * Creates a _CreateEvent_ instruction.
@@ -71,12 +71,12 @@ export const createEventInstructionDiscriminator = [
 export function createCreateEventInstruction(
   accounts: CreateEventInstructionAccounts,
   args: CreateEventInstructionArgs,
-  programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
+  programId = new web3.PublicKey("3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS")
 ) {
   const [data] = createEventStruct.serialize({
     instructionDiscriminator: createEventInstructionDiscriminator,
     ...args,
-  })
+  });
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.authority,
@@ -98,11 +98,11 @@ export function createCreateEventInstruction(
       isWritable: false,
       isSigner: false,
     },
-  ]
+  ];
 
   if (accounts.anchorRemainingAccounts != null) {
     for (const acc of accounts.anchorRemainingAccounts) {
-      keys.push(acc)
+      keys.push(acc);
     }
   }
 
@@ -110,6 +110,6 @@ export function createCreateEventInstruction(
     programId,
     keys,
     data,
-  })
-  return ix
+  });
+  return ix;
 }

@@ -1,23 +1,25 @@
+use crate::errors::Errors;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
-use crate::errors::Errors;
-
 
 pub fn create_admin(ctx: Context<CreateAdminContext>) -> Result<()> {
     let admin_account = &mut ctx.accounts.admin_account;
     admin_account.authority = ctx.accounts.authority.key();
     admin_account.permission = AdminPermission {
-        full:true,
-        project_join_status:true,
-        project_status:true,
+        full: true,
+        project_join_status: true,
+        project_status: true,
     };
     admin_account.bump = *ctx.bumps.get("admin_account").unwrap();
     Ok(())
 }
 
-pub fn create_sub_admin(ctx: Context<CreateSubAdminContext>,create_key:Pubkey,permission:AdminPermission) -> Result<()> {
-    
+pub fn create_sub_admin(
+    ctx: Context<CreateSubAdminContext>,
+    create_key: Pubkey,
+    permission: AdminPermission,
+) -> Result<()> {
     let sub_admin_account = &mut ctx.accounts.admin_account;
     sub_admin_account.authority = create_key.key();
     sub_admin_account.permission = permission;

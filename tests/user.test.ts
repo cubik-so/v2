@@ -1,22 +1,26 @@
-import * as anchor from '@coral-xyz/anchor';
-import { Program } from '@coral-xyz/anchor';
-import { Cubik, IDL } from '../target/types/cubik';
-import fs from 'fs';
+import * as anchor from "@coral-xyz/anchor";
+import { Program } from "@coral-xyz/anchor";
+import { Cubik, IDL } from "../target/types/cubik";
+import fs from "fs";
+import { config } from "dotenv";
 
-describe('cubik_v2', () => {
+config();
+describe("cubik_v2", () => {
   anchor.setProvider(
-    anchor.AnchorProvider.local('https://api.devnet.solana.com', {
-      commitment: 'confirmed',
+    anchor.AnchorProvider.local("https://api.devnet.solana.com", {
+      commitment: "confirmed",
     })
   );
 
   const program = anchor.workspace.Cubik as Program<Cubik>;
   const Keypair = anchor.web3.Keypair.fromSecretKey(
-    anchor.utils.bytes.bs58.decode('')
+    anchor.utils.bytes.bs58.decode(process.env.WALLET)
   );
   const newKeypair = anchor.web3.Keypair.generate();
-  console.log(newKeypair.publicKey.toBase58());
-  it.skip('create tester', async () => {
+  // console.log(newKeypair.publicKey.toBase58());
+
+  let counter = "sssadfssss";
+  it.skip("create tester", async () => {
     const ix = anchor.web3.SystemProgram.transfer({
       fromPubkey: Keypair.publicKey,
       toPubkey: newKeypair.publicKey,
@@ -32,23 +36,30 @@ describe('cubik_v2', () => {
     const sig = await program.provider.connection.sendRawTransaction(
       tx.serialize(),
       {
-        preflightCommitment: 'finalized',
+        preflightCommitment: "finalized",
       }
     );
-    console.log(sig, '==');
+    console.log(sig, "==");
     await Promise.resolve(() =>
       setTimeout(() => {
         return null;
       }, 200000)
     );
   });
-  it('create user', async () => {
+  it("create user", async () => {
+    let username = "usernamesssssssfssss";
     const [userAccount] = anchor.web3.PublicKey.findProgramAddressSync(
-      [anchor.utils.bytes.utf8.encode('user'), Keypair.publicKey.toBuffer()],
+      [
+        anchor.utils.bytes.utf8.encode("user"),
+        Keypair.publicKey.toBuffer(),
+        anchor.utils.bytes.utf8.encode(counter),
+      ],
       program.programId
     );
+    console.log(userAccount.toBase58());
+    console.log(username.length);
     const ix = await program.methods
-      .createUser('username', 'admin')
+      .createUser(username, "admin", counter)
       .accounts({
         userAccount: userAccount,
         authority: Keypair.publicKey,
@@ -62,8 +73,24 @@ describe('cubik_v2', () => {
     tx.recentBlockhash = blockhash;
     tx.partialSign(Keypair);
     const sig = await program.provider.connection.sendRawTransaction(
-      tx.serialize()
+      tx.serialize(),
+      {
+        // skipPreflight: true,
+      }
     );
-    console.log(sig, '----');
+    console.log(sig, "----");
+  });
+  it.skip("fetch", async () => {
+    const [userAccount] = anchor.web3.PublicKey.findProgramAddressSync(
+      [
+        anchor.utils.bytes.utf8.encode("user"),
+        Keypair.publicKey.toBuffer(),
+        anchor.utils.bytes.utf8.encode(counter),
+      ],
+      program.programId
+    );
+    console.log(userAccount.toBase58());
+    const acc = await program.account.user.fetch(userAccount);
+    console.log(acc);
   });
 });

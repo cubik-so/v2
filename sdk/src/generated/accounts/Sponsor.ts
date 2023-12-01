@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as web3 from '@solana/web3.js'
-import * as beet from '@metaplex-foundation/beet'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as web3 from "@solana/web3.js";
+import * as beet from "@metaplex-foundation/beet";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
 
 /**
  * Arguments used to create {@link Sponsor}
@@ -15,15 +15,15 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
  * @category generated
  */
 export type SponsorArgs = {
-  authority: web3.PublicKey
-  totalAmount: beet.bignum
-  totalAmountPaid: beet.bignum
-  token: web3.PublicKey
-  vault: web3.PublicKey
-  bump: number
-}
+  authority: web3.PublicKey;
+  totalAmount: beet.bignum;
+  totalAmountPaid: beet.bignum;
+  token: web3.PublicKey;
+  vault: web3.PublicKey;
+  bump: number;
+};
 
-export const sponsorDiscriminator = [19, 128, 115, 109, 118, 109, 66, 213]
+export const sponsorDiscriminator = [19, 128, 115, 109, 118, 109, 66, 213];
 /**
  * Holds the data for the {@link Sponsor} Account and provides de/serialization
  * functionality for that data
@@ -52,7 +52,7 @@ export class Sponsor implements SponsorArgs {
       args.token,
       args.vault,
       args.bump
-    )
+    );
   }
 
   /**
@@ -63,7 +63,7 @@ export class Sponsor implements SponsorArgs {
     accountInfo: web3.AccountInfo<Buffer>,
     offset = 0
   ): [Sponsor, number] {
-    return Sponsor.deserialize(accountInfo.data, offset)
+    return Sponsor.deserialize(accountInfo.data, offset);
   }
 
   /**
@@ -80,11 +80,11 @@ export class Sponsor implements SponsorArgs {
     const accountInfo = await connection.getAccountInfo(
       address,
       commitmentOrConfig
-    )
+    );
     if (accountInfo == null) {
-      throw new Error(`Unable to find Sponsor account at ${address}`)
+      throw new Error(`Unable to find Sponsor account at ${address}`);
     }
-    return Sponsor.fromAccountInfo(accountInfo, 0)[0]
+    return Sponsor.fromAccountInfo(accountInfo, 0)[0];
   }
 
   /**
@@ -95,10 +95,10 @@ export class Sponsor implements SponsorArgs {
    */
   static gpaBuilder(
     programId: web3.PublicKey = new web3.PublicKey(
-      '3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS'
+      "3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS"
     )
   ) {
-    return beetSolana.GpaBuilder.fromStruct(programId, sponsorBeet)
+    return beetSolana.GpaBuilder.fromStruct(programId, sponsorBeet);
   }
 
   /**
@@ -106,7 +106,7 @@ export class Sponsor implements SponsorArgs {
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
   static deserialize(buf: Buffer, offset = 0): [Sponsor, number] {
-    return sponsorBeet.deserialize(buf, offset)
+    return sponsorBeet.deserialize(buf, offset);
   }
 
   /**
@@ -117,7 +117,7 @@ export class Sponsor implements SponsorArgs {
     return sponsorBeet.serialize({
       accountDiscriminator: sponsorDiscriminator,
       ...this,
-    })
+    });
   }
 
   /**
@@ -125,7 +125,7 @@ export class Sponsor implements SponsorArgs {
    * {@link Sponsor}
    */
   static get byteSize() {
-    return sponsorBeet.byteSize
+    return sponsorBeet.byteSize;
   }
 
   /**
@@ -141,7 +141,7 @@ export class Sponsor implements SponsorArgs {
     return connection.getMinimumBalanceForRentExemption(
       Sponsor.byteSize,
       commitment
-    )
+    );
   }
 
   /**
@@ -149,7 +149,7 @@ export class Sponsor implements SponsorArgs {
    * hold {@link Sponsor} data.
    */
   static hasCorrectByteSize(buf: Buffer, offset = 0) {
-    return buf.byteLength - offset === Sponsor.byteSize
+    return buf.byteLength - offset === Sponsor.byteSize;
   }
 
   /**
@@ -160,31 +160,31 @@ export class Sponsor implements SponsorArgs {
     return {
       authority: this.authority.toBase58(),
       totalAmount: (() => {
-        const x = <{ toNumber: () => number }>this.totalAmount
-        if (typeof x.toNumber === 'function') {
+        const x = <{ toNumber: () => number }>this.totalAmount;
+        if (typeof x.toNumber === "function") {
           try {
-            return x.toNumber()
+            return x.toNumber();
           } catch (_) {
-            return x
+            return x;
           }
         }
-        return x
+        return x;
       })(),
       totalAmountPaid: (() => {
-        const x = <{ toNumber: () => number }>this.totalAmountPaid
-        if (typeof x.toNumber === 'function') {
+        const x = <{ toNumber: () => number }>this.totalAmountPaid;
+        if (typeof x.toNumber === "function") {
           try {
-            return x.toNumber()
+            return x.toNumber();
           } catch (_) {
-            return x
+            return x;
           }
         }
-        return x
+        return x;
       })(),
       token: this.token.toBase58(),
       vault: this.vault.toBase58(),
       bump: this.bump,
-    }
+    };
   }
 }
 
@@ -195,18 +195,18 @@ export class Sponsor implements SponsorArgs {
 export const sponsorBeet = new beet.BeetStruct<
   Sponsor,
   SponsorArgs & {
-    accountDiscriminator: number[] /* size: 8 */
+    accountDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['accountDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['authority', beetSolana.publicKey],
-    ['totalAmount', beet.u64],
-    ['totalAmountPaid', beet.u64],
-    ['token', beetSolana.publicKey],
-    ['vault', beetSolana.publicKey],
-    ['bump', beet.u8],
+    ["accountDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["authority", beetSolana.publicKey],
+    ["totalAmount", beet.u64],
+    ["totalAmountPaid", beet.u64],
+    ["token", beetSolana.publicKey],
+    ["vault", beetSolana.publicKey],
+    ["bump", beet.u8],
   ],
   Sponsor.fromArgs,
-  'Sponsor'
-)
+  "Sponsor"
+);

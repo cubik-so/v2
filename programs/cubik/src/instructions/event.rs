@@ -1,37 +1,39 @@
 use crate::errors::Errors;
 use crate::event::{NewEvent, NewEventJoin, UpdateEvent};
-use crate::state::{Event,Admin, AdminPermission, ProjectVerification, EventProjectStatus, EventJoin, Project};
+use crate::state::{
+    Admin, AdminPermission, Event, EventJoin, EventProjectStatus, Project, ProjectVerification,
+};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 
-
-
-
-pub fn create_event(ctx: Context<CreateEventContext>, event_key: Pubkey,matching_pool:u64,metadata:String) -> Result<()> {
-    
+pub fn create_event(
+    ctx: Context<CreateEventContext>,
+    event_key: Pubkey,
+    matching_pool: u64,
+    metadata: String,
+) -> Result<()> {
     let event_account = &mut ctx.accounts.event_account;
 
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
-
 
     event_account.authority = ctx.accounts.authority.key();
     event_account.matching_pool = matching_pool;
 
     sub_admin_account.authority = ctx.accounts.authority.key();
     sub_admin_account.permission = AdminPermission {
-        full:false,
-        project_join_status:true,
-        project_status:false
+        full: false,
+        project_join_status: true,
+        project_status: false,
     };
-    
+
     event_account.bump = *ctx.bumps.get("event_account").unwrap();
     sub_admin_account.bump = *ctx.bumps.get("sub_admin_account").unwrap();
-    emit!(NewEvent{
+    emit!(NewEvent {
         authority: ctx.accounts.authority.key(),
         metadata,
         event_key
     });
-    
+
     Ok(())
 }
 
@@ -99,8 +101,6 @@ pub fn update_reject_handler(
     Ok(())
 }
 
-
-
 pub fn update_event(
     ctx: Context<UpdateEventContext>,
     event_key: Pubkey,
@@ -118,7 +118,6 @@ pub fn update_event(
 
     Ok(())
 }
-
 
 #[derive(Accounts)]
 #[instruction(event_key:Pubkey)]
@@ -167,11 +166,10 @@ pub struct EventJoinContext<'info> {
             seeds=[b"project",authority.key().as_ref(),counter.to_le_bytes().as_ref()],
             bump = project_account.bump
         )]
-    pub project_account: Box<Account<'info,Project>>,
-
+    pub project_account: Box<Account<'info, Project>>,
 
     #[account(mut,seeds=[b"event",event_key.key().as_ref()],bump=event_account.bump)]
-    pub event_account: Box<Account<'info,Event>>,
+    pub event_account: Box<Account<'info, Event>>,
     // Misc Accounts
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,

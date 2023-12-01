@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
-import * as web3 from '@solana/web3.js'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as beet from "@metaplex-foundation/beet";
+import * as web3 from "@solana/web3.js";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
 
 /**
  * @category Instructions
@@ -15,9 +15,9 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
  * @category generated
  */
 export type UpdateProjectStatusVerifiedInstructionArgs = {
-  counter: beet.bignum
-  owner: web3.PublicKey
-}
+  counter: beet.bignum;
+  owner: web3.PublicKey;
+};
 /**
  * @category Instructions
  * @category UpdateProjectStatusVerified
@@ -25,16 +25,16 @@ export type UpdateProjectStatusVerifiedInstructionArgs = {
  */
 export const updateProjectStatusVerifiedStruct = new beet.BeetArgsStruct<
   UpdateProjectStatusVerifiedInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */
+    instructionDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['counter', beet.u64],
-    ['owner', beetSolana.publicKey],
+    ["instructionDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["counter", beet.u64],
+    ["owner", beetSolana.publicKey],
   ],
-  'UpdateProjectStatusVerifiedInstructionArgs'
-)
+  "UpdateProjectStatusVerifiedInstructionArgs"
+);
 /**
  * Accounts required by the _updateProjectStatusVerified_ instruction
  *
@@ -47,18 +47,18 @@ export const updateProjectStatusVerifiedStruct = new beet.BeetArgsStruct<
  * @category generated
  */
 export type UpdateProjectStatusVerifiedInstructionAccounts = {
-  authority: web3.PublicKey
-  adminAccount: web3.PublicKey
-  projectAccount: web3.PublicKey
-  userAccount: web3.PublicKey
-  systemProgram?: web3.PublicKey
-  rent?: web3.PublicKey
-  anchorRemainingAccounts?: web3.AccountMeta[]
-}
+  authority: web3.PublicKey;
+  adminAccount: web3.PublicKey;
+  projectAccount: web3.PublicKey;
+  userAccount: web3.PublicKey;
+  systemProgram?: web3.PublicKey;
+  rent?: web3.PublicKey;
+  anchorRemainingAccounts?: web3.AccountMeta[];
+};
 
 export const updateProjectStatusVerifiedInstructionDiscriminator = [
   167, 95, 4, 44, 137, 100, 148, 198,
-]
+];
 
 /**
  * Creates a _UpdateProjectStatusVerified_ instruction.
@@ -73,13 +73,13 @@ export const updateProjectStatusVerifiedInstructionDiscriminator = [
 export function createUpdateProjectStatusVerifiedInstruction(
   accounts: UpdateProjectStatusVerifiedInstructionAccounts,
   args: UpdateProjectStatusVerifiedInstructionArgs,
-  programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
+  programId = new web3.PublicKey("3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS")
 ) {
   const [data] = updateProjectStatusVerifiedStruct.serialize({
     instructionDiscriminator:
       updateProjectStatusVerifiedInstructionDiscriminator,
     ...args,
-  })
+  });
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.authority,
@@ -111,11 +111,11 @@ export function createUpdateProjectStatusVerifiedInstruction(
       isWritable: false,
       isSigner: false,
     },
-  ]
+  ];
 
   if (accounts.anchorRemainingAccounts != null) {
     for (const acc of accounts.anchorRemainingAccounts) {
-      keys.push(acc)
+      keys.push(acc);
     }
   }
 
@@ -123,6 +123,6 @@ export function createUpdateProjectStatusVerifiedInstruction(
     programId,
     keys,
     data,
-  })
-  return ix
+  });
+  return ix;
 }

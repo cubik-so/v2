@@ -1,5 +1,4 @@
 #[warn(unused_must_use)]
-
 use anchor_lang::prelude::*;
 mod errors;
 pub mod event;
@@ -15,9 +14,17 @@ pub mod cubik {
 
     use super::*;
 
-    pub fn create_user(ctx: Context<CreateUserContext>,username:String,metadata:String)-> Result<()>{
+    pub fn create_user(
+        ctx: Context<CreateUserContext>,
+        username: String,
+        metadata: [u8; 32],
+    ) -> Result<()> {
+        handler_create_user(ctx, username, metadata)?;
+        Ok(())
+    }
 
-    handler_create_user(ctx, username,metadata)?;
-    Ok(())
+    pub fn update_user(ctx: Context<UpdateUserContext>, metadata: [u8; 32]) -> Result<()> {
+        handler_update_user(ctx, metadata)?;
+        Ok(())
     }
 }

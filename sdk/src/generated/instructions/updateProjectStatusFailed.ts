@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
-import * as web3 from '@solana/web3.js'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as beet from "@metaplex-foundation/beet";
+import * as web3 from "@solana/web3.js";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
 
 /**
  * @category Instructions
@@ -15,9 +15,9 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
  * @category generated
  */
 export type UpdateProjectStatusFailedInstructionArgs = {
-  counter: beet.bignum
-  owner: web3.PublicKey
-}
+  counter: beet.bignum;
+  owner: web3.PublicKey;
+};
 /**
  * @category Instructions
  * @category UpdateProjectStatusFailed
@@ -25,16 +25,16 @@ export type UpdateProjectStatusFailedInstructionArgs = {
  */
 export const updateProjectStatusFailedStruct = new beet.BeetArgsStruct<
   UpdateProjectStatusFailedInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */
+    instructionDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['counter', beet.u64],
-    ['owner', beetSolana.publicKey],
+    ["instructionDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["counter", beet.u64],
+    ["owner", beetSolana.publicKey],
   ],
-  'UpdateProjectStatusFailedInstructionArgs'
-)
+  "UpdateProjectStatusFailedInstructionArgs"
+);
 /**
  * Accounts required by the _updateProjectStatusFailed_ instruction
  *
@@ -47,18 +47,18 @@ export const updateProjectStatusFailedStruct = new beet.BeetArgsStruct<
  * @category generated
  */
 export type UpdateProjectStatusFailedInstructionAccounts = {
-  authority: web3.PublicKey
-  adminAccount: web3.PublicKey
-  projectAccount: web3.PublicKey
-  userAccount: web3.PublicKey
-  systemProgram?: web3.PublicKey
-  rent?: web3.PublicKey
-  anchorRemainingAccounts?: web3.AccountMeta[]
-}
+  authority: web3.PublicKey;
+  adminAccount: web3.PublicKey;
+  projectAccount: web3.PublicKey;
+  userAccount: web3.PublicKey;
+  systemProgram?: web3.PublicKey;
+  rent?: web3.PublicKey;
+  anchorRemainingAccounts?: web3.AccountMeta[];
+};
 
 export const updateProjectStatusFailedInstructionDiscriminator = [
   159, 145, 152, 144, 91, 132, 81, 220,
-]
+];
 
 /**
  * Creates a _UpdateProjectStatusFailed_ instruction.
@@ -73,12 +73,12 @@ export const updateProjectStatusFailedInstructionDiscriminator = [
 export function createUpdateProjectStatusFailedInstruction(
   accounts: UpdateProjectStatusFailedInstructionAccounts,
   args: UpdateProjectStatusFailedInstructionArgs,
-  programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
+  programId = new web3.PublicKey("3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS")
 ) {
   const [data] = updateProjectStatusFailedStruct.serialize({
     instructionDiscriminator: updateProjectStatusFailedInstructionDiscriminator,
     ...args,
-  })
+  });
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.authority,
@@ -110,11 +110,11 @@ export function createUpdateProjectStatusFailedInstruction(
       isWritable: false,
       isSigner: false,
     },
-  ]
+  ];
 
   if (accounts.anchorRemainingAccounts != null) {
     for (const acc of accounts.anchorRemainingAccounts) {
-      keys.push(acc)
+      keys.push(acc);
     }
   }
 
@@ -122,6 +122,6 @@ export function createUpdateProjectStatusFailedInstruction(
     programId,
     keys,
     data,
-  })
-  return ix
+  });
+  return ix;
 }
