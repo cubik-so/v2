@@ -5,7 +5,7 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
+import * as beet from "@metaplex-foundation/beet";
 /**
  * @category enums
  * @category generated
@@ -22,4 +22,4 @@ export enum RoundProjectStatus {
  */
 export const roundProjectStatusBeet = beet.fixedScalarEnum(
   RoundProjectStatus
-) as beet.FixedSizeBeet<RoundProjectStatus, RoundProjectStatus>
+) as beet.FixedSizeBeet<RoundProjectStatus, RoundProjectStatus>;

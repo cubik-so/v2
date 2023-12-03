@@ -5,8 +5,8 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
-import * as web3 from '@solana/web3.js'
+import * as beet from "@metaplex-foundation/beet";
+import * as web3 from "@solana/web3.js";
 
 /**
  * @category Instructions
@@ -14,9 +14,9 @@ import * as web3 from '@solana/web3.js'
  * @category generated
  */
 export type CreateUserInstructionArgs = {
-  username: string
-  metadata: string
-}
+  username: string;
+  metadata: string;
+};
 /**
  * @category Instructions
  * @category CreateUser
@@ -24,16 +24,16 @@ export type CreateUserInstructionArgs = {
  */
 export const createUserStruct = new beet.FixableBeetArgsStruct<
   CreateUserInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */
+    instructionDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['username', beet.utf8String],
-    ['metadata', beet.utf8String],
+    ["instructionDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["username", beet.utf8String],
+    ["metadata", beet.utf8String],
   ],
-  'CreateUserInstructionArgs'
-)
+  "CreateUserInstructionArgs"
+);
 /**
  * Accounts required by the _createUser_ instruction
  *
@@ -44,16 +44,16 @@ export const createUserStruct = new beet.FixableBeetArgsStruct<
  * @category generated
  */
 export type CreateUserInstructionAccounts = {
-  authority: web3.PublicKey
-  userAccount: web3.PublicKey
-  systemProgram?: web3.PublicKey
-  rent?: web3.PublicKey
-  anchorRemainingAccounts?: web3.AccountMeta[]
-}
+  authority: web3.PublicKey;
+  userAccount: web3.PublicKey;
+  systemProgram?: web3.PublicKey;
+  rent?: web3.PublicKey;
+  anchorRemainingAccounts?: web3.AccountMeta[];
+};
 
 export const createUserInstructionDiscriminator = [
   108, 227, 130, 130, 252, 109, 75, 218,
-]
+];
 
 /**
  * Creates a _CreateUser_ instruction.
@@ -68,12 +68,12 @@ export const createUserInstructionDiscriminator = [
 export function createCreateUserInstruction(
   accounts: CreateUserInstructionAccounts,
   args: CreateUserInstructionArgs,
-  programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
+  programId = new web3.PublicKey("3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS")
 ) {
   const [data] = createUserStruct.serialize({
     instructionDiscriminator: createUserInstructionDiscriminator,
     ...args,
-  })
+  });
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.authority,
@@ -95,11 +95,11 @@ export function createCreateUserInstruction(
       isWritable: false,
       isSigner: false,
     },
-  ]
+  ];
 
   if (accounts.anchorRemainingAccounts != null) {
     for (const acc of accounts.anchorRemainingAccounts) {
-      keys.push(acc)
+      keys.push(acc);
     }
   }
 
@@ -107,6 +107,6 @@ export function createCreateUserInstruction(
     programId,
     keys,
     data,
-  })
-  return ix
+  });
+  return ix;
 }

@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as web3 from '@solana/web3.js'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
-import * as beet from '@metaplex-foundation/beet'
+import * as web3 from "@solana/web3.js";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
+import * as beet from "@metaplex-foundation/beet";
 
 /**
  * Arguments used to create {@link Admin}
@@ -15,11 +15,11 @@ import * as beet from '@metaplex-foundation/beet'
  * @category generated
  */
 export type AdminArgs = {
-  authority: web3.PublicKey
-  bump: number
-}
+  authority: web3.PublicKey;
+  bump: number;
+};
 
-export const adminDiscriminator = [244, 158, 220, 65, 8, 73, 4, 65]
+export const adminDiscriminator = [244, 158, 220, 65, 8, 73, 4, 65];
 /**
  * Holds the data for the {@link Admin} Account and provides de/serialization
  * functionality for that data
@@ -37,7 +37,7 @@ export class Admin implements AdminArgs {
    * Creates a {@link Admin} instance from the provided args.
    */
   static fromArgs(args: AdminArgs) {
-    return new Admin(args.authority, args.bump)
+    return new Admin(args.authority, args.bump);
   }
 
   /**
@@ -48,7 +48,7 @@ export class Admin implements AdminArgs {
     accountInfo: web3.AccountInfo<Buffer>,
     offset = 0
   ): [Admin, number] {
-    return Admin.deserialize(accountInfo.data, offset)
+    return Admin.deserialize(accountInfo.data, offset);
   }
 
   /**
@@ -65,11 +65,11 @@ export class Admin implements AdminArgs {
     const accountInfo = await connection.getAccountInfo(
       address,
       commitmentOrConfig
-    )
+    );
     if (accountInfo == null) {
-      throw new Error(`Unable to find Admin account at ${address}`)
+      throw new Error(`Unable to find Admin account at ${address}`);
     }
-    return Admin.fromAccountInfo(accountInfo, 0)[0]
+    return Admin.fromAccountInfo(accountInfo, 0)[0];
   }
 
   /**
@@ -80,10 +80,10 @@ export class Admin implements AdminArgs {
    */
   static gpaBuilder(
     programId: web3.PublicKey = new web3.PublicKey(
-      '3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS'
+      "3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS"
     )
   ) {
-    return beetSolana.GpaBuilder.fromStruct(programId, adminBeet)
+    return beetSolana.GpaBuilder.fromStruct(programId, adminBeet);
   }
 
   /**
@@ -91,7 +91,7 @@ export class Admin implements AdminArgs {
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
   static deserialize(buf: Buffer, offset = 0): [Admin, number] {
-    return adminBeet.deserialize(buf, offset)
+    return adminBeet.deserialize(buf, offset);
   }
 
   /**
@@ -102,7 +102,7 @@ export class Admin implements AdminArgs {
     return adminBeet.serialize({
       accountDiscriminator: adminDiscriminator,
       ...this,
-    })
+    });
   }
 
   /**
@@ -110,7 +110,7 @@ export class Admin implements AdminArgs {
    * {@link Admin}
    */
   static get byteSize() {
-    return adminBeet.byteSize
+    return adminBeet.byteSize;
   }
 
   /**
@@ -126,7 +126,7 @@ export class Admin implements AdminArgs {
     return connection.getMinimumBalanceForRentExemption(
       Admin.byteSize,
       commitment
-    )
+    );
   }
 
   /**
@@ -134,7 +134,7 @@ export class Admin implements AdminArgs {
    * hold {@link Admin} data.
    */
   static hasCorrectByteSize(buf: Buffer, offset = 0) {
-    return buf.byteLength - offset === Admin.byteSize
+    return buf.byteLength - offset === Admin.byteSize;
   }
 
   /**
@@ -145,7 +145,7 @@ export class Admin implements AdminArgs {
     return {
       authority: this.authority.toBase58(),
       bump: this.bump,
-    }
+    };
   }
 }
 
@@ -156,14 +156,14 @@ export class Admin implements AdminArgs {
 export const adminBeet = new beet.BeetStruct<
   Admin,
   AdminArgs & {
-    accountDiscriminator: number[] /* size: 8 */
+    accountDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['accountDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['authority', beetSolana.publicKey],
-    ['bump', beet.u8],
+    ["accountDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["authority", beetSolana.publicKey],
+    ["bump", beet.u8],
   ],
   Admin.fromArgs,
-  'Admin'
-)
+  "Admin"
+);

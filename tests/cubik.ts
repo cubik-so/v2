@@ -1,11 +1,11 @@
-import * as anchor from '@coral-xyz/anchor';
-import { Program } from '@coral-xyz/anchor';
-import { Cubik, IDL } from '../target/types/cubik';
+import * as anchor from "@coral-xyz/anchor";
+import { Program } from "@coral-xyz/anchor";
+import { Cubik, IDL } from "../target/types/cubik";
 
-describe('cubik_v2', () => {
+describe("cubik_v2", () => {
   anchor.setProvider(
-    anchor.AnchorProvider.local('https://api.devnet.solana.com', {
-      commitment: 'confirmed',
+    anchor.AnchorProvider.local("https://api.devnet.solana.com", {
+      commitment: "confirmed",
     })
   );
 

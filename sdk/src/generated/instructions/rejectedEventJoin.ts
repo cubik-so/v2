@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
-import * as web3 from '@solana/web3.js'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as beet from "@metaplex-foundation/beet";
+import * as web3 from "@solana/web3.js";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
 
 /**
  * @category Instructions
@@ -15,10 +15,10 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
  * @category generated
  */
 export type RejectedEventJoinInstructionArgs = {
-  counter: beet.bignum
-  eventKey: web3.PublicKey
-  owner: web3.PublicKey
-}
+  counter: beet.bignum;
+  eventKey: web3.PublicKey;
+  owner: web3.PublicKey;
+};
 /**
  * @category Instructions
  * @category RejectedEventJoin
@@ -26,17 +26,17 @@ export type RejectedEventJoinInstructionArgs = {
  */
 export const rejectedEventJoinStruct = new beet.BeetArgsStruct<
   RejectedEventJoinInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */
+    instructionDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['counter', beet.u64],
-    ['eventKey', beetSolana.publicKey],
-    ['owner', beetSolana.publicKey],
+    ["instructionDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["counter", beet.u64],
+    ["eventKey", beetSolana.publicKey],
+    ["owner", beetSolana.publicKey],
   ],
-  'RejectedEventJoinInstructionArgs'
-)
+  "RejectedEventJoinInstructionArgs"
+);
 /**
  * Accounts required by the _rejectedEventJoin_ instruction
  *
@@ -50,19 +50,19 @@ export const rejectedEventJoinStruct = new beet.BeetArgsStruct<
  * @category generated
  */
 export type RejectedEventJoinInstructionAccounts = {
-  authority: web3.PublicKey
-  adminAccount: web3.PublicKey
-  eventJoinAccount: web3.PublicKey
-  eventAccount: web3.PublicKey
-  projectAccount: web3.PublicKey
-  systemProgram?: web3.PublicKey
-  rent?: web3.PublicKey
-  anchorRemainingAccounts?: web3.AccountMeta[]
-}
+  authority: web3.PublicKey;
+  adminAccount: web3.PublicKey;
+  eventJoinAccount: web3.PublicKey;
+  eventAccount: web3.PublicKey;
+  projectAccount: web3.PublicKey;
+  systemProgram?: web3.PublicKey;
+  rent?: web3.PublicKey;
+  anchorRemainingAccounts?: web3.AccountMeta[];
+};
 
 export const rejectedEventJoinInstructionDiscriminator = [
   22, 154, 10, 195, 53, 170, 42, 174,
-]
+];
 
 /**
  * Creates a _RejectedEventJoin_ instruction.
@@ -77,12 +77,12 @@ export const rejectedEventJoinInstructionDiscriminator = [
 export function createRejectedEventJoinInstruction(
   accounts: RejectedEventJoinInstructionAccounts,
   args: RejectedEventJoinInstructionArgs,
-  programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
+  programId = new web3.PublicKey("3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS")
 ) {
   const [data] = rejectedEventJoinStruct.serialize({
     instructionDiscriminator: rejectedEventJoinInstructionDiscriminator,
     ...args,
-  })
+  });
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.authority,
@@ -119,11 +119,11 @@ export function createRejectedEventJoinInstruction(
       isWritable: false,
       isSigner: false,
     },
-  ]
+  ];
 
   if (accounts.anchorRemainingAccounts != null) {
     for (const acc of accounts.anchorRemainingAccounts) {
-      keys.push(acc)
+      keys.push(acc);
     }
   }
 
@@ -131,6 +131,6 @@ export function createRejectedEventJoinInstruction(
     programId,
     keys,
     data,
-  })
-  return ix
+  });
+  return ix;
 }

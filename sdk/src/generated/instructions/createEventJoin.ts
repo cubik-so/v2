@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
-import * as web3 from '@solana/web3.js'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as beet from "@metaplex-foundation/beet";
+import * as web3 from "@solana/web3.js";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
 
 /**
  * @category Instructions
@@ -15,10 +15,10 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
  * @category generated
  */
 export type CreateEventJoinInstructionArgs = {
-  counter: beet.bignum
-  eventKey: web3.PublicKey
-  metadata: string
-}
+  counter: beet.bignum;
+  eventKey: web3.PublicKey;
+  metadata: string;
+};
 /**
  * @category Instructions
  * @category CreateEventJoin
@@ -26,17 +26,17 @@ export type CreateEventJoinInstructionArgs = {
  */
 export const createEventJoinStruct = new beet.FixableBeetArgsStruct<
   CreateEventJoinInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */
+    instructionDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['counter', beet.u64],
-    ['eventKey', beetSolana.publicKey],
-    ['metadata', beet.utf8String],
+    ["instructionDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["counter", beet.u64],
+    ["eventKey", beetSolana.publicKey],
+    ["metadata", beet.utf8String],
   ],
-  'CreateEventJoinInstructionArgs'
-)
+  "CreateEventJoinInstructionArgs"
+);
 /**
  * Accounts required by the _createEventJoin_ instruction
  *
@@ -49,18 +49,18 @@ export const createEventJoinStruct = new beet.FixableBeetArgsStruct<
  * @category generated
  */
 export type CreateEventJoinInstructionAccounts = {
-  authority: web3.PublicKey
-  eventJoinAccount: web3.PublicKey
-  projectAccount: web3.PublicKey
-  eventAccount: web3.PublicKey
-  systemProgram?: web3.PublicKey
-  rent?: web3.PublicKey
-  anchorRemainingAccounts?: web3.AccountMeta[]
-}
+  authority: web3.PublicKey;
+  eventJoinAccount: web3.PublicKey;
+  projectAccount: web3.PublicKey;
+  eventAccount: web3.PublicKey;
+  systemProgram?: web3.PublicKey;
+  rent?: web3.PublicKey;
+  anchorRemainingAccounts?: web3.AccountMeta[];
+};
 
 export const createEventJoinInstructionDiscriminator = [
   225, 73, 212, 8, 140, 148, 168, 110,
-]
+];
 
 /**
  * Creates a _CreateEventJoin_ instruction.
@@ -75,12 +75,12 @@ export const createEventJoinInstructionDiscriminator = [
 export function createCreateEventJoinInstruction(
   accounts: CreateEventJoinInstructionAccounts,
   args: CreateEventJoinInstructionArgs,
-  programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
+  programId = new web3.PublicKey("3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS")
 ) {
   const [data] = createEventJoinStruct.serialize({
     instructionDiscriminator: createEventJoinInstructionDiscriminator,
     ...args,
-  })
+  });
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.authority,
@@ -112,11 +112,11 @@ export function createCreateEventJoinInstruction(
       isWritable: false,
       isSigner: false,
     },
-  ]
+  ];
 
   if (accounts.anchorRemainingAccounts != null) {
     for (const acc of accounts.anchorRemainingAccounts) {
-      keys.push(acc)
+      keys.push(acc);
     }
   }
 
@@ -124,6 +124,6 @@ export function createCreateEventJoinInstruction(
     programId,
     keys,
     data,
-  })
-  return ix
+  });
+  return ix;
 }

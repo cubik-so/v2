@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as web3 from '@solana/web3.js'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
-import * as beet from '@metaplex-foundation/beet'
+import * as web3 from "@solana/web3.js";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
+import * as beet from "@metaplex-foundation/beet";
 
 /**
  * Arguments used to create {@link User}
@@ -15,11 +15,11 @@ import * as beet from '@metaplex-foundation/beet'
  * @category generated
  */
 export type UserArgs = {
-  authority: web3.PublicKey
-  bump: number
-}
+  authority: web3.PublicKey;
+  bump: number;
+};
 
-export const userDiscriminator = [159, 117, 95, 227, 239, 151, 58, 236]
+export const userDiscriminator = [159, 117, 95, 227, 239, 151, 58, 236];
 /**
  * Holds the data for the {@link User} Account and provides de/serialization
  * functionality for that data
@@ -37,7 +37,7 @@ export class User implements UserArgs {
    * Creates a {@link User} instance from the provided args.
    */
   static fromArgs(args: UserArgs) {
-    return new User(args.authority, args.bump)
+    return new User(args.authority, args.bump);
   }
 
   /**
@@ -48,7 +48,7 @@ export class User implements UserArgs {
     accountInfo: web3.AccountInfo<Buffer>,
     offset = 0
   ): [User, number] {
-    return User.deserialize(accountInfo.data, offset)
+    return User.deserialize(accountInfo.data, offset);
   }
 
   /**
@@ -65,11 +65,11 @@ export class User implements UserArgs {
     const accountInfo = await connection.getAccountInfo(
       address,
       commitmentOrConfig
-    )
+    );
     if (accountInfo == null) {
-      throw new Error(`Unable to find User account at ${address}`)
+      throw new Error(`Unable to find User account at ${address}`);
     }
-    return User.fromAccountInfo(accountInfo, 0)[0]
+    return User.fromAccountInfo(accountInfo, 0)[0];
   }
 
   /**
@@ -80,10 +80,10 @@ export class User implements UserArgs {
    */
   static gpaBuilder(
     programId: web3.PublicKey = new web3.PublicKey(
-      '3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS'
+      "3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS"
     )
   ) {
-    return beetSolana.GpaBuilder.fromStruct(programId, userBeet)
+    return beetSolana.GpaBuilder.fromStruct(programId, userBeet);
   }
 
   /**
@@ -91,7 +91,7 @@ export class User implements UserArgs {
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
   static deserialize(buf: Buffer, offset = 0): [User, number] {
-    return userBeet.deserialize(buf, offset)
+    return userBeet.deserialize(buf, offset);
   }
 
   /**
@@ -102,7 +102,7 @@ export class User implements UserArgs {
     return userBeet.serialize({
       accountDiscriminator: userDiscriminator,
       ...this,
-    })
+    });
   }
 
   /**
@@ -110,7 +110,7 @@ export class User implements UserArgs {
    * {@link User}
    */
   static get byteSize() {
-    return userBeet.byteSize
+    return userBeet.byteSize;
   }
 
   /**
@@ -126,7 +126,7 @@ export class User implements UserArgs {
     return connection.getMinimumBalanceForRentExemption(
       User.byteSize,
       commitment
-    )
+    );
   }
 
   /**
@@ -134,7 +134,7 @@ export class User implements UserArgs {
    * hold {@link User} data.
    */
   static hasCorrectByteSize(buf: Buffer, offset = 0) {
-    return buf.byteLength - offset === User.byteSize
+    return buf.byteLength - offset === User.byteSize;
   }
 
   /**
@@ -145,7 +145,7 @@ export class User implements UserArgs {
     return {
       authority: this.authority.toBase58(),
       bump: this.bump,
-    }
+    };
   }
 }
 
@@ -156,14 +156,14 @@ export class User implements UserArgs {
 export const userBeet = new beet.BeetStruct<
   User,
   UserArgs & {
-    accountDiscriminator: number[] /* size: 8 */
+    accountDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['accountDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['authority', beetSolana.publicKey],
-    ['bump', beet.u8],
+    ["accountDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["authority", beetSolana.publicKey],
+    ["bump", beet.u8],
   ],
   User.fromArgs,
-  'User'
-)
+  "User"
+);

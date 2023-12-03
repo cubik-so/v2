@@ -5,7 +5,7 @@ use crate::state::ProjectVerification;
 pub struct NewUser {
     pub authority: Pubkey,
     pub username: String,
-    pub metadata: String,
+    pub metadata: [u8; 32],
 }
 #[event]
 pub struct NewSponsor {
@@ -22,7 +22,7 @@ pub struct UpdateSponsorEvent {
 pub struct NewProject {
     pub authority: Pubkey,
     pub counter: u64,
-    pub metadata: String,
+    pub metadata: [u8; 32],
 }
 #[event]
 pub struct UpdateProjectStatus {
@@ -30,20 +30,26 @@ pub struct UpdateProjectStatus {
     pub status: ProjectVerification,
 }
 #[event]
+pub struct UpdateProject {
+    pub authority: Pubkey,
+    pub metadata: [u8; 32],
+}
+#[event]
 pub struct NewEvent {
     pub authority: Pubkey,
-    pub metadata: String,
+    pub metadata: [u8; 32],
     pub event_key: Pubkey,
 }
 #[event]
 pub struct UpdateEvent {
     pub authority: Pubkey,
-    pub metadata: String,
+    pub metadata: [u8; 32],
 }
 #[event]
 pub struct NewEventJoin {
     pub authority: Pubkey,
-    pub metadata: String,
+    pub project_account: Pubkey,
+    pub event_account: Pubkey,
 }
 #[event]
 pub struct UpdateEventJoin {

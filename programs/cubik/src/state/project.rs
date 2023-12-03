@@ -7,6 +7,8 @@ pub struct Project {
     pub status: ProjectVerification,
     pub counter: u64,
     pub multisig: Pubkey,
+    pub create_key: Pubkey,
+    pub metadata: [u8; 32],
     pub bump: u8,
 }
 

@@ -40,7 +40,7 @@ pub struct TipUserContext<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
 
-    #[account(mut,seeds=[b"user".as_ref(),user_account.authority.key().as_ref()],bump =user_account.bump)]
+    #[account(mut,seeds=[b"user".as_ref(),user_account.authority.key().as_ref()],bump= user_account.bump)]
     pub user_account: Box<Account<'info, User>>,
 
     #[account(mut)]
@@ -67,7 +67,7 @@ pub struct TipProjectContext<'info> {
     pub authority: Signer<'info>,
 
     #[account(mut,
-    seeds = [b"project",project_account.owner.key().as_ref(),&project_account.counter.to_le_bytes()],
+    seeds = [b"project",project_account.create_key.key().as_ref(),&project_account.counter.to_le_bytes()],
     bump = project_account.bump
     )]
     pub project_account: Box<Account<'info, Project>>,

@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
-import * as web3 from '@solana/web3.js'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as beet from "@metaplex-foundation/beet";
+import * as web3 from "@solana/web3.js";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
 
 /**
  * @category Instructions
@@ -15,10 +15,10 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
  * @category generated
  */
 export type CreateProjectInstructionArgs = {
-  counter: beet.bignum
-  multiSig: web3.PublicKey
-  metadata: string
-}
+  counter: beet.bignum;
+  multiSig: web3.PublicKey;
+  metadata: string;
+};
 /**
  * @category Instructions
  * @category CreateProject
@@ -26,17 +26,17 @@ export type CreateProjectInstructionArgs = {
  */
 export const createProjectStruct = new beet.FixableBeetArgsStruct<
   CreateProjectInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */
+    instructionDiscriminator: number[] /* size: 8 */;
   }
 >(
   [
-    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['counter', beet.u64],
-    ['multiSig', beetSolana.publicKey],
-    ['metadata', beet.utf8String],
+    ["instructionDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
+    ["counter", beet.u64],
+    ["multiSig", beetSolana.publicKey],
+    ["metadata", beet.utf8String],
   ],
-  'CreateProjectInstructionArgs'
-)
+  "CreateProjectInstructionArgs"
+);
 /**
  * Accounts required by the _createProject_ instruction
  *
@@ -49,18 +49,18 @@ export const createProjectStruct = new beet.FixableBeetArgsStruct<
  * @category generated
  */
 export type CreateProjectInstructionAccounts = {
-  owners: web3.PublicKey
-  projectAccount: web3.PublicKey
-  adminAccount: web3.PublicKey
-  userAccount: web3.PublicKey
-  systemProgram?: web3.PublicKey
-  rent?: web3.PublicKey
-  anchorRemainingAccounts?: web3.AccountMeta[]
-}
+  owners: web3.PublicKey;
+  projectAccount: web3.PublicKey;
+  adminAccount: web3.PublicKey;
+  userAccount: web3.PublicKey;
+  systemProgram?: web3.PublicKey;
+  rent?: web3.PublicKey;
+  anchorRemainingAccounts?: web3.AccountMeta[];
+};
 
 export const createProjectInstructionDiscriminator = [
   148, 219, 181, 42, 221, 114, 145, 190,
-]
+];
 
 /**
  * Creates a _CreateProject_ instruction.
@@ -75,12 +75,12 @@ export const createProjectInstructionDiscriminator = [
 export function createCreateProjectInstruction(
   accounts: CreateProjectInstructionAccounts,
   args: CreateProjectInstructionArgs,
-  programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
+  programId = new web3.PublicKey("3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS")
 ) {
   const [data] = createProjectStruct.serialize({
     instructionDiscriminator: createProjectInstructionDiscriminator,
     ...args,
-  })
+  });
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.owners,
@@ -112,11 +112,11 @@ export function createCreateProjectInstruction(
       isWritable: false,
       isSigner: false,
     },
-  ]
+  ];
 
   if (accounts.anchorRemainingAccounts != null) {
     for (const acc of accounts.anchorRemainingAccounts) {
-      keys.push(acc)
+      keys.push(acc);
     }
   }
 
@@ -124,6 +124,6 @@ export function createCreateProjectInstruction(
     programId,
     keys,
     data,
-  })
-  return ix
+  });
+  return ix;
 }

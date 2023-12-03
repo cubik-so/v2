@@ -6,7 +6,7 @@ pub enum Errors {
     MaxLengthExceeded,
     #[msg("Error: Mismatch in signer credentials")]
     InvalidSigner,
-    #[msg("Error: Project verification failed or not present")]
+    #[msg("Error: Invalid Signer")]
     InvalidProjectVerification,
     #[msg("Error: Admin credentials invalid or not recognized")]
     InvalidAdmin,
