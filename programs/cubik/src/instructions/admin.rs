@@ -20,7 +20,7 @@ pub fn create_sub_admin_with_full_permissions_handler(
     sub_admin_account.authority = create_key.key();
     sub_admin_account.permission = AdminPermission {
         full: true,
-        project_join_status:true,
+        event_join_status:true,
         project_status:true
     };
     sub_admin_account.event = event_key.key();
@@ -41,7 +41,7 @@ pub fn set_sub_admin_project_status_permissions_handler(
     new_sub_admin_account.authority = create_key.key();
     new_sub_admin_account.permission = AdminPermission {
         full: false,
-        project_join_status:false,
+        event_join_status:false,
         project_status:true
     };
     new_sub_admin_account.event = event_key.key();
@@ -159,6 +159,7 @@ pub struct SetSubAdminEventPermissionsContext<'info> {
         bump 
     )]
     pub new_sub_admin_account: Account<'info, SubAdmin>,
+    
     #[account(mut,
         seeds = [b"admin".as_ref(),authority.key().as_ref()],
         bump = sub_admin_account.bump

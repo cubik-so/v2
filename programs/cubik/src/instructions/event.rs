@@ -22,7 +22,7 @@ pub fn create_event_handler(
     sub_admin_account.authority = ctx.accounts.authority.key();
     sub_admin_account.permission = AdminPermission {
         full: false,
-        project_join_status: true,
+        event_join_status: true,
         project_status: false,
     };
     sub_admin_account.event = event_account.key();

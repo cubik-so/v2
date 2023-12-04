@@ -4,7 +4,7 @@ use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 
-pub fn handler_create_user(
+pub fn create_user_handler(
     ctx: Context<CreateUserContext>,
     username: String,
     metadata: [u8; 32],
@@ -25,7 +25,7 @@ pub fn handler_create_user(
     Ok(())
 }
 
-pub fn handler_update_user(ctx: Context<UpdateUserContext>, metadata: [u8; 32]) -> Result<()> {
+pub fn update_user_handler(ctx: Context<UpdateUserContext>, metadata: [u8; 32]) -> Result<()> {
     let user_account = &mut ctx.accounts.user_account;
     user_account.metadata = metadata;
     Ok(())

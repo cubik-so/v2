@@ -3,6 +3,7 @@ use anchor_lang::prelude::*;
 #[account]
 #[derive(Default, InitSpace)]
 pub struct Admin {
+    // ['admin']
     pub authority: Pubkey,
     pub bump: u8,
 }
@@ -17,7 +18,16 @@ pub struct SubAdmin {
 
 #[derive(Default, AnchorDeserialize, AnchorSerialize, Clone, InitSpace)]
 pub struct AdminPermission {
+    // ['admin',authority]
+    // event = authority,
+    // all true
     pub full: bool,
+    // ['admin',authority]
+    // event = authority,
+    // project status true
     pub project_status: bool,
-    pub project_join_status: bool,
+    // ['admin',authority,event]
+    // event = event_key/sponsor_key,
+    // event_join true
+    pub event_join_status: bool,
 }

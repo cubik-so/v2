@@ -19,12 +19,12 @@ pub mod cubik {
         username: String,
         metadata: [u8; 32],
     ) -> Result<()> {
-        handler_create_user(ctx, username, metadata)?;
+        create_user_handler(ctx, username, metadata)?;
         Ok(())
     }
 
     pub fn update_user(ctx: Context<UpdateUserContext>, metadata: [u8; 32]) -> Result<()> {
-        handler_update_user(ctx, metadata)?;
+        update_user_handler(ctx, metadata)?;
         Ok(())
     }
 
