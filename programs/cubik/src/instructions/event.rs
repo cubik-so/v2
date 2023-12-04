@@ -8,16 +8,17 @@ use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 
 pub fn create_event_handler(
     ctx: Context<CreateEventContext>,
-    event_key: Pubkey,
     matching_pool: u64,
     metadata: [u8;32],
 ) -> Result<()> {
     let event_account = &mut ctx.accounts.event_account;
 
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
+    let event_key = ctx.accounts.event_key.key();
 
     event_account.authority = ctx.accounts.authority.key();
     event_account.matching_pool = matching_pool;
+    event_account.event_key = event_key;
     sub_admin_account.authority = ctx.accounts.authority.key();
     sub_admin_account.permission = AdminPermission {
         full: false,
@@ -31,6 +32,7 @@ pub fn create_event_handler(
         authority: ctx.accounts.authority.key(),
         metadata,
         event_key
+        
     });
 
     Ok(())
@@ -66,8 +68,6 @@ pub fn create_event_join_handler(
 
 pub fn update_approve_handler(
     ctx: Context<UpdateEventJoinContext>,
-    counter: u64,
-    event_key: Pubkey,
 ) -> Result<()> {
     let event_account = &mut ctx.accounts.event_account;
     let event_join_account = &mut ctx.accounts.event_join_account;
@@ -93,8 +93,6 @@ pub fn update_approve_handler(
 
 pub fn update_reject_handler(
     ctx: Context<UpdateEventJoinContext>,
-    counter: u64,
-    event_key: Pubkey,
 ) -> Result<()> {
      let event_account = &mut ctx.accounts.event_account;
     let event_join_account = &mut ctx.accounts.event_join_account;
@@ -134,15 +132,17 @@ pub fn update_event_handler(
 }
 
 #[derive(Accounts)]
-#[instruction(event_key:Pubkey)]
 pub struct CreateEventContext<'info> {
     #[account(mut, constraint = user_account.authority.key() == authority.key() )]
     pub authority: Signer<'info>,
 
+    #[account(mut)]
+    pub event_key: Signer<'info>,
+
     #[account(init,
         payer = authority,
         space = 8 + Event::INIT_SPACE,
-        seeds = [b"event".as_ref(),event_key.as_ref()],
+        seeds = [b"event".as_ref(),event_key.key().as_ref()],
         bump 
     )]
     pub event_account: Box<Account<'info, Event>>,
@@ -169,7 +169,6 @@ pub struct CreateEventContext<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(counter:u64,event_key:Pubkey)]
 pub struct EventJoinContext<'info> {
     #[account(mut,constraint = authority.key() == project_account.owner.key() @ Errors::InvalidSigner)]
     pub authority: Signer<'info>,
@@ -183,16 +182,13 @@ pub struct EventJoinContext<'info> {
     pub event_join_account: Box<Account<'info, EventJoin>>,
 
     #[account(mut,
-            seeds=[b"project",project_account.create_key.key().as_ref(),counter.to_le_bytes().as_ref()],
+            seeds=[b"project",project_account.create_key.key().as_ref(),project_account.counter.to_le_bytes().as_ref()],
             bump = project_account.bump
         )]
     pub project_account: Box<Account<'info, Project>>,
 
 
-
-
-
-    #[account(mut,seeds=[b"event",event_key.key().as_ref()],bump=event_account.bump)]
+    #[account(mut,seeds=[b"event",event_account.event_key.key().as_ref()],bump=event_account.bump)]
     pub event_account: Box<Account<'info, Event>>,
     // Misc Accounts
     #[account(address = system_program::ID)]
@@ -202,7 +198,6 @@ pub struct EventJoinContext<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(counter:u64,event_key:Pubkey)]
 pub struct UpdateEventJoinContext<'info> {
     #[account(mut,constraint = event_account.key() == sub_admin_account.event.key() @ Errors::InvalidAdmin)]
     pub authority: Signer<'info>,
@@ -220,13 +215,13 @@ pub struct UpdateEventJoinContext<'info> {
     pub event_join_account: Box<Account<'info, EventJoin>>,
 
     #[account(mut,
-        seeds = [b"event".as_ref(),event_key.key().as_ref()],
+        seeds = [b"event".as_ref(),event_account.event_key.key().as_ref()],
         bump = event_account.bump
     )]
     pub event_account: Box<Account<'info, Event>>,
 
     #[account(mut,
-        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(), counter.to_le_bytes().as_ref()],
+        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(), project_account.counter.to_le_bytes().as_ref()],
         bump = project_account.bump)]
     pub project_account: Box<Account<'info, Project>>,
 
@@ -238,13 +233,12 @@ pub struct UpdateEventJoinContext<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(event_key:Pubkey)]
 pub struct UpdateEventContext<'info> {
     #[account(mut,constraint = event_account.authority.key() == authority.key())]
     pub authority: Signer<'info>,
 
     #[account(mut,
-        seeds = [b"event".as_ref(),event_key.as_ref()],
+        seeds = [b"event".as_ref(),event_account.event_key.as_ref()],
         bump = event_account.bump
     )]
     pub event_account: Box<Account<'info, Event>>,

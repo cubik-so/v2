@@ -78,7 +78,6 @@ pub fn create_project_handler(
 
 pub fn verified_status_handler(
     ctx: Context<UpdateProjectStatusContext>,
-    _counter: u64,
 ) -> Result<()> {
     let project_account = &mut ctx.accounts.project_account;
 
@@ -103,7 +102,6 @@ pub fn verified_status_handler(
 
 pub fn failed_status_handler(
     ctx: Context<UpdateProjectStatusContext>,
-    _counter: u64,
 ) -> Result<()> {
     let project_account = &mut ctx.accounts.project_account;
     require!(
@@ -125,7 +123,6 @@ pub fn failed_status_handler(
 
 pub fn update_project_handler(
     ctx: Context<UpdateProjectContext>,
-    _counter: u64,
     metadata:[u8;32]
 ) -> Result<()> {
 
@@ -141,8 +138,7 @@ pub fn update_project_handler(
 }
 
 
-pub fn transfer_project_handler(ctx: Context<TransferProjectContext>,
-    _counter: u64,
+pub fn transfer_project_handler(ctx: Context<TransferProjectContext>
 )-> Result<()>{
 
     let project_account = &mut ctx.accounts.project_account;
@@ -197,7 +193,6 @@ pub struct CreateProjectContext<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(_counter: u64)]
 pub struct UpdateProjectStatusContext<'info> {
 
     #[account(mut,constraint = authority.key() == sub_admin_account.authority.key() @ Errors::InvalidSigner)]
@@ -210,7 +205,7 @@ pub struct UpdateProjectStatusContext<'info> {
     pub sub_admin_account: Box<Account<'info, SubAdmin>>,
 
     #[account(mut,
-        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),_counter.to_le_bytes().as_ref()],
+        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),project_account.counter.to_le_bytes().as_ref()],
         bump = project_account.bump
     )]
     pub project_account: Box<Account<'info, Project>>,
@@ -223,13 +218,12 @@ pub struct UpdateProjectStatusContext<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(_counter: u64)]
 pub struct  UpdateProjectContext<'info>{
     #[account(mut,constraint = authority.key() == project_account.owner.key() @ Errors::InvalidSigner)]
     pub authority: Signer<'info>,
 
     #[account(mut,
-        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),_counter.to_le_bytes().as_ref()],
+        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),project_account.counter.to_le_bytes().as_ref()],
         bump = project_account.bump
     )]
     pub project_account: Box<Account<'info, Project>>,
@@ -242,14 +236,13 @@ pub struct  UpdateProjectContext<'info>{
 
 }
 #[derive(Accounts)]
-#[instruction(_counter: u64)]
 pub struct  TransferProjectContext<'info>{
 
     #[account(mut,constraint = authority.key() == project_account.owner.key() @ Errors::InvalidSigner)]
     pub authority: Signer<'info>,
 
     #[account(mut,
-        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),_counter.to_le_bytes().as_ref()],
+        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),project_account.counter.to_le_bytes().as_ref()],
         bump = project_account.bump
     )]
     pub project_account: Box<Account<'info, Project>>,
