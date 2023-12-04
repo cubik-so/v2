@@ -1,6 +1,6 @@
 {
-  "version": "0.1.0",
-  "name": "cubik_v2",
+  "version": "0.0.0",
+  "name": "cubik",
   "instructions": [
     {
       "name": "createUser",
@@ -33,7 +33,48 @@
         },
         {
           "name": "metadata",
-          "type": "string"
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateUser",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "userAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "metadata",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
         }
       ]
     },
@@ -41,8 +82,13 @@
       "name": "createProject",
       "accounts": [
         {
-          "name": "owners",
+          "name": "owner",
           "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "createKey",
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -51,13 +97,18 @@
           "isSigner": false
         },
         {
-          "name": "adminAccount",
+          "name": "userAccount",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "userAccount",
+          "name": "multisig",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "squadsProgram",
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -82,12 +133,17 @@
         },
         {
           "name": "metadata",
-          "type": "string"
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
         }
       ]
     },
     {
-      "name": "updateProjectStatusVerified",
+      "name": "projectStatusVerified",
       "accounts": [
         {
           "name": "authority",
@@ -95,7 +151,7 @@
           "isSigner": true
         },
         {
-          "name": "adminAccount",
+          "name": "subAdminAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -105,11 +161,6 @@
           "isSigner": false
         },
         {
-          "name": "userAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -120,19 +171,10 @@
           "isSigner": false
         }
       ],
-      "args": [
-        {
-          "name": "counter",
-          "type": "u64"
-        },
-        {
-          "name": "owner",
-          "type": "publicKey"
-        }
-      ]
+      "args": []
     },
     {
-      "name": "updateProjectStatusFailed",
+      "name": "projectStatusFailed",
       "accounts": [
         {
           "name": "authority",
@@ -140,7 +182,7 @@
           "isSigner": true
         },
         {
-          "name": "adminAccount",
+          "name": "subAdminAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -150,11 +192,6 @@
           "isSigner": false
         },
         {
-          "name": "userAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -165,19 +202,10 @@
           "isSigner": false
         }
       ],
-      "args": [
-        {
-          "name": "counter",
-          "type": "u64"
-        },
-        {
-          "name": "owner",
-          "type": "publicKey"
-        }
-      ]
+      "args": []
     },
     {
-      "name": "createEvent",
+      "name": "updateProject",
       "accounts": [
         {
           "name": "authority",
@@ -185,7 +213,7 @@
           "isSigner": true
         },
         {
-          "name": "eventAccount",
+          "name": "projectAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -202,21 +230,18 @@
       ],
       "args": [
         {
-          "name": "eventKey",
-          "type": "publicKey"
-        },
-        {
-          "name": "matchingPool",
-          "type": "u64"
-        },
-        {
           "name": "metadata",
-          "type": "string"
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
         }
       ]
     },
     {
-      "name": "updateEvent",
+      "name": "transferProject",
       "accounts": [
         {
           "name": "authority",
@@ -224,7 +249,12 @@
           "isSigner": true
         },
         {
-          "name": "eventAccount",
+          "name": "projectAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "transferUserAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -239,20 +269,7 @@
           "isSigner": false
         }
       ],
-      "args": [
-        {
-          "name": "eventKey",
-          "type": "publicKey"
-        },
-        {
-          "name": "matchingPool",
-          "type": "u64"
-        },
-        {
-          "name": "metadata",
-          "type": "string"
-        }
-      ]
+      "args": []
     },
     {
       "name": "createEventJoin",
@@ -296,15 +313,11 @@
         {
           "name": "eventKey",
           "type": "publicKey"
-        },
-        {
-          "name": "metadata",
-          "type": "string"
         }
       ]
     },
     {
-      "name": "approveEventJoin",
+      "name": "createEvent",
       "accounts": [
         {
           "name": "authority",
@@ -312,14 +325,9 @@
           "isSigner": true
         },
         {
-          "name": "adminAccount",
+          "name": "eventKey",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "eventJoinAccount",
-          "isMut": true,
-          "isSigner": false
+          "isSigner": true
         },
         {
           "name": "eventAccount",
@@ -327,97 +335,9 @@
           "isSigner": false
         },
         {
-          "name": "projectAccount",
+          "name": "subAdminAccount",
           "isMut": true,
           "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "counter",
-          "type": "u64"
-        },
-        {
-          "name": "eventKey",
-          "type": "publicKey"
-        },
-        {
-          "name": "owner",
-          "type": "publicKey"
-        }
-      ]
-    },
-    {
-      "name": "rejectedEventJoin",
-      "accounts": [
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "adminAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "eventJoinAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "eventAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "projectAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "counter",
-          "type": "u64"
-        },
-        {
-          "name": "eventKey",
-          "type": "publicKey"
-        },
-        {
-          "name": "owner",
-          "type": "publicKey"
-        }
-      ]
-    },
-    {
-      "name": "tipUser",
-      "accounts": [
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
         },
         {
           "name": "userAccount",
@@ -425,27 +345,7 @@
           "isSigner": false
         },
         {
-          "name": "tokenMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAtaSender",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAtaReceiver",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         },
@@ -457,13 +357,22 @@
       ],
       "args": [
         {
-          "name": "amount",
+          "name": "matchingPool",
           "type": "u64"
+        },
+        {
+          "name": "metadata",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
         }
       ]
     },
     {
-      "name": "tipProject",
+      "name": "updateEventJoinStatusApprove",
       "accounts": [
         {
           "name": "authority",
@@ -471,22 +380,22 @@
           "isSigner": true
         },
         {
+          "name": "subAdminAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "eventJoinAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "eventAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "projectAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAtaSender",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAtaReceiver",
           "isMut": true,
           "isSigner": false
         },
@@ -496,7 +405,69 @@
           "isSigner": false
         },
         {
-          "name": "tokenProgram",
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "updateEventJoinStatusRejected",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "subAdminAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "eventJoinAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "eventAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "projectAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "updateEvent",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "eventAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
           "isMut": false,
           "isSigner": false
         },
@@ -508,8 +479,201 @@
       ],
       "args": [
         {
-          "name": "amount",
+          "name": "matchingPool",
           "type": "u64"
+        },
+        {
+          "name": "metadata",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "createAdmin",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "adminAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "setSubAdminProjectStatusPermissions",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "newSubAdminAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "subAdminAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "createKey",
+          "type": "publicKey"
+        },
+        {
+          "name": "eventKey",
+          "type": "publicKey"
+        }
+      ]
+    },
+    {
+      "name": "setSubAdminEventPermissions",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "newSubAdminAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "subAdminAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "createKey",
+          "type": "publicKey"
+        },
+        {
+          "name": "eventKey",
+          "type": "publicKey"
+        },
+        {
+          "name": "permission",
+          "type": {
+            "defined": "AdminPermission"
+          }
+        }
+      ]
+    },
+    {
+      "name": "closeSubAdminEventAccess",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "closeSubAdminAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "subAdminAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "createKey",
+          "type": "publicKey"
+        }
+      ]
+    },
+    {
+      "name": "closeSubAdmin",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "closeSubAdminAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "subAdminAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "createKey",
+          "type": "publicKey"
         }
       ]
     }
@@ -532,6 +696,32 @@
       }
     },
     {
+      "name": "SubAdmin",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "permission",
+            "type": {
+              "defined": "AdminPermission"
+            }
+          },
+          {
+            "name": "event",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
       "name": "EventJoin",
       "type": {
         "kind": "struct",
@@ -543,12 +733,12 @@
           {
             "name": "status",
             "type": {
-              "defined": "RoundProjectStatus"
+              "defined": "EventProjectStatus"
             }
           },
           {
             "name": "donation",
-            "type": "u128"
+            "type": "u64"
           },
           {
             "name": "bump",
@@ -573,6 +763,15 @@
           {
             "name": "eventKey",
             "type": "publicKey"
+          },
+          {
+            "name": "metadata",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
           },
           {
             "name": "bump",
@@ -605,6 +804,35 @@
             "type": "publicKey"
           },
           {
+            "name": "createKey",
+            "type": "publicKey"
+          },
+          {
+            "name": "metadata",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SponsorTeam",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
             "name": "bump",
             "type": "u8"
           }
@@ -621,20 +849,16 @@
             "type": "publicKey"
           },
           {
-            "name": "totalAmount",
-            "type": "u64"
-          },
-          {
-            "name": "totalAmountPaid",
-            "type": "u64"
-          },
-          {
-            "name": "token",
-            "type": "publicKey"
-          },
-          {
             "name": "vault",
             "type": "publicKey"
+          },
+          {
+            "name": "totalCommittedUsd",
+            "type": "u64"
+          },
+          {
+            "name": "totalPaidUsd",
+            "type": "u64"
           },
           {
             "name": "bump",
@@ -653,6 +877,15 @@
             "type": "publicKey"
           },
           {
+            "name": "metadata",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
             "name": "bump",
             "type": "u8"
           }
@@ -662,7 +895,27 @@
   ],
   "types": [
     {
-      "name": "RoundProjectStatus",
+      "name": "AdminPermission",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "full",
+            "type": "bool"
+          },
+          {
+            "name": "projectStatus",
+            "type": "bool"
+          },
+          {
+            "name": "projectJoinStatus",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EventProjectStatus",
       "type": {
         "kind": "enum",
         "variants": [
@@ -706,6 +959,46 @@
           "index": false
         },
         {
+          "name": "username",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "metadata",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          },
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "NewSponsor",
+      "fields": [
+        {
+          "name": "authority",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "metadata",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "UpdateSponsorEvent",
+      "fields": [
+        {
+          "name": "authority",
+          "type": "publicKey",
+          "index": false
+        },
+        {
           "name": "metadata",
           "type": "string",
           "index": false
@@ -727,7 +1020,12 @@
         },
         {
           "name": "metadata",
-          "type": "string",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          },
           "index": false
         }
       ]
@@ -750,6 +1048,26 @@
       ]
     },
     {
+      "name": "UpdateProject",
+      "fields": [
+        {
+          "name": "authority",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "metadata",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          },
+          "index": false
+        }
+      ]
+    },
+    {
       "name": "NewEvent",
       "fields": [
         {
@@ -759,7 +1077,12 @@
         },
         {
           "name": "metadata",
-          "type": "string",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          },
           "index": false
         },
         {
@@ -779,7 +1102,12 @@
         },
         {
           "name": "metadata",
-          "type": "string",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          },
           "index": false
         }
       ]
@@ -793,8 +1121,13 @@
           "index": false
         },
         {
-          "name": "metadata",
-          "type": "string",
+          "name": "projectAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "eventAccount",
+          "type": "publicKey",
           "index": false
         }
       ]
@@ -859,23 +1192,32 @@
     {
       "code": 6000,
       "name": "MaxLengthExceeded",
-      "msg": "max length is 32"
+      "msg": "Error: Maximum length of 32 characters exceeded"
     },
     {
       "code": 6001,
       "name": "InvalidSigner",
-      "msg": "Signer Mismatch"
+      "msg": "Error: Mismatch in signer credentials"
     },
     {
       "code": 6002,
       "name": "InvalidProjectVerification",
-      "msg": "project not verified"
+      "msg": "Error: Invalid Signer"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidAdmin",
+      "msg": "Error: Admin credentials invalid or not recognized"
+    },
+    {
+      "code": 6004,
+      "name": "Permission",
+      "msg": "Error: Unauthorized access attempt detected"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidTip",
+      "msg": "Error: Owner of project cannot tip the Project itself"
     }
-  ],
-  "metadata": {
-    "address": "3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS",
-    "origin": "anchor",
-    "binaryVersion": "0.29.0",
-    "libVersion": "0.29.0"
-  }
+  ]
 }
