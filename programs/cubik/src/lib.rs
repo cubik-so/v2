@@ -124,6 +124,11 @@ pub mod cubik {
         Ok(())
     }
     pub fn close_sub_admin(ctx: Context<CloseSubAdminContext>, create_key: Pubkey) -> Result<()> {
-        close_sub_admin_handler(ctx, create_key)
+        close_sub_admin_handler(ctx, create_key)?;
+        Ok(())
+    }
+    pub fn invite_event_join(ctx: Context<InviteEventJoinContext>) -> Result<()> {
+        invite_event_join_handler(ctx)?;
+        Ok(())
     }
 }
