@@ -7,7 +7,8 @@ use instructions::*;
 pub mod state;
 use state::*;
 
-declare_id!("CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7");
+// declare_id!("CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7");
+declare_id!("3s9zZaosL6hJFeDToXDoPN4sQgyVwLEdqzaztZXj1Nnk");
 
 #[program]
 pub mod cubik {

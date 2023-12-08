@@ -5,18 +5,19 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-cubik_v2 = "CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7"
+# cubik_v2 = "CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7"
+cubik_v2 = "3s9zZaosL6hJFeDToXDoPN4sQgyVwLEdqzaztZXj1Nnk"
 
 [programs.devnet]
-cubik_v2 = "CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7"
+cubik_v2 = "3s9zZaosL6hJFeDToXDoPN4sQgyVwLEdqzaztZXj1Nnk"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
-wallet = "/Users/dhruvraj/.config/solana/id.json"
+cluster = "devnet"
+wallet = "/Users/sahilpabale/wallets/cubik/CBKiBsr31UR58LqdMWtWkKiPAsB4VAhWgWmW4XCicj3p.json"
 
 [scripts]
-test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000"
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.spec.ts"
 lint = "yarn prettify:fix && cargo fmt"

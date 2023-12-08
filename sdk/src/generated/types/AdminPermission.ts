@@ -6,20 +6,21 @@
  */
 
 import * as beet from '@metaplex-foundation/beet'
-/**
- * @category enums
- * @category generated
- */
-export enum ProjectVerification {
-  UnderReview,
-  Verified,
-  VerificationFailed,
+export type AdminPermission = {
+  full: boolean
+  projectStatus: boolean
+  eventJoinStatus: boolean
 }
 
 /**
  * @category userTypes
  * @category generated
  */
-export const projectVerificationBeet = beet.fixedScalarEnum(
-  ProjectVerification
-) as beet.FixedSizeBeet<ProjectVerification, ProjectVerification>
+export const adminPermissionBeet = new beet.BeetArgsStruct<AdminPermission>(
+  [
+    ['full', beet.bool],
+    ['projectStatus', beet.bool],
+    ['eventJoinStatus', beet.bool],
+  ],
+  'AdminPermission'
+)

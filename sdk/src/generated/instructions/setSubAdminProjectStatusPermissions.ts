@@ -5,78 +5,78 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
 import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as beet from '@metaplex-foundation/beet'
 
 /**
  * @category Instructions
- * @category CreateEventJoin
+ * @category SetSubAdminProjectStatusPermissions
  * @category generated
  */
-export type CreateEventJoinInstructionArgs = {
-  counter: beet.bignum
+export type SetSubAdminProjectStatusPermissionsInstructionArgs = {
+  createKey: web3.PublicKey
   eventKey: web3.PublicKey
 }
 /**
  * @category Instructions
- * @category CreateEventJoin
+ * @category SetSubAdminProjectStatusPermissions
  * @category generated
  */
-export const createEventJoinStruct = new beet.BeetArgsStruct<
-  CreateEventJoinInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */
-  }
->(
-  [
-    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['counter', beet.u64],
-    ['eventKey', beetSolana.publicKey],
-  ],
-  'CreateEventJoinInstructionArgs'
-)
+export const setSubAdminProjectStatusPermissionsStruct =
+  new beet.BeetArgsStruct<
+    SetSubAdminProjectStatusPermissionsInstructionArgs & {
+      instructionDiscriminator: number[] /* size: 8 */
+    }
+  >(
+    [
+      ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
+      ['createKey', beetSolana.publicKey],
+      ['eventKey', beetSolana.publicKey],
+    ],
+    'SetSubAdminProjectStatusPermissionsInstructionArgs'
+  )
 /**
- * Accounts required by the _createEventJoin_ instruction
+ * Accounts required by the _setSubAdminProjectStatusPermissions_ instruction
  *
  * @property [_writable_, **signer**] authority
- * @property [_writable_] eventJoinAccount
- * @property [_writable_] projectAccount
- * @property [_writable_] eventAccount
+ * @property [_writable_] newSubAdminAccount
+ * @property [_writable_] subAdminAccount
  * @category Instructions
- * @category CreateEventJoin
+ * @category SetSubAdminProjectStatusPermissions
  * @category generated
  */
-export type CreateEventJoinInstructionAccounts = {
+export type SetSubAdminProjectStatusPermissionsInstructionAccounts = {
   authority: web3.PublicKey
-  eventJoinAccount: web3.PublicKey
-  projectAccount: web3.PublicKey
-  eventAccount: web3.PublicKey
+  newSubAdminAccount: web3.PublicKey
+  subAdminAccount: web3.PublicKey
   systemProgram?: web3.PublicKey
   rent?: web3.PublicKey
   anchorRemainingAccounts?: web3.AccountMeta[]
 }
 
-export const createEventJoinInstructionDiscriminator = [
-  225, 73, 212, 8, 140, 148, 168, 110,
+export const setSubAdminProjectStatusPermissionsInstructionDiscriminator = [
+  133, 209, 103, 206, 87, 207, 173, 246,
 ]
 
 /**
- * Creates a _CreateEventJoin_ instruction.
+ * Creates a _SetSubAdminProjectStatusPermissions_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
  * @param args to provide as instruction data to the program
  *
  * @category Instructions
- * @category CreateEventJoin
+ * @category SetSubAdminProjectStatusPermissions
  * @category generated
  */
-export function createCreateEventJoinInstruction(
-  accounts: CreateEventJoinInstructionAccounts,
-  args: CreateEventJoinInstructionArgs,
+export function createSetSubAdminProjectStatusPermissionsInstruction(
+  accounts: SetSubAdminProjectStatusPermissionsInstructionAccounts,
+  args: SetSubAdminProjectStatusPermissionsInstructionArgs,
   programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
 ) {
-  const [data] = createEventJoinStruct.serialize({
-    instructionDiscriminator: createEventJoinInstructionDiscriminator,
+  const [data] = setSubAdminProjectStatusPermissionsStruct.serialize({
+    instructionDiscriminator:
+      setSubAdminProjectStatusPermissionsInstructionDiscriminator,
     ...args,
   })
   const keys: web3.AccountMeta[] = [
@@ -86,17 +86,12 @@ export function createCreateEventJoinInstruction(
       isSigner: true,
     },
     {
-      pubkey: accounts.eventJoinAccount,
+      pubkey: accounts.newSubAdminAccount,
       isWritable: true,
       isSigner: false,
     },
     {
-      pubkey: accounts.projectAccount,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.eventAccount,
+      pubkey: accounts.subAdminAccount,
       isWritable: true,
       isSigner: false,
     },

@@ -10,69 +10,52 @@ import * as web3 from '@solana/web3.js'
 
 /**
  * @category Instructions
- * @category UpdateEvent
+ * @category TransferProject
  * @category generated
  */
-export type UpdateEventInstructionArgs = {
-  matchingPool: beet.bignum
-  metadata: number[] /* size: 32 */
-}
-/**
- * @category Instructions
- * @category UpdateEvent
- * @category generated
- */
-export const updateEventStruct = new beet.BeetArgsStruct<
-  UpdateEventInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */
-  }
->(
-  [
-    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['matchingPool', beet.u64],
-    ['metadata', beet.uniformFixedSizeArray(beet.u8, 32)],
-  ],
-  'UpdateEventInstructionArgs'
+export const transferProjectStruct = new beet.BeetArgsStruct<{
+  instructionDiscriminator: number[] /* size: 8 */
+}>(
+  [['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)]],
+  'TransferProjectInstructionArgs'
 )
 /**
- * Accounts required by the _updateEvent_ instruction
+ * Accounts required by the _transferProject_ instruction
  *
  * @property [_writable_, **signer**] authority
- * @property [_writable_] eventAccount
+ * @property [_writable_] projectAccount
+ * @property [_writable_] transferUserAccount
  * @category Instructions
- * @category UpdateEvent
+ * @category TransferProject
  * @category generated
  */
-export type UpdateEventInstructionAccounts = {
+export type TransferProjectInstructionAccounts = {
   authority: web3.PublicKey
-  eventAccount: web3.PublicKey
+  projectAccount: web3.PublicKey
+  transferUserAccount: web3.PublicKey
   systemProgram?: web3.PublicKey
   rent?: web3.PublicKey
   anchorRemainingAccounts?: web3.AccountMeta[]
 }
 
-export const updateEventInstructionDiscriminator = [
-  70, 108, 211, 125, 171, 176, 25, 217,
+export const transferProjectInstructionDiscriminator = [
+  164, 123, 142, 233, 67, 142, 71, 148,
 ]
 
 /**
- * Creates a _UpdateEvent_ instruction.
+ * Creates a _TransferProject_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
- * @param args to provide as instruction data to the program
- *
  * @category Instructions
- * @category UpdateEvent
+ * @category TransferProject
  * @category generated
  */
-export function createUpdateEventInstruction(
-  accounts: UpdateEventInstructionAccounts,
-  args: UpdateEventInstructionArgs,
+export function createTransferProjectInstruction(
+  accounts: TransferProjectInstructionAccounts,
   programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
 ) {
-  const [data] = updateEventStruct.serialize({
-    instructionDiscriminator: updateEventInstructionDiscriminator,
-    ...args,
+  const [data] = transferProjectStruct.serialize({
+    instructionDiscriminator: transferProjectInstructionDiscriminator,
   })
   const keys: web3.AccountMeta[] = [
     {
@@ -81,7 +64,12 @@ export function createUpdateEventInstruction(
       isSigner: true,
     },
     {
-      pubkey: accounts.eventAccount,
+      pubkey: accounts.projectAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.transferUserAccount,
       isWritable: true,
       isSigner: false,
     },

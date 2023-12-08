@@ -10,69 +10,57 @@ import * as web3 from '@solana/web3.js'
 
 /**
  * @category Instructions
- * @category UpdateEvent
+ * @category UpdateEventJoinStatusApprove
  * @category generated
  */
-export type UpdateEventInstructionArgs = {
-  matchingPool: beet.bignum
-  metadata: number[] /* size: 32 */
-}
-/**
- * @category Instructions
- * @category UpdateEvent
- * @category generated
- */
-export const updateEventStruct = new beet.BeetArgsStruct<
-  UpdateEventInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */
-  }
->(
-  [
-    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['matchingPool', beet.u64],
-    ['metadata', beet.uniformFixedSizeArray(beet.u8, 32)],
-  ],
-  'UpdateEventInstructionArgs'
+export const updateEventJoinStatusApproveStruct = new beet.BeetArgsStruct<{
+  instructionDiscriminator: number[] /* size: 8 */
+}>(
+  [['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)]],
+  'UpdateEventJoinStatusApproveInstructionArgs'
 )
 /**
- * Accounts required by the _updateEvent_ instruction
+ * Accounts required by the _updateEventJoinStatusApprove_ instruction
  *
  * @property [_writable_, **signer**] authority
+ * @property [_writable_] subAdminAccount
+ * @property [_writable_] eventJoinAccount
  * @property [_writable_] eventAccount
+ * @property [_writable_] projectAccount
  * @category Instructions
- * @category UpdateEvent
+ * @category UpdateEventJoinStatusApprove
  * @category generated
  */
-export type UpdateEventInstructionAccounts = {
+export type UpdateEventJoinStatusApproveInstructionAccounts = {
   authority: web3.PublicKey
+  subAdminAccount: web3.PublicKey
+  eventJoinAccount: web3.PublicKey
   eventAccount: web3.PublicKey
+  projectAccount: web3.PublicKey
   systemProgram?: web3.PublicKey
   rent?: web3.PublicKey
   anchorRemainingAccounts?: web3.AccountMeta[]
 }
 
-export const updateEventInstructionDiscriminator = [
-  70, 108, 211, 125, 171, 176, 25, 217,
+export const updateEventJoinStatusApproveInstructionDiscriminator = [
+  248, 30, 97, 49, 79, 198, 242, 23,
 ]
 
 /**
- * Creates a _UpdateEvent_ instruction.
+ * Creates a _UpdateEventJoinStatusApprove_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
- * @param args to provide as instruction data to the program
- *
  * @category Instructions
- * @category UpdateEvent
+ * @category UpdateEventJoinStatusApprove
  * @category generated
  */
-export function createUpdateEventInstruction(
-  accounts: UpdateEventInstructionAccounts,
-  args: UpdateEventInstructionArgs,
+export function createUpdateEventJoinStatusApproveInstruction(
+  accounts: UpdateEventJoinStatusApproveInstructionAccounts,
   programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
 ) {
-  const [data] = updateEventStruct.serialize({
-    instructionDiscriminator: updateEventInstructionDiscriminator,
-    ...args,
+  const [data] = updateEventJoinStatusApproveStruct.serialize({
+    instructionDiscriminator:
+      updateEventJoinStatusApproveInstructionDiscriminator,
   })
   const keys: web3.AccountMeta[] = [
     {
@@ -81,7 +69,22 @@ export function createUpdateEventInstruction(
       isSigner: true,
     },
     {
+      pubkey: accounts.subAdminAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.eventJoinAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
       pubkey: accounts.eventAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.projectAccount,
       isWritable: true,
       isSigner: false,
     },

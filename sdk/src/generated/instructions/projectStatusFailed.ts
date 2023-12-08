@@ -10,69 +10,52 @@ import * as web3 from '@solana/web3.js'
 
 /**
  * @category Instructions
- * @category UpdateEvent
+ * @category ProjectStatusFailed
  * @category generated
  */
-export type UpdateEventInstructionArgs = {
-  matchingPool: beet.bignum
-  metadata: number[] /* size: 32 */
-}
-/**
- * @category Instructions
- * @category UpdateEvent
- * @category generated
- */
-export const updateEventStruct = new beet.BeetArgsStruct<
-  UpdateEventInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */
-  }
->(
-  [
-    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['matchingPool', beet.u64],
-    ['metadata', beet.uniformFixedSizeArray(beet.u8, 32)],
-  ],
-  'UpdateEventInstructionArgs'
+export const projectStatusFailedStruct = new beet.BeetArgsStruct<{
+  instructionDiscriminator: number[] /* size: 8 */
+}>(
+  [['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)]],
+  'ProjectStatusFailedInstructionArgs'
 )
 /**
- * Accounts required by the _updateEvent_ instruction
+ * Accounts required by the _projectStatusFailed_ instruction
  *
  * @property [_writable_, **signer**] authority
- * @property [_writable_] eventAccount
+ * @property [_writable_] subAdminAccount
+ * @property [_writable_] projectAccount
  * @category Instructions
- * @category UpdateEvent
+ * @category ProjectStatusFailed
  * @category generated
  */
-export type UpdateEventInstructionAccounts = {
+export type ProjectStatusFailedInstructionAccounts = {
   authority: web3.PublicKey
-  eventAccount: web3.PublicKey
+  subAdminAccount: web3.PublicKey
+  projectAccount: web3.PublicKey
   systemProgram?: web3.PublicKey
   rent?: web3.PublicKey
   anchorRemainingAccounts?: web3.AccountMeta[]
 }
 
-export const updateEventInstructionDiscriminator = [
-  70, 108, 211, 125, 171, 176, 25, 217,
+export const projectStatusFailedInstructionDiscriminator = [
+  46, 166, 213, 55, 51, 186, 22, 85,
 ]
 
 /**
- * Creates a _UpdateEvent_ instruction.
+ * Creates a _ProjectStatusFailed_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
- * @param args to provide as instruction data to the program
- *
  * @category Instructions
- * @category UpdateEvent
+ * @category ProjectStatusFailed
  * @category generated
  */
-export function createUpdateEventInstruction(
-  accounts: UpdateEventInstructionAccounts,
-  args: UpdateEventInstructionArgs,
+export function createProjectStatusFailedInstruction(
+  accounts: ProjectStatusFailedInstructionAccounts,
   programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
 ) {
-  const [data] = updateEventStruct.serialize({
-    instructionDiscriminator: updateEventInstructionDiscriminator,
-    ...args,
+  const [data] = projectStatusFailedStruct.serialize({
+    instructionDiscriminator: projectStatusFailedInstructionDiscriminator,
   })
   const keys: web3.AccountMeta[] = [
     {
@@ -81,7 +64,12 @@ export function createUpdateEventInstruction(
       isSigner: true,
     },
     {
-      pubkey: accounts.eventAccount,
+      pubkey: accounts.subAdminAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.projectAccount,
       isWritable: true,
       isSigner: false,
     },

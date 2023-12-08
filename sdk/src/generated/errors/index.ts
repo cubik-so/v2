@@ -5,68 +5,68 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-type ErrorWithCode = Error & { code: number };
-type MaybeErrorWithCode = ErrorWithCode | null | undefined;
+type ErrorWithCode = Error & { code: number }
+type MaybeErrorWithCode = ErrorWithCode | null | undefined
 
-const createErrorFromCodeLookup: Map<number, () => ErrorWithCode> = new Map();
-const createErrorFromNameLookup: Map<string, () => ErrorWithCode> = new Map();
+const createErrorFromCodeLookup: Map<number, () => ErrorWithCode> = new Map()
+const createErrorFromNameLookup: Map<string, () => ErrorWithCode> = new Map()
 
 /**
- * MaxLengthExceeded: 'max length is 32'
+ * MaxLengthExceeded: 'Error: Maximum length of 32 characters exceeded'
  *
  * @category Errors
  * @category generated
  */
 export class MaxLengthExceededError extends Error {
-  readonly code: number = 0x1770;
-  readonly name: string = "MaxLengthExceeded";
+  readonly code: number = 0x1770
+  readonly name: string = 'MaxLengthExceeded'
   constructor() {
-    super("max length is 32");
-    if (typeof Error.captureStackTrace === "function") {
-      Error.captureStackTrace(this, MaxLengthExceededError);
+    super('Error: Maximum length of 32 characters exceeded')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, MaxLengthExceededError)
     }
   }
 }
 
-createErrorFromCodeLookup.set(0x1770, () => new MaxLengthExceededError());
+createErrorFromCodeLookup.set(0x1770, () => new MaxLengthExceededError())
 createErrorFromNameLookup.set(
-  "MaxLengthExceeded",
+  'MaxLengthExceeded',
   () => new MaxLengthExceededError()
-);
+)
 
 /**
- * InvalidSigner: 'Signer Mismatch'
+ * InvalidSigner: 'Error: Mismatch in signer credentials'
  *
  * @category Errors
  * @category generated
  */
 export class InvalidSignerError extends Error {
-  readonly code: number = 0x1771;
-  readonly name: string = "InvalidSigner";
+  readonly code: number = 0x1771
+  readonly name: string = 'InvalidSigner'
   constructor() {
-    super("Signer Mismatch");
-    if (typeof Error.captureStackTrace === "function") {
-      Error.captureStackTrace(this, InvalidSignerError);
+    super('Error: Mismatch in signer credentials')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidSignerError)
     }
   }
 }
 
-createErrorFromCodeLookup.set(0x1771, () => new InvalidSignerError());
-createErrorFromNameLookup.set("InvalidSigner", () => new InvalidSignerError());
+createErrorFromCodeLookup.set(0x1771, () => new InvalidSignerError())
+createErrorFromNameLookup.set('InvalidSigner', () => new InvalidSignerError())
 
 /**
- * InvalidProjectVerification: 'project not verified'
+ * InvalidProjectVerification: 'Error: Invalid Signer'
  *
  * @category Errors
  * @category generated
  */
 export class InvalidProjectVerificationError extends Error {
-  readonly code: number = 0x1772;
-  readonly name: string = "InvalidProjectVerification";
+  readonly code: number = 0x1772
+  readonly name: string = 'InvalidProjectVerification'
   constructor() {
-    super("project not verified");
-    if (typeof Error.captureStackTrace === "function") {
-      Error.captureStackTrace(this, InvalidProjectVerificationError);
+    super('Error: Invalid Signer')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidProjectVerificationError)
     }
   }
 }
@@ -74,11 +74,71 @@ export class InvalidProjectVerificationError extends Error {
 createErrorFromCodeLookup.set(
   0x1772,
   () => new InvalidProjectVerificationError()
-);
+)
 createErrorFromNameLookup.set(
-  "InvalidProjectVerification",
+  'InvalidProjectVerification',
   () => new InvalidProjectVerificationError()
-);
+)
+
+/**
+ * InvalidAdmin: 'Error: Admin credentials invalid or not recognized'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidAdminError extends Error {
+  readonly code: number = 0x1773
+  readonly name: string = 'InvalidAdmin'
+  constructor() {
+    super('Error: Admin credentials invalid or not recognized')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidAdminError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1773, () => new InvalidAdminError())
+createErrorFromNameLookup.set('InvalidAdmin', () => new InvalidAdminError())
+
+/**
+ * Permission: 'Error: Unauthorized access attempt detected'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class PermissionError extends Error {
+  readonly code: number = 0x1774
+  readonly name: string = 'Permission'
+  constructor() {
+    super('Error: Unauthorized access attempt detected')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, PermissionError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1774, () => new PermissionError())
+createErrorFromNameLookup.set('Permission', () => new PermissionError())
+
+/**
+ * InvalidTip: 'Error: Owner of project cannot tip the Project itself'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidTipError extends Error {
+  readonly code: number = 0x1775
+  readonly name: string = 'InvalidTip'
+  constructor() {
+    super('Error: Owner of project cannot tip the Project itself')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidTipError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1775, () => new InvalidTipError())
+createErrorFromNameLookup.set('InvalidTip', () => new InvalidTipError())
 
 /**
  * Attempts to resolve a custom program error from the provided error code.
@@ -86,8 +146,8 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export function errorFromCode(code: number): MaybeErrorWithCode {
-  const createError = createErrorFromCodeLookup.get(code);
-  return createError != null ? createError() : null;
+  const createError = createErrorFromCodeLookup.get(code)
+  return createError != null ? createError() : null
 }
 
 /**
@@ -96,6 +156,6 @@ export function errorFromCode(code: number): MaybeErrorWithCode {
  * @category generated
  */
 export function errorFromName(name: string): MaybeErrorWithCode {
-  const createError = createErrorFromNameLookup.get(name);
-  return createError != null ? createError() : null;
+  const createError = createErrorFromNameLookup.get(name)
+  return createError != null ? createError() : null
 }

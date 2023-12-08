@@ -95,7 +95,7 @@ pub fn update_reject_handler(
     ctx: Context<UpdateEventJoinContext>,
 ) -> Result<()> {
      let event_account = &mut ctx.accounts.event_account;
-    let event_join_account = &mut ctx.accounts.event_join_account;
+    let event_join_account: &mut Box<Account<'_, EventJoin>> = &mut ctx.accounts.event_join_account;
     let project_account = &mut ctx.accounts.project_account;
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
 

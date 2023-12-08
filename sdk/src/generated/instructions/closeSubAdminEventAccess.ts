@@ -5,73 +5,74 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
+import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as beet from '@metaplex-foundation/beet'
 
 /**
  * @category Instructions
- * @category UpdateEvent
+ * @category CloseSubAdminEventAccess
  * @category generated
  */
-export type UpdateEventInstructionArgs = {
-  matchingPool: beet.bignum
-  metadata: number[] /* size: 32 */
+export type CloseSubAdminEventAccessInstructionArgs = {
+  createKey: web3.PublicKey
 }
 /**
  * @category Instructions
- * @category UpdateEvent
+ * @category CloseSubAdminEventAccess
  * @category generated
  */
-export const updateEventStruct = new beet.BeetArgsStruct<
-  UpdateEventInstructionArgs & {
+export const closeSubAdminEventAccessStruct = new beet.BeetArgsStruct<
+  CloseSubAdminEventAccessInstructionArgs & {
     instructionDiscriminator: number[] /* size: 8 */
   }
 >(
   [
     ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['matchingPool', beet.u64],
-    ['metadata', beet.uniformFixedSizeArray(beet.u8, 32)],
+    ['createKey', beetSolana.publicKey],
   ],
-  'UpdateEventInstructionArgs'
+  'CloseSubAdminEventAccessInstructionArgs'
 )
 /**
- * Accounts required by the _updateEvent_ instruction
+ * Accounts required by the _closeSubAdminEventAccess_ instruction
  *
  * @property [_writable_, **signer**] authority
- * @property [_writable_] eventAccount
+ * @property [_writable_] closeSubAdminAccount
+ * @property [_writable_] subAdminAccount
  * @category Instructions
- * @category UpdateEvent
+ * @category CloseSubAdminEventAccess
  * @category generated
  */
-export type UpdateEventInstructionAccounts = {
+export type CloseSubAdminEventAccessInstructionAccounts = {
   authority: web3.PublicKey
-  eventAccount: web3.PublicKey
+  closeSubAdminAccount: web3.PublicKey
+  subAdminAccount: web3.PublicKey
   systemProgram?: web3.PublicKey
   rent?: web3.PublicKey
   anchorRemainingAccounts?: web3.AccountMeta[]
 }
 
-export const updateEventInstructionDiscriminator = [
-  70, 108, 211, 125, 171, 176, 25, 217,
+export const closeSubAdminEventAccessInstructionDiscriminator = [
+  216, 238, 84, 43, 97, 175, 5, 157,
 ]
 
 /**
- * Creates a _UpdateEvent_ instruction.
+ * Creates a _CloseSubAdminEventAccess_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
  * @param args to provide as instruction data to the program
  *
  * @category Instructions
- * @category UpdateEvent
+ * @category CloseSubAdminEventAccess
  * @category generated
  */
-export function createUpdateEventInstruction(
-  accounts: UpdateEventInstructionAccounts,
-  args: UpdateEventInstructionArgs,
+export function createCloseSubAdminEventAccessInstruction(
+  accounts: CloseSubAdminEventAccessInstructionAccounts,
+  args: CloseSubAdminEventAccessInstructionArgs,
   programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
 ) {
-  const [data] = updateEventStruct.serialize({
-    instructionDiscriminator: updateEventInstructionDiscriminator,
+  const [data] = closeSubAdminEventAccessStruct.serialize({
+    instructionDiscriminator: closeSubAdminEventAccessInstructionDiscriminator,
     ...args,
   })
   const keys: web3.AccountMeta[] = [
@@ -81,7 +82,12 @@ export function createUpdateEventInstruction(
       isSigner: true,
     },
     {
-      pubkey: accounts.eventAccount,
+      pubkey: accounts.closeSubAdminAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.subAdminAccount,
       isWritable: true,
       isSigner: false,
     },

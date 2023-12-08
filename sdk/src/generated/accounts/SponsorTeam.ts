@@ -6,62 +6,54 @@
  */
 
 import * as web3 from '@solana/web3.js'
-import * as beet from '@metaplex-foundation/beet'
 import * as beetSolana from '@metaplex-foundation/beet-solana'
-import {
-  EventProjectStatus,
-  eventProjectStatusBeet,
-} from '../types/EventProjectStatus'
+import * as beet from '@metaplex-foundation/beet'
 
 /**
- * Arguments used to create {@link EventJoin}
+ * Arguments used to create {@link SponsorTeam}
  * @category Accounts
  * @category generated
  */
-export type EventJoinArgs = {
+export type SponsorTeamArgs = {
   authority: web3.PublicKey
-  status: EventProjectStatus
-  donation: beet.bignum
   bump: number
 }
 
-export const eventJoinDiscriminator = [38, 238, 50, 133, 221, 124, 13, 106]
+export const sponsorTeamDiscriminator = [171, 227, 61, 96, 91, 217, 113, 170]
 /**
- * Holds the data for the {@link EventJoin} Account and provides de/serialization
+ * Holds the data for the {@link SponsorTeam} Account and provides de/serialization
  * functionality for that data
  *
  * @category Accounts
  * @category generated
  */
-export class EventJoin implements EventJoinArgs {
+export class SponsorTeam implements SponsorTeamArgs {
   private constructor(
     readonly authority: web3.PublicKey,
-    readonly status: EventProjectStatus,
-    readonly donation: beet.bignum,
     readonly bump: number
   ) {}
 
   /**
-   * Creates a {@link EventJoin} instance from the provided args.
+   * Creates a {@link SponsorTeam} instance from the provided args.
    */
-  static fromArgs(args: EventJoinArgs) {
-    return new EventJoin(args.authority, args.status, args.donation, args.bump)
+  static fromArgs(args: SponsorTeamArgs) {
+    return new SponsorTeam(args.authority, args.bump)
   }
 
   /**
-   * Deserializes the {@link EventJoin} from the data of the provided {@link web3.AccountInfo}.
+   * Deserializes the {@link SponsorTeam} from the data of the provided {@link web3.AccountInfo}.
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
   static fromAccountInfo(
     accountInfo: web3.AccountInfo<Buffer>,
     offset = 0
-  ): [EventJoin, number] {
-    return EventJoin.deserialize(accountInfo.data, offset)
+  ): [SponsorTeam, number] {
+    return SponsorTeam.deserialize(accountInfo.data, offset)
   }
 
   /**
    * Retrieves the account info from the provided address and deserializes
-   * the {@link EventJoin} from its data.
+   * the {@link SponsorTeam} from its data.
    *
    * @throws Error if no account info is found at the address or if deserialization fails
    */
@@ -69,15 +61,15 @@ export class EventJoin implements EventJoinArgs {
     connection: web3.Connection,
     address: web3.PublicKey,
     commitmentOrConfig?: web3.Commitment | web3.GetAccountInfoConfig
-  ): Promise<EventJoin> {
+  ): Promise<SponsorTeam> {
     const accountInfo = await connection.getAccountInfo(
       address,
       commitmentOrConfig
     )
     if (accountInfo == null) {
-      throw new Error(`Unable to find EventJoin account at ${address}`)
+      throw new Error(`Unable to find SponsorTeam account at ${address}`)
     }
-    return EventJoin.fromAccountInfo(accountInfo, 0)[0]
+    return SponsorTeam.fromAccountInfo(accountInfo, 0)[0]
   }
 
   /**
@@ -91,39 +83,39 @@ export class EventJoin implements EventJoinArgs {
       '3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS'
     )
   ) {
-    return beetSolana.GpaBuilder.fromStruct(programId, eventJoinBeet)
+    return beetSolana.GpaBuilder.fromStruct(programId, sponsorTeamBeet)
   }
 
   /**
-   * Deserializes the {@link EventJoin} from the provided data Buffer.
+   * Deserializes the {@link SponsorTeam} from the provided data Buffer.
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
-  static deserialize(buf: Buffer, offset = 0): [EventJoin, number] {
-    return eventJoinBeet.deserialize(buf, offset)
+  static deserialize(buf: Buffer, offset = 0): [SponsorTeam, number] {
+    return sponsorTeamBeet.deserialize(buf, offset)
   }
 
   /**
-   * Serializes the {@link EventJoin} into a Buffer.
+   * Serializes the {@link SponsorTeam} into a Buffer.
    * @returns a tuple of the created Buffer and the offset up to which the buffer was written to store it.
    */
   serialize(): [Buffer, number] {
-    return eventJoinBeet.serialize({
-      accountDiscriminator: eventJoinDiscriminator,
+    return sponsorTeamBeet.serialize({
+      accountDiscriminator: sponsorTeamDiscriminator,
       ...this,
     })
   }
 
   /**
    * Returns the byteSize of a {@link Buffer} holding the serialized data of
-   * {@link EventJoin}
+   * {@link SponsorTeam}
    */
   static get byteSize() {
-    return eventJoinBeet.byteSize
+    return sponsorTeamBeet.byteSize
   }
 
   /**
    * Fetches the minimum balance needed to exempt an account holding
-   * {@link EventJoin} data from rent
+   * {@link SponsorTeam} data from rent
    *
    * @param connection used to retrieve the rent exemption information
    */
@@ -132,38 +124,26 @@ export class EventJoin implements EventJoinArgs {
     commitment?: web3.Commitment
   ): Promise<number> {
     return connection.getMinimumBalanceForRentExemption(
-      EventJoin.byteSize,
+      SponsorTeam.byteSize,
       commitment
     )
   }
 
   /**
    * Determines if the provided {@link Buffer} has the correct byte size to
-   * hold {@link EventJoin} data.
+   * hold {@link SponsorTeam} data.
    */
   static hasCorrectByteSize(buf: Buffer, offset = 0) {
-    return buf.byteLength - offset === EventJoin.byteSize
+    return buf.byteLength - offset === SponsorTeam.byteSize
   }
 
   /**
-   * Returns a readable version of {@link EventJoin} properties
+   * Returns a readable version of {@link SponsorTeam} properties
    * and can be used to convert to JSON and/or logging
    */
   pretty() {
     return {
       authority: this.authority.toBase58(),
-      status: 'EventProjectStatus.' + EventProjectStatus[this.status],
-      donation: (() => {
-        const x = <{ toNumber: () => number }>this.donation
-        if (typeof x.toNumber === 'function') {
-          try {
-            return x.toNumber()
-          } catch (_) {
-            return x
-          }
-        }
-        return x
-      })(),
       bump: this.bump,
     }
   }
@@ -173,19 +153,17 @@ export class EventJoin implements EventJoinArgs {
  * @category Accounts
  * @category generated
  */
-export const eventJoinBeet = new beet.BeetStruct<
-  EventJoin,
-  EventJoinArgs & {
+export const sponsorTeamBeet = new beet.BeetStruct<
+  SponsorTeam,
+  SponsorTeamArgs & {
     accountDiscriminator: number[] /* size: 8 */
   }
 >(
   [
     ['accountDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
     ['authority', beetSolana.publicKey],
-    ['status', eventProjectStatusBeet],
-    ['donation', beet.u64],
     ['bump', beet.u8],
   ],
-  EventJoin.fromArgs,
-  'EventJoin'
+  SponsorTeam.fromArgs,
+  'SponsorTeam'
 )

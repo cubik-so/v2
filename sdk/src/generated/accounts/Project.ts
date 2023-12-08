@@ -5,13 +5,13 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as web3 from "@solana/web3.js";
-import * as beet from "@metaplex-foundation/beet";
-import * as beetSolana from "@metaplex-foundation/beet-solana";
+import * as web3 from '@solana/web3.js'
+import * as beet from '@metaplex-foundation/beet'
+import * as beetSolana from '@metaplex-foundation/beet-solana'
 import {
   ProjectVerification,
   projectVerificationBeet,
-} from "../types/ProjectVerification";
+} from '../types/ProjectVerification'
 
 /**
  * Arguments used to create {@link Project}
@@ -19,14 +19,16 @@ import {
  * @category generated
  */
 export type ProjectArgs = {
-  owner: web3.PublicKey;
-  status: ProjectVerification;
-  counter: beet.bignum;
-  multisig: web3.PublicKey;
-  bump: number;
-};
+  owner: web3.PublicKey
+  status: ProjectVerification
+  counter: beet.bignum
+  multisig: web3.PublicKey
+  createKey: web3.PublicKey
+  metadata: number[] /* size: 32 */
+  bump: number
+}
 
-export const projectDiscriminator = [205, 168, 189, 202, 181, 247, 142, 19];
+export const projectDiscriminator = [205, 168, 189, 202, 181, 247, 142, 19]
 /**
  * Holds the data for the {@link Project} Account and provides de/serialization
  * functionality for that data
@@ -40,6 +42,8 @@ export class Project implements ProjectArgs {
     readonly status: ProjectVerification,
     readonly counter: beet.bignum,
     readonly multisig: web3.PublicKey,
+    readonly createKey: web3.PublicKey,
+    readonly metadata: number[] /* size: 32 */,
     readonly bump: number
   ) {}
 
@@ -52,8 +56,10 @@ export class Project implements ProjectArgs {
       args.status,
       args.counter,
       args.multisig,
+      args.createKey,
+      args.metadata,
       args.bump
-    );
+    )
   }
 
   /**
@@ -64,7 +70,7 @@ export class Project implements ProjectArgs {
     accountInfo: web3.AccountInfo<Buffer>,
     offset = 0
   ): [Project, number] {
-    return Project.deserialize(accountInfo.data, offset);
+    return Project.deserialize(accountInfo.data, offset)
   }
 
   /**
@@ -81,11 +87,11 @@ export class Project implements ProjectArgs {
     const accountInfo = await connection.getAccountInfo(
       address,
       commitmentOrConfig
-    );
+    )
     if (accountInfo == null) {
-      throw new Error(`Unable to find Project account at ${address}`);
+      throw new Error(`Unable to find Project account at ${address}`)
     }
-    return Project.fromAccountInfo(accountInfo, 0)[0];
+    return Project.fromAccountInfo(accountInfo, 0)[0]
   }
 
   /**
@@ -96,10 +102,10 @@ export class Project implements ProjectArgs {
    */
   static gpaBuilder(
     programId: web3.PublicKey = new web3.PublicKey(
-      "3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS"
+      '3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS'
     )
   ) {
-    return beetSolana.GpaBuilder.fromStruct(programId, projectBeet);
+    return beetSolana.GpaBuilder.fromStruct(programId, projectBeet)
   }
 
   /**
@@ -107,7 +113,7 @@ export class Project implements ProjectArgs {
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
   static deserialize(buf: Buffer, offset = 0): [Project, number] {
-    return projectBeet.deserialize(buf, offset);
+    return projectBeet.deserialize(buf, offset)
   }
 
   /**
@@ -118,7 +124,7 @@ export class Project implements ProjectArgs {
     return projectBeet.serialize({
       accountDiscriminator: projectDiscriminator,
       ...this,
-    });
+    })
   }
 
   /**
@@ -126,7 +132,7 @@ export class Project implements ProjectArgs {
    * {@link Project}
    */
   static get byteSize() {
-    return projectBeet.byteSize;
+    return projectBeet.byteSize
   }
 
   /**
@@ -142,7 +148,7 @@ export class Project implements ProjectArgs {
     return connection.getMinimumBalanceForRentExemption(
       Project.byteSize,
       commitment
-    );
+    )
   }
 
   /**
@@ -150,7 +156,7 @@ export class Project implements ProjectArgs {
    * hold {@link Project} data.
    */
   static hasCorrectByteSize(buf: Buffer, offset = 0) {
-    return buf.byteLength - offset === Project.byteSize;
+    return buf.byteLength - offset === Project.byteSize
   }
 
   /**
@@ -160,21 +166,23 @@ export class Project implements ProjectArgs {
   pretty() {
     return {
       owner: this.owner.toBase58(),
-      status: "ProjectVerification." + ProjectVerification[this.status],
+      status: 'ProjectVerification.' + ProjectVerification[this.status],
       counter: (() => {
-        const x = <{ toNumber: () => number }>this.counter;
-        if (typeof x.toNumber === "function") {
+        const x = <{ toNumber: () => number }>this.counter
+        if (typeof x.toNumber === 'function') {
           try {
-            return x.toNumber();
+            return x.toNumber()
           } catch (_) {
-            return x;
+            return x
           }
         }
-        return x;
+        return x
       })(),
       multisig: this.multisig.toBase58(),
+      createKey: this.createKey.toBase58(),
+      metadata: this.metadata,
       bump: this.bump,
-    };
+    }
   }
 }
 
@@ -185,17 +193,19 @@ export class Project implements ProjectArgs {
 export const projectBeet = new beet.BeetStruct<
   Project,
   ProjectArgs & {
-    accountDiscriminator: number[] /* size: 8 */;
+    accountDiscriminator: number[] /* size: 8 */
   }
 >(
   [
-    ["accountDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
-    ["owner", beetSolana.publicKey],
-    ["status", projectVerificationBeet],
-    ["counter", beet.u64],
-    ["multisig", beetSolana.publicKey],
-    ["bump", beet.u8],
+    ['accountDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
+    ['owner', beetSolana.publicKey],
+    ['status', projectVerificationBeet],
+    ['counter', beet.u64],
+    ['multisig', beetSolana.publicKey],
+    ['createKey', beetSolana.publicKey],
+    ['metadata', beet.uniformFixedSizeArray(beet.u8, 32)],
+    ['bump', beet.u8],
   ],
   Project.fromArgs,
-  "Project"
-);
+  'Project'
+)

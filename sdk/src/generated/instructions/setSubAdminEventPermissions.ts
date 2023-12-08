@@ -5,73 +5,80 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
+import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as beet from '@metaplex-foundation/beet'
+import { AdminPermission, adminPermissionBeet } from '../types/AdminPermission'
 
 /**
  * @category Instructions
- * @category UpdateEvent
+ * @category SetSubAdminEventPermissions
  * @category generated
  */
-export type UpdateEventInstructionArgs = {
-  matchingPool: beet.bignum
-  metadata: number[] /* size: 32 */
+export type SetSubAdminEventPermissionsInstructionArgs = {
+  createKey: web3.PublicKey
+  eventKey: web3.PublicKey
+  permission: AdminPermission
 }
 /**
  * @category Instructions
- * @category UpdateEvent
+ * @category SetSubAdminEventPermissions
  * @category generated
  */
-export const updateEventStruct = new beet.BeetArgsStruct<
-  UpdateEventInstructionArgs & {
+export const setSubAdminEventPermissionsStruct = new beet.BeetArgsStruct<
+  SetSubAdminEventPermissionsInstructionArgs & {
     instructionDiscriminator: number[] /* size: 8 */
   }
 >(
   [
     ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['matchingPool', beet.u64],
-    ['metadata', beet.uniformFixedSizeArray(beet.u8, 32)],
+    ['createKey', beetSolana.publicKey],
+    ['eventKey', beetSolana.publicKey],
+    ['permission', adminPermissionBeet],
   ],
-  'UpdateEventInstructionArgs'
+  'SetSubAdminEventPermissionsInstructionArgs'
 )
 /**
- * Accounts required by the _updateEvent_ instruction
+ * Accounts required by the _setSubAdminEventPermissions_ instruction
  *
  * @property [_writable_, **signer**] authority
- * @property [_writable_] eventAccount
+ * @property [_writable_] newSubAdminAccount
+ * @property [_writable_] subAdminAccount
  * @category Instructions
- * @category UpdateEvent
+ * @category SetSubAdminEventPermissions
  * @category generated
  */
-export type UpdateEventInstructionAccounts = {
+export type SetSubAdminEventPermissionsInstructionAccounts = {
   authority: web3.PublicKey
-  eventAccount: web3.PublicKey
+  newSubAdminAccount: web3.PublicKey
+  subAdminAccount: web3.PublicKey
   systemProgram?: web3.PublicKey
   rent?: web3.PublicKey
   anchorRemainingAccounts?: web3.AccountMeta[]
 }
 
-export const updateEventInstructionDiscriminator = [
-  70, 108, 211, 125, 171, 176, 25, 217,
+export const setSubAdminEventPermissionsInstructionDiscriminator = [
+  55, 164, 161, 136, 164, 102, 17, 237,
 ]
 
 /**
- * Creates a _UpdateEvent_ instruction.
+ * Creates a _SetSubAdminEventPermissions_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
  * @param args to provide as instruction data to the program
  *
  * @category Instructions
- * @category UpdateEvent
+ * @category SetSubAdminEventPermissions
  * @category generated
  */
-export function createUpdateEventInstruction(
-  accounts: UpdateEventInstructionAccounts,
-  args: UpdateEventInstructionArgs,
+export function createSetSubAdminEventPermissionsInstruction(
+  accounts: SetSubAdminEventPermissionsInstructionAccounts,
+  args: SetSubAdminEventPermissionsInstructionArgs,
   programId = new web3.PublicKey('3o5FHxJVuU39wv7VSaYdewPosHLQzZGvPtdwnU4qYBiS')
 ) {
-  const [data] = updateEventStruct.serialize({
-    instructionDiscriminator: updateEventInstructionDiscriminator,
+  const [data] = setSubAdminEventPermissionsStruct.serialize({
+    instructionDiscriminator:
+      setSubAdminEventPermissionsInstructionDiscriminator,
     ...args,
   })
   const keys: web3.AccountMeta[] = [
@@ -81,7 +88,12 @@ export function createUpdateEventInstruction(
       isSigner: true,
     },
     {
-      pubkey: accounts.eventAccount,
+      pubkey: accounts.newSubAdminAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.subAdminAccount,
       isWritable: true,
       isSigner: false,
     },
