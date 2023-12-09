@@ -67,7 +67,7 @@ export const [subAdminPDA, __] = anchor.web3.PublicKey.findProgramAddressSync(
   program.programId,
 );
 
-export const [userPDA, ___] = anchor.web3.PublicKey.findProgramAddressSync(
+export const [userPDA, ____] = anchor.web3.PublicKey.findProgramAddressSync(
   [anchor.utils.bytes.utf8.encode("user"), userKeypair.publicKey.toBuffer()],
   program.programId,
 );

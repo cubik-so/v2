@@ -15,7 +15,7 @@ import { Keypair, PublicKey } from "@solana/web3.js";
 describe("Project", async () => {
   let provider: anchor.Provider;
   let projectPDA: anchor.web3.PublicKey;
-  let counter = new anchor.BN(23);
+  let counter = new anchor.BN(0);
   let metadata = Keypair.generate().publicKey.toBuffer() as unknown as number[];
   let createKey = Keypair.generate();
   let multisig = Keypair.generate();
