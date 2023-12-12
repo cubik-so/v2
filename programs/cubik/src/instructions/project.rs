@@ -3,7 +3,7 @@ use std::vec;
 use crate::errors::Errors;
 use crate::event::{NewEventJoin, NewProject, UpdateProjectStatus, UpdateProject};
 use crate::state::{
-    user, Admin, Event, EventJoin, EventProjectStatus, Project, ProjectVerification, User, SubAdmin, admin_permission_to_u8,
+    user, Admin, Event, EventJoin, EventProjectStatus, Project, ProjectVerification, User, SubAdmin, admin_permission_to_u8, SubAdminPermission,
 };
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
@@ -84,6 +84,10 @@ pub fn project_status_handler(
 
     require!(
         admin_permission_to_u8(ctx.accounts.sub_admin_account.permission) >= 1, 
+        Errors::InvalidAdmin
+    );
+    require!(
+     ctx.accounts.sub_admin_account.permission != SubAdminPermission::GOD &&  ctx.accounts.sub_admin_account.permission == SubAdminPermission::Manger, 
         Errors::InvalidAdmin
     );
 
