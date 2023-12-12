@@ -12,7 +12,7 @@ pub struct Project {
     pub bump: u8,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq, Debug, InitSpace)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq, Eq, Debug, InitSpace)]
 pub enum ProjectVerification {
     UnderReview,
     Verified,

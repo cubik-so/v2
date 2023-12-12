@@ -1,7 +1,7 @@
 use crate::errors::Errors;
 use crate::event::{NewEvent, NewEventJoin, UpdateEvent, self};
 use crate::state::{
-    Admin, AdminPermission, Event, EventJoin, EventProjectStatus, Project, ProjectVerification, SubAdmin, User,
+    Admin, SubAdminPermission, Event, EventJoin, EventProjectStatus, Project, ProjectVerification, SubAdmin, User,
 };
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
@@ -20,12 +20,8 @@ pub fn create_event_handler(
     event_account.matching_pool = matching_pool;
     event_account.event_key = event_key;
     sub_admin_account.authority = ctx.accounts.authority.key();
-    sub_admin_account.permission = AdminPermission {
-        full: false,
-        event_join_status: true,
-        project_status: false,
-    };
-    sub_admin_account.event = event_account.key();
+    sub_admin_account.create_key = ctx.accounts.create_key.key();
+    sub_admin_account.permission = SubAdminPermission::EventManger { event: event_account.key() };
     event_account.bump = *ctx.bumps.get("event_account").unwrap();
     sub_admin_account.bump = *ctx.bumps.get("sub_admin_account").unwrap();
     emit!(NewEvent {
@@ -39,7 +35,7 @@ pub fn create_event_handler(
 }
 
 pub fn create_event_join_handler(
-    ctx: Context<EventJoinContext>,
+    ctx: Context<CreateEventJoinContext>,
     counter: u64,
     event_key: Pubkey,
 ) -> Result<()> {
@@ -66,8 +62,9 @@ pub fn create_event_join_handler(
     Ok(())
 }
 
-pub fn update_approve_handler(
-    ctx: Context<UpdateEventJoinContext>,
+pub fn update_event_status_handler(
+    ctx: Context<UpdateEventJoinStatusContext>,
+    status:EventProjectStatus
 ) -> Result<()> {
     let event_account = &mut ctx.accounts.event_account;
     let event_join_account = &mut ctx.accounts.event_join_account;
@@ -80,39 +77,17 @@ pub fn update_approve_handler(
     );
 
     require!(
-        sub_admin_account.event != event_account.key(),
+        sub_admin_account.permission != SubAdminPermission::EventManger { event: event_account.key() },
         Errors::InvalidAdmin
     );
 
 
 
-    event_join_account.status = EventProjectStatus::Approved;
+    event_join_account.status =status;
 
     Ok(())
 }
 
-pub fn update_reject_handler(
-    ctx: Context<UpdateEventJoinContext>,
-) -> Result<()> {
-     let event_account = &mut ctx.accounts.event_account;
-    let event_join_account: &mut Box<Account<'_, EventJoin>> = &mut ctx.accounts.event_join_account;
-    let project_account = &mut ctx.accounts.project_account;
-    let sub_admin_account = &mut ctx.accounts.sub_admin_account;
-
-    require!(
-        project_account.status != ProjectVerification::VerificationFailed,
-        Errors::InvalidProjectVerification
-    );
-
-    require!(
-        sub_admin_account.event != event_account.key(),
-        Errors::InvalidAdmin
-    );
-
-    event_join_account.status = EventProjectStatus::Rejected;
-
-    Ok(())
-}
 
 pub fn update_event_handler(
     ctx: Context<UpdateEventContext>,
@@ -161,6 +136,8 @@ pub struct CreateEventContext<'info> {
     #[account(mut, constraint = user_account.authority.key() == authority.key() )]
     pub authority: Signer<'info>,
 
+    pub create_key: Signer<'info>,
+
     #[account(mut)]
     pub event_key: Signer<'info>,
 
@@ -175,7 +152,7 @@ pub struct CreateEventContext<'info> {
     #[account(init,
         payer = authority,
         space = 8 + SubAdmin::INIT_SPACE,
-        seeds = [b"admin".as_ref(),authority.key().as_ref(),event_account.key().as_ref()],
+        seeds = [b"admin".as_ref(),authority.key().as_ref(),create_key.key().as_ref()],
         bump 
     )]
     pub sub_admin_account: Account<'info, SubAdmin>,
@@ -194,7 +171,7 @@ pub struct CreateEventContext<'info> {
 }
 
 #[derive(Accounts)]
-pub struct EventJoinContext<'info> {
+pub struct CreateEventJoinContext<'info> {
     #[account(mut,constraint = authority.key() == project_account.owner.key() @ Errors::InvalidSigner)]
     pub authority: Signer<'info>,
 
@@ -223,12 +200,12 @@ pub struct EventJoinContext<'info> {
 }
 
 #[derive(Accounts)]
-pub struct UpdateEventJoinContext<'info> {
-    #[account(mut,constraint = event_account.key() == sub_admin_account.event.key() @ Errors::InvalidAdmin)]
+pub struct UpdateEventJoinStatusContext<'info> {
+    #[account(mut)]
     pub authority: Signer<'info>,
 
     #[account(mut,
-        seeds = [b"admin".as_ref(), sub_admin_account.authority.key().as_ref(), event_account.key().as_ref()],
+        seeds = [b"admin".as_ref(), sub_admin_account.authority.key().as_ref(),sub_admin_account.create_key.key().as_ref()],
         bump = sub_admin_account.bump
     )]
     pub sub_admin_account: Box<Account<'info, SubAdmin>>,
@@ -281,7 +258,7 @@ pub struct InviteEventJoinContext<'info>{
 
      #[account(mut,
         constraint = authority.key() == sub_admin_account.authority.key() @ Errors::InvalidSigner,
-        constraint = sub_admin_account.permission.full == true @Errors::InvalidAdmin
+        constraint = sub_admin_account.permission == SubAdminPermission::GOD @Errors::InvalidAdmin
     )]
     pub authority: Signer<'info>,
 
@@ -293,8 +270,8 @@ pub struct InviteEventJoinContext<'info>{
     )]
     pub event_join_account: Box<Account<'info, EventJoin>>,
 
-        #[account(mut,
-        seeds = [b"admin".as_ref(), sub_admin_account.authority.key().as_ref(), event_account.key().as_ref()],
+   #[account(mut,
+        seeds = [b"admin".as_ref(), sub_admin_account.authority.key().as_ref(), sub_admin_account.create_key.key().as_ref()],
         bump = sub_admin_account.bump
     )]
     pub sub_admin_account: Box<Account<'info, SubAdmin>>,
