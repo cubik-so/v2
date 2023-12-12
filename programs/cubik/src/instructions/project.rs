@@ -3,7 +3,7 @@ use std::vec;
 use crate::errors::Errors;
 use crate::event::{NewEventJoin, NewProject, UpdateProjectStatus, UpdateProject};
 use crate::state::{
-    user, Admin, Event, EventJoin, EventProjectStatus, Project, ProjectVerification, User, SubAdmin,
+    user, Admin, Event, EventJoin, EventProjectStatus, Project, ProjectVerification, User, SubAdmin, admin_permission_to_u8,
 };
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
@@ -76,50 +76,26 @@ pub fn create_project_handler(
     Ok(())
 }
 
-pub fn verified_status_handler(
+pub fn project_status_handler(
     ctx: Context<UpdateProjectStatusContext>,
+    status:ProjectVerification,
 ) -> Result<()> {
     let project_account = &mut ctx.accounts.project_account;
 
     require!(
-        ctx.accounts.sub_admin_account.permission.project_status == true,
+        admin_permission_to_u8(ctx.accounts.sub_admin_account.permission) >= 1, 
         Errors::InvalidAdmin
     );
 
-    require!(
-        ctx.accounts.sub_admin_account.event == ctx.accounts.authority.key(),
-        Errors::InvalidAdmin
-    );
-
-    project_account.status = ProjectVerification::Verified;
+    project_account.status = status;
 
     emit!(UpdateProjectStatus {
         authority: ctx.accounts.authority.key(),
-        status: ProjectVerification::Verified
+        status
     });
     Ok(())
 }
 
-pub fn failed_status_handler(
-    ctx: Context<UpdateProjectStatusContext>,
-) -> Result<()> {
-    let project_account = &mut ctx.accounts.project_account;
-    require!(
-        ctx.accounts.sub_admin_account.permission.project_status == true,
-        Errors::InvalidAdmin
-    );
-    require!(
-        ctx.accounts.sub_admin_account.event == ctx.accounts.authority.key(),
-        Errors::InvalidAdmin
-    );
-    project_account.status = ProjectVerification::VerificationFailed;
-
-    emit!(UpdateProjectStatus {
-        authority: ctx.accounts.authority.key(),
-        status: ProjectVerification::VerificationFailed
-    });
-    Ok(())
-}
 
 pub fn update_project_handler(
     ctx: Context<UpdateProjectContext>,
@@ -144,6 +120,13 @@ pub fn transfer_project_handler(ctx: Context<TransferProjectContext>
     let project_account = &mut ctx.accounts.project_account;
     let transfer_account = &mut ctx.accounts.transfer_user_account;
     project_account.owner = transfer_account.authority;
+    Ok(())
+}
+pub fn close_project_handler(ctx: Context<CloseProjectContext>
+)-> Result<()>{
+
+    let project_account = &mut ctx.accounts.project_account;
+    
     Ok(())
 }
 
@@ -263,14 +246,13 @@ pub struct  TransferProjectContext<'info>{
 
 
 #[derive(Accounts)]
-#[instruction(_counter: u64)]
 pub struct  CloseProjectContext<'info>{
 
     #[account(mut,constraint = authority.key() == project_account.owner.key() @ Errors::InvalidSigner)]
     pub authority: Signer<'info>,
 
     #[account(mut,
-        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),_counter.to_le_bytes().as_ref()],
+        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),project_account.counter.to_le_bytes().as_ref()],
         bump = project_account.bump,
         close = authority,
     )]

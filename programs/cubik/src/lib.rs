@@ -39,13 +39,11 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn project_status_verified(ctx: Context<UpdateProjectStatusContext>) -> Result<()> {
-        verified_status_handler(ctx)?;
-        Ok(())
-    }
-
-    pub fn project_status_failed(ctx: Context<UpdateProjectStatusContext>) -> Result<()> {
-        failed_status_handler(ctx)?;
+    pub fn update_project_status(
+        ctx: Context<UpdateProjectStatusContext>,
+        status: ProjectVerification,
+    ) -> Result<()> {
+        project_status_handler(ctx, status)?;
         Ok(())
     }
 
@@ -60,7 +58,7 @@ pub mod cubik {
     }
 
     pub fn create_event_join(
-        ctx: Context<EventJoinContext>,
+        ctx: Context<CreateEventJoinContext>,
         counter: u64,
         event_key: Pubkey,
     ) -> Result<()> {
@@ -77,12 +75,11 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn update_event_join_status_approve(ctx: Context<UpdateEventJoinContext>) -> Result<()> {
-        update_approve_handler(ctx)?;
-        Ok(())
-    }
-    pub fn update_event_join_status_rejected(ctx: Context<UpdateEventJoinContext>) -> Result<()> {
-        update_reject_handler(ctx)?;
+    pub fn update_event_join_status(
+        ctx: Context<UpdateEventJoinStatusContext>,
+        status: EventProjectStatus,
+    ) -> Result<()> {
+        update_event_status_handler(ctx, status)?;
         Ok(())
     }
 
@@ -100,36 +97,20 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn set_sub_admin_project_status_permissions(
-        ctx: Context<SetSubAdminEventPermissionsContext>,
-        create_key: Pubkey,
-        event_key: Pubkey,
-    ) -> Result<()> {
-        set_sub_admin_project_status_permissions_handler(ctx, create_key, event_key)?;
-        Ok(())
-    }
-    pub fn set_sub_admin_event_permissions(
-        ctx: Context<CreateSubAdminEventStatusContext>,
-        create_key: Pubkey,
-        event_key: Pubkey,
-        permission: AdminPermission,
-    ) -> Result<()> {
-        set_sub_admin_event_permissions_handler(ctx, create_key, event_key, permission)?;
-        Ok(())
-    }
-    pub fn close_sub_admin_event_access(
-        ctx: Context<CloseSubAdminEventAccessContext>,
-        create_key: Pubkey,
-    ) -> Result<()> {
-        close_sub_admin_event_access_handler(ctx, create_key)?;
-        Ok(())
-    }
-    pub fn close_sub_admin(ctx: Context<CloseSubAdminContext>, create_key: Pubkey) -> Result<()> {
-        close_sub_admin_handler(ctx, create_key)?;
-        Ok(())
-    }
     pub fn invite_event_join(ctx: Context<InviteEventJoinContext>) -> Result<()> {
         invite_event_join_handler(ctx)?;
+        Ok(())
+    }
+    pub fn create_sub_admin(
+        ctx: Context<CreateSubAdminContext>,
+        status: SubAdminPermission,
+        new_sub_admin_authority: Pubkey,
+    ) -> Result<()> {
+        create_sub_admin_handler(ctx, status, new_sub_admin_authority)?;
+        Ok(())
+    }
+    pub fn close_sub_admin(ctx: Context<CloseSubAdminContext>) -> Result<()> {
+        close_sub_admin_handler(ctx)?;
         Ok(())
     }
 }
