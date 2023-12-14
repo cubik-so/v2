@@ -31,4 +31,3 @@ pub struct CreateAdminContext<'info> {
     #[account(address = solana_program::sysvar::rent::ID)]
     pub rent: Sysvar<'info, Rent>,
 }
-

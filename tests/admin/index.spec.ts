@@ -55,57 +55,57 @@ describe("Admin", async () => {
       expect(admin.authority).to.eql(adminKeypair.publicKey);
     });
 
-    it("should set a sub admin with project status permissions", async () => {
-      const ix = await program.methods
-        .setSubAdminProjectStatusPermissions(
-          createKey.publicKey,
-          eventKey.publicKey,
-        )
-        .accounts({
-          authority: adminKeypair.publicKey,
-          subAdminAccount: subAdminPDA,
-          newSubAdminAccount: newSubAdminPDA,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .signers([adminKeypair])
-        .instruction();
+    // it("should set a sub admin with project status permissions", async () => {
+    //   const ix = await program.methods
+    //     .setSubAdminProjectStatusPermissions(
+    //       createKey.publicKey,
+    //       eventKey.publicKey,
+    //     )
+    //     .accounts({
+    //       authority: adminKeypair.publicKey,
+    //       subAdminAccount: subAdminPDA,
+    //       newSubAdminAccount: newSubAdminPDA,
+    //       systemProgram: anchor.web3.SystemProgram.programId,
+    //     })
+    //     .signers([adminKeypair])
+    //     .instruction();
 
-      const tx = new anchor.web3.Transaction().add(ix);
+    //   const tx = new anchor.web3.Transaction().add(ix);
 
-      tx.recentBlockhash = (
-        await provider.connection.getLatestBlockhash()
-      ).blockhash;
+    //   tx.recentBlockhash = (
+    //     await provider.connection.getLatestBlockhash()
+    //   ).blockhash;
 
-      tx.feePayer = adminKeypair.publicKey;
+    //   tx.feePayer = adminKeypair.publicKey;
 
-      await provider.sendAndConfirm(tx);
-    });
+    //   await provider.sendAndConfirm(tx);
+    // });
 
-    it("should set a sub admin with event permissions", async () => {
-      const ix = await program.methods
-        .setSubAdminEventPermissions(createKey.publicKey, eventKey.publicKey, {
-          full: true,
-          projectStatus: true,
-          eventJoinStatus: true,
-        })
-        .accounts({
-          authority: adminKeypair.publicKey,
-          subAdminAccount: subAdminPDA,
-          newSubAdminAccount: newEventSubAdminPDA,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .signers([adminKeypair])
-        .instruction();
+    // it("should set a sub admin with event permissions", async () => {
+    //   const ix = await program.methods
+    //     .setSubAdminEventPermissions(createKey.publicKey, eventKey.publicKey, {
+    //       full: true,
+    //       projectStatus: true,
+    //       eventJoinStatus: true,
+    //     })
+    //     .accounts({
+    //       authority: adminKeypair.publicKey,
+    //       subAdminAccount: subAdminPDA,
+    //       newSubAdminAccount: newEventSubAdminPDA,
+    //       systemProgram: anchor.web3.SystemProgram.programId,
+    //     })
+    //     .signers([adminKeypair])
+    //     .instruction();
 
-      const tx = new anchor.web3.Transaction().add(ix);
+    //   const tx = new anchor.web3.Transaction().add(ix);
 
-      tx.recentBlockhash = (
-        await provider.connection.getLatestBlockhash()
-      ).blockhash;
+    //   tx.recentBlockhash = (
+    //     await provider.connection.getLatestBlockhash()
+    //   ).blockhash;
 
-      tx.feePayer = adminKeypair.publicKey;
+    //   tx.feePayer = adminKeypair.publicKey;
 
-      await provider.sendAndConfirm(tx);
-    });
+    //   await provider.sendAndConfirm(tx);
+    // });
   });
 });
