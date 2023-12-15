@@ -113,4 +113,58 @@ pub mod cubik {
         close_sub_admin_handler(ctx)?;
         Ok(())
     }
+
+    pub fn init_sponsor(
+        ctx: Context<InitSponsorContext>,
+        vault: Pubkey,
+        total_committed: u64,
+        metadata: String,
+    ) -> Result<()> {
+        init_sponsor_handler(ctx, vault, total_committed, metadata)?;
+        Ok(())
+    }
+
+    pub fn add_member_sponsor(
+        ctx: Context<SponsorTeamContext>,
+        team_member_key: Pubkey,
+    ) -> Result<()> {
+        add_member_sponsor_handler(ctx, team_member_key)?;
+        Ok(())
+    }
+
+    pub fn update_sponsor(
+        ctx: Context<UpdateSponsor>,
+        metadata: String,
+        total_committed: u64,
+    ) -> Result<()> {
+        update_sponsor_handler(ctx, metadata, total_committed)?;
+        Ok(())
+    }
+
+    pub fn fund_sponsor_vault_spl(
+        ctx: Context<FundSponsorVaultSPLContext>,
+        amount: u64,
+        amount_usd: u64,
+    ) -> Result<()> {
+        fund_sponsor_vault_spl_handler(ctx, amount, amount_usd)?;
+        Ok(())
+    }
+
+    pub fn fund_sponsor_vault_sol(
+        ctx: Context<FundSponsorVaultSOLContext>,
+        amount: u64,
+        amount_usd: u64,
+    ) -> Result<()> {
+        fund_sponsor_vault_sol_handler(ctx, amount, amount_usd)
+    }
+
+    pub fn create_contribution(
+        ctx: Context<CreateContributionContext>,
+        amount: u64,
+        split: u64,
+        create_key: Pubkey,
+    ) -> Result<()> {
+        create_contribution_handler(ctx, amount, split, create_key)?;
+        Ok(())
+    }
 }

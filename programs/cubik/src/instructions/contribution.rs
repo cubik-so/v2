@@ -5,7 +5,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
 
-pub fn create_contribution(
+pub fn create_contribution_handler(
     ctx: Context<CreateContributionContext>,
     amount: u64,
     split: u64,
