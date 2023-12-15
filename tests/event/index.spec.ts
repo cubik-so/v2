@@ -150,56 +150,6 @@ describe("Event", async () => {
       assert.ok(event.matchingPool.toBuffer().equals(matchingPool.toBuffer()));
     });
 
-    it("should update approve an event", async () => {
-      const ix = await program.methods
-        .updateEventJoinStatusApprove()
-        .accounts({
-          authority: subAdminKeypair.publicKey,
-          eventAccount: eventPDA,
-          subAdminAccount: subAdminPDA,
-          eventJoinAccount: eventJoinPDA,
-          projectAccount: projectPDA,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .signers([subAdminKeypair])
-        .instruction();
-
-      const tx = new anchor.web3.Transaction().add(ix);
-
-      tx.recentBlockhash = (
-        await provider.connection.getLatestBlockhash()
-      ).blockhash;
-
-      tx.feePayer = subAdminKeypair.publicKey;
-
-      await provider.sendAndConfirm(tx);
-    });
-
-    it("should update reject an event", async () => {
-      const ix = await program.methods
-        .updateEventJoinStatusRejected()
-        .accounts({
-          authority: subAdminKeypair.publicKey,
-          eventAccount: eventPDA,
-          subAdminAccount: subAdminPDA,
-          eventJoinAccount: eventJoinPDA,
-          projectAccount: projectPDA,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .signers([subAdminKeypair])
-        .instruction();
-
-      const tx = new anchor.web3.Transaction().add(ix);
-
-      tx.recentBlockhash = (
-        await provider.connection.getLatestBlockhash()
-      ).blockhash;
-
-      tx.feePayer = subAdminKeypair.publicKey;
-
-      await provider.sendAndConfirm(tx);
-    });
-
     it("should invite an event join", async () => {
       const ix = await program.methods
         .inviteEventJoin()

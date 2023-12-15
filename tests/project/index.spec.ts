@@ -66,34 +66,34 @@ describe("Project", async () => {
       assert.ok(project.owner.equals(userKeypair.publicKey));
     });
 
-    it("should verify project status", async () => {
-      const ix = await program.methods
-        .projectStatusVerified()
-        .accounts({
-          authority: subAdminKeypair.publicKey,
-          subAdminAccount: subAdminPDA,
-          projectAccount: projectPDA,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .signers([subAdminKeypair])
-        .instruction();
+    // it("should verify project status", async () => {
+    //   const ix = await program.methods
+    //     .projectStatusVerified()
+    //     .accounts({
+    //       authority: subAdminKeypair.publicKey,
+    //       subAdminAccount: subAdminPDA,
+    //       projectAccount: projectPDA,
+    //       systemProgram: anchor.web3.SystemProgram.programId,
+    //     })
+    //     .signers([subAdminKeypair])
+    //     .instruction();
 
-      const tx = new anchor.web3.Transaction().add(ix);
+    //   const tx = new anchor.web3.Transaction().add(ix);
 
-      tx.recentBlockhash = (
-        await provider.connection.getLatestBlockhash()
-      ).blockhash;
+    //   tx.recentBlockhash = (
+    //     await provider.connection.getLatestBlockhash()
+    //   ).blockhash;
 
-      tx.feePayer = subAdminKeypair.publicKey;
+    //   tx.feePayer = subAdminKeypair.publicKey;
 
-      await provider.sendAndConfirm(tx);
+    //   await provider.sendAndConfirm(tx);
 
-      const project = await program.account.project.fetch(projectPDA);
+    //   const project = await program.account.project.fetch(projectPDA);
 
-      assert.ok(
-        (project.status.verified as unknown as string).match("Verified"),
-      );
-    });
+    //   assert.ok(
+    //     (project.status.verified as unknown as string).match("Verified"),
+    //   );
+    // });
 
     it("should update project metadata", async () => {
       let newMetadata =

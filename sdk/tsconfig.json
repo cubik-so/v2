@@ -3,6 +3,7 @@
         "target": "esnext",
         "module": "es2022",
         "moduleResolution": "node",
+        "resolveJsonModule": true,
         "lib": [
             "es2015",
             "DOM"
