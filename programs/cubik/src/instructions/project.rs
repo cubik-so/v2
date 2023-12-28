@@ -1,7 +1,7 @@
 use std::vec;
 
 use crate::errors::Errors;
-use crate::event::{NewEventJoin, NewProject, UpdateProjectStatus, UpdateProject};
+use crate::event::{NewEventJoin, NewProject, UpdateProjectStatus};
 use crate::state::{
     user, Admin, Event, EventJoin, EventProjectStatus, Project, ProjectVerification, User, SubAdmin, admin_permission_to_u8, SubAdminPermission,
 };
@@ -13,7 +13,6 @@ pub fn create_project_handler(
     ctx: Context<CreateProjectContext>,
     counter: u64,
     multi_sig: Pubkey,
-    metadata: [u8;32],
     // members_keys: Vec<Pubkey>,
     // threshold: u16,
     // config_authority: Option<Pubkey>,
@@ -61,7 +60,6 @@ pub fn create_project_handler(
 
     project_account.owner = user_account.authority.key();
     project_account.status = ProjectVerification::UnderReview;
-    project_account.metadata = metadata;
     project_account.create_key = ctx.accounts.create_key.key();
     project_account.counter = counter;
     project_account.multisig = multi_sig;
@@ -69,7 +67,6 @@ pub fn create_project_handler(
 
     emit!(NewProject {
         authority: user_account.authority.key(),
-        metadata,
         counter,
     });
 
@@ -101,21 +98,6 @@ pub fn project_status_handler(
 }
 
 
-pub fn update_project_handler(
-    ctx: Context<UpdateProjectContext>,
-    metadata:[u8;32]
-) -> Result<()> {
-
-    let project_account = &mut ctx.accounts.project_account;
-   
-    project_account.metadata = metadata;
-
-    emit!(UpdateProject {
-        authority: ctx.accounts.authority.key(),
-        metadata:metadata
-    });
-    Ok(())
-}
 
 
 pub fn transfer_project_handler(ctx: Context<TransferProjectContext>
@@ -204,24 +186,7 @@ pub struct UpdateProjectStatusContext<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-#[derive(Accounts)]
-pub struct  UpdateProjectContext<'info>{
-    #[account(mut,constraint = authority.key() == project_account.owner.key() @ Errors::InvalidSigner)]
-    pub authority: Signer<'info>,
 
-    #[account(mut,
-        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),project_account.counter.to_le_bytes().as_ref()],
-        bump = project_account.bump
-    )]
-    pub project_account: Box<Account<'info, Project>>,
-
-    // Misc Accounts
-    #[account(address = system_program::ID)]
-    pub system_program: Program<'info, System>,
-    #[account(address = solana_program::sysvar::rent::ID)]
-    pub rent: Sysvar<'info, Rent>,
-
-}
 #[derive(Accounts)]
 pub struct  TransferProjectContext<'info>{
 

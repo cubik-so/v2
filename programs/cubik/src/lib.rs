@@ -8,24 +8,15 @@ pub mod state;
 use state::*;
 
 // declare_id!("CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7");
-declare_id!("3s9zZaosL6hJFeDToXDoPN4sQgyVwLEdqzaztZXj1Nnk");
+declare_id!("D4QbbabmtqmkjJFcE2qnHihuXa4NT7Ap2tqqh5nyCG4T");
 
 #[program]
 pub mod cubik {
 
     use super::*;
 
-    pub fn create_user(
-        ctx: Context<CreateUserContext>,
-        username: String,
-        metadata: [u8; 32],
-    ) -> Result<()> {
-        create_user_handler(ctx, username, metadata)?;
-        Ok(())
-    }
-
-    pub fn update_user(ctx: Context<UpdateUserContext>, metadata: [u8; 32]) -> Result<()> {
-        update_user_handler(ctx, metadata)?;
+    pub fn create_user(ctx: Context<CreateUserContext>, username: String) -> Result<()> {
+        create_user_handler(ctx, username)?;
         Ok(())
     }
 
@@ -33,9 +24,8 @@ pub mod cubik {
         ctx: Context<CreateProjectContext>,
         counter: u64,
         multi_sig: Pubkey,
-        metadata: [u8; 32],
     ) -> Result<()> {
-        create_project_handler(ctx, counter, multi_sig, metadata)?;
+        create_project_handler(ctx, counter, multi_sig)?;
         Ok(())
     }
 
@@ -44,11 +34,6 @@ pub mod cubik {
         status: ProjectVerification,
     ) -> Result<()> {
         project_status_handler(ctx, status)?;
-        Ok(())
-    }
-
-    pub fn update_project(ctx: Context<UpdateProjectContext>, metadata: [u8; 32]) -> Result<()> {
-        update_project_handler(ctx, metadata)?;
         Ok(())
     }
 
@@ -66,12 +51,8 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn create_event(
-        ctx: Context<CreateEventContext>,
-        matching_pool: u64,
-        metadata: [u8; 32],
-    ) -> Result<()> {
-        create_event_handler(ctx, matching_pool, metadata)?;
+    pub fn create_event(ctx: Context<CreateEventContext>, matching_pool: u64) -> Result<()> {
+        create_event_handler(ctx, matching_pool)?;
         Ok(())
     }
 
@@ -83,12 +64,8 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn update_event(
-        ctx: Context<UpdateEventContext>,
-        matching_pool: u64,
-        metadata: [u8; 32],
-    ) -> Result<()> {
-        update_event_handler(ctx, matching_pool, metadata)?;
+    pub fn update_event(ctx: Context<UpdateEventContext>, matching_pool: u64) -> Result<()> {
+        update_event_handler(ctx, matching_pool)?;
         Ok(())
     }
 
@@ -118,9 +95,8 @@ pub mod cubik {
         ctx: Context<InitSponsorContext>,
         vault: Pubkey,
         total_committed: u64,
-        metadata: String,
     ) -> Result<()> {
-        init_sponsor_handler(ctx, vault, total_committed, metadata)?;
+        init_sponsor_handler(ctx, vault, total_committed)?;
         Ok(())
     }
 
@@ -132,12 +108,8 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn update_sponsor(
-        ctx: Context<UpdateSponsor>,
-        metadata: String,
-        total_committed: u64,
-    ) -> Result<()> {
-        update_sponsor_handler(ctx, metadata, total_committed)?;
+    pub fn update_sponsor(ctx: Context<UpdateSponsor>, total_committed: u64) -> Result<()> {
+        update_sponsor_handler(ctx, total_committed)?;
         Ok(())
     }
 

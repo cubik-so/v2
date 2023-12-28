@@ -9,7 +9,6 @@ use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 pub fn create_event_handler(
     ctx: Context<CreateEventContext>,
     matching_pool: u64,
-    metadata: [u8;32],
 ) -> Result<()> {
     let event_account = &mut ctx.accounts.event_account;
 
@@ -26,7 +25,6 @@ pub fn create_event_handler(
     sub_admin_account.bump = *ctx.bumps.get("sub_admin_account").unwrap();
     emit!(NewEvent {
         authority: ctx.accounts.authority.key(),
-        metadata,
         event_key
         
     });
@@ -92,15 +90,12 @@ pub fn update_event_status_handler(
 pub fn update_event_handler(
     ctx: Context<UpdateEventContext>,
     matching_pool: u64,
-    metadata: [u8;32],
 ) -> Result<()> {
     let event_account = &mut ctx.accounts.event_account;
     event_account.matching_pool = matching_pool;
-    event_account.metadata = metadata;
 
     emit!(UpdateEvent {
         authority: ctx.accounts.authority.key(),
-        metadata,
     });
 
     Ok(())

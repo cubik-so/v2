@@ -11,7 +11,6 @@ pub fn init_sponsor_handler(
     ctx: Context<InitSponsorContext>,
     vault: Pubkey,
     total_committed: u64,
-    metadata: String,
 ) -> Result<()> {
     let sponsor_account = &mut ctx.accounts.sponsor_account;
     let sponsor_team_account = &mut ctx.accounts.sponsor_team_account;
@@ -27,7 +26,6 @@ pub fn init_sponsor_handler(
     // team account
     emit!(NewSponsor {
         authority: ctx.accounts.authority.key(),
-        metadata: metadata
     });
 
     Ok(())
@@ -44,17 +42,12 @@ pub fn add_member_sponsor_handler(
     Ok(())
 }
 
-pub fn update_sponsor_handler(
-    ctx: Context<UpdateSponsor>,
-    metadata: String,
-    total_committed: u64,
-) -> Result<()> {
+pub fn update_sponsor_handler(ctx: Context<UpdateSponsor>, total_committed: u64) -> Result<()> {
     let sponsor_account = &mut ctx.accounts.sponsor_account;
     sponsor_account.total_committed_usd = total_committed;
 
     emit!(UpdateSponsorEvent {
         authority: ctx.accounts.authority.key(),
-        metadata,
     });
 
     Ok(())
