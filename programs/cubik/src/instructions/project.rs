@@ -7,62 +7,69 @@ use crate::state::{
 };
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
-use squads_multisig_program::{Member, Permission, Permissions};
+use squads_multisig_program::{Member, Permission, Permissions, SEED_PREFIX, SEED_VAULT};
 
 pub fn create_project_handler(
     ctx: Context<CreateProjectContext>,
     counter: u64,
-    multi_sig: Pubkey,
-    // members_keys: Vec<Pubkey>,
-    // threshold: u16,
-    // config_authority: Option<Pubkey>,
-    // time_lock: u32,
-    // memo: Option<String>,
+    members_keys: Vec<Pubkey>,
+    threshold: u16,
+    config_authority: Option<Pubkey>,
+    time_lock: u32,
+    memo: Option<String>,
 ) -> Result<()> {
 
     let project_account = &mut ctx.accounts.project_account;
     let user_account = &mut ctx.accounts.user_account;
 
-    // let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreate {
-    //     create_key: ctx.accounts.create_key.to_account_info(), // this is example
-    //     creator: ctx.accounts.owner.to_account_info(),
-    //     multisig: ctx.accounts.multisig.to_account_info(),
-    //     system_program: ctx.accounts.system_program.to_account_info(),
-    // };
+    let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreate {
+        create_key: ctx.accounts.create_key.to_account_info(), // this is example
+        creator: ctx.accounts.owner.to_account_info(),
+        multisig: ctx.accounts.multisig.to_account_info(),
+        system_program: ctx.accounts.system_program.to_account_info(),
+    };
 
-    // let cpi_ctx_squads = CpiContext::new(
-    //     ctx.accounts.squads_program.to_account_info(),
-    //     create_multisig,
-    // );
-    // let all_permissions = [Permission::Initiate, Permission::Vote, Permission::Execute];
 
-    // // Use from_vec to create a Permissions instance with all permissions
-    // let permission = Permissions::from_vec(&all_permissions);
+         let (vault_pubkey, vault_bump_seed) = Pubkey::find_program_address(&[
+            SEED_PREFIX,
+            &ctx.accounts.multisig.key().to_bytes(),
+            SEED_VAULT,
+            &[0],
+        ], &squads_multisig_program::ID);
 
-    // let members: Vec<Member> = members_keys
-    //     .iter()
-    //     .map(|key| Member {
-    //         key: *key,
-    //         permissions: permission,
-    //     })
-    //     .collect();
+        
+    let cpi_ctx_squads = CpiContext::new(
+        ctx.accounts.squads_program.to_account_info(),
+        create_multisig,
+    );
+    let all_permissions = [Permission::Initiate, Permission::Vote, Permission::Execute];
 
-    // squads_multisig_program::cpi::multisig_create(
-    //     cpi_ctx_squads,
-    //     squads_multisig_program::MultisigCreateArgs {
-    //         config_authority,
-    //         members,
-    //         memo,
-    //         threshold,
-    //         time_lock,
-    //     },
-    // )?;
+    let permission = Permissions::from_vec(&all_permissions);
+
+    let members: Vec<Member> = members_keys
+        .iter()
+        .map(|key| Member {
+            key: *key,
+            permissions: permission,
+        })
+        .collect();
+
+    squads_multisig_program::cpi::multisig_create(
+        cpi_ctx_squads,
+        squads_multisig_program::MultisigCreateArgs {
+            config_authority,
+            members,
+            memo,
+            threshold,
+            time_lock,
+        },
+    )?;
 
     project_account.owner = user_account.authority.key();
     project_account.status = ProjectVerification::UnderReview;
     project_account.create_key = ctx.accounts.create_key.key();
     project_account.counter = counter;
-    project_account.multisig = multi_sig;
+    project_account.multisig = vault_pubkey;
     project_account.bump = *ctx.bumps.get("project_account").unwrap();
 
     emit!(NewProject {

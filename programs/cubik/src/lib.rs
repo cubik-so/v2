@@ -23,9 +23,21 @@ pub mod cubik {
     pub fn create_project(
         ctx: Context<CreateProjectContext>,
         counter: u64,
-        multi_sig: Pubkey,
+        members_keys: Vec<Pubkey>,
+        threshold: u16,
+        config_authority: Option<Pubkey>,
+        time_lock: u32,
+        memo: Option<String>,
     ) -> Result<()> {
-        create_project_handler(ctx, counter, multi_sig)?;
+        create_project_handler(
+            ctx,
+            counter,
+            members_keys,
+            threshold,
+            config_authority,
+            time_lock,
+            memo,
+        )?;
         Ok(())
     }
 
