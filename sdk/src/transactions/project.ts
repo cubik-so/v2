@@ -4,11 +4,13 @@ import {
   CreateProjectAccounts,
   CreateProjectArgs,
   CreateProjectSigners,
-  UpdateProjectAccounts,
-  UpdateProjectArgs,
-  UpdateProjectSigners,
   TransferProjectAccounts,
   TransferProjectSigners,
+  ProjectStatusHandlerArgs,
+  UpdateProjectStatusAccounts,
+  UpdateProjectStatusSigners,
+  CloseProjectSigners,
+  CloseProjectAccounts,
 } from "../types";
 import { program } from "../constants";
 
@@ -33,7 +35,14 @@ export const createProject = async (
   signers: CreateProjectSigners,
 ): Promise<web3.Transaction> => {
   const ix = await program.methods
-    .createProject(args.counter, args.squadsProgramID, args.metadata)
+    .createProject(
+      args.counter,
+      args.membersKeys,
+      args.threshold,
+      args.configAuthority,
+      args.timeLock,
+      args.memo,
+    )
     .accounts(accounts)
     .signers(signers)
     .instruction();
@@ -43,41 +52,6 @@ export const createProject = async (
     await provider.connection.getLatestBlockhash()
   ).blockhash;
   tx.feePayer = accounts.owner;
-
-  return tx;
-};
-
-/**
- *
- * @name updateProject
- * @description
- * Updates a project.
- *
- * @param provider anchor.AnchorProvider
- * @param args UpdateProjectArgs
- * @param accounts UpdateProjectAccounts
- * @param signers UpdateProjectSigners
- * @returns Promise<web3.Transaction>
- *
- * @category transactions
- */
-export const updateProject = async (
-  provider: anchor.AnchorProvider,
-  args: UpdateProjectArgs,
-  accounts: UpdateProjectAccounts,
-  signers: UpdateProjectSigners,
-): Promise<web3.Transaction> => {
-  const ix = await program.methods
-    .updateProject(args.metadata)
-    .accounts(accounts)
-    .signers(signers)
-    .instruction();
-
-  const tx = new web3.Transaction().add(ix);
-  tx.recentBlockhash = (
-    await provider.connection.getLatestBlockhash()
-  ).blockhash;
-  tx.feePayer = accounts.authority;
 
   return tx;
 };
@@ -94,6 +68,7 @@ export const updateProject = async (
  *
  * @category transactions
  */
+
 export const transferProject = async (
   provider: anchor.AnchorProvider,
   accounts: TransferProjectAccounts,
@@ -113,3 +88,59 @@ export const transferProject = async (
 
   return tx;
 };
+
+/**
+ * Update the status of a project.
+ * @param provider The Anchor provider.
+ * @param args The arguments for the function.
+ * @param accounts The accounts required for the transaction.
+ * @param signers The signers for the transaction.
+ * @returns A promise that resolves to a Solana transaction.
+ */
+export const updateProjectStatus = async (
+  provider: anchor.AnchorProvider,
+  args: ProjectStatusHandlerArgs,
+  accounts: UpdateProjectStatusAccounts,
+  signers: UpdateProjectStatusSigners,
+): Promise<web3.Transaction> => {
+  const ix = await program.methods
+    .updateProjectStatus(args.status) // @todo: enum issue
+    .accounts(accounts)
+    .signers(signers)
+    .instruction();
+
+  const tx = new web3.Transaction().add(ix);
+  tx.recentBlockhash = (
+    await provider.connection.getLatestBlockhash()
+  ).blockhash;
+  tx.feePayer = accounts.authority;
+
+  return tx;
+};
+
+/**
+ * Close a project.
+ * @param provider The Anchor provider.
+ * @param accounts The accounts required for the transaction.
+ * @param signers The signers for the transaction.
+ * @returns A promise that resolves to a Solana transaction.
+ */
+// export const closeProject = async (
+//   provider: anchor.AnchorProvider,
+//   accounts: CloseProjectAccounts,
+//   signers: CloseProjectSigners,
+// ): Promise<web3.Transaction> => {
+//   const ix = await program.methods
+//     .closeProject()
+//     .accounts(accounts)
+//     .signers(signers)
+//     .instruction();
+
+//   const tx = new web3.Transaction().add(ix);
+//   tx.recentBlockhash = (
+//     await provider.connection.getLatestBlockhash()
+//   ).blockhash;
+//   tx.feePayer = accounts.authority;
+
+//   return tx;
+// };

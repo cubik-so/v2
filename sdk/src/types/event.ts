@@ -1,67 +1,135 @@
-import * as web3 from "@solana/web3.js";
-import { BN } from "@coral-xyz/anchor";
+import { BN, web3 } from "@coral-xyz/anchor";
 
-export type CreateEventArgs = {
+/**
+ * @name CreateEventHandlerArgs
+ * @description The arguments required to create an event.
+ * @property matchingPool - The matching pool amount for the event.
+ */
+export type CreateEventHandlerArgs = {
   matchingPool: BN;
-  metadata: number[];
 };
 
+/**
+ * @name CreateEventAccounts
+ * @description The accounts required for creating an event.
+ * @property authority - The public key of the authority executing the action.
+ * @property eventAccount - The public key of the event account.
+ * @property subAdminAccount - The public key of the sub-admin account.
+ * @property eventKey - The public key of the event key.
+ * @property systemProgram - The public key of the system program.
+ * @property rent - The public key of the rent sysvar.
+ */
 export type CreateEventAccounts = {
   authority: web3.PublicKey;
-  createKey: web3.PublicKey;
-  eventKey: web3.PublicKey;
   eventAccount: web3.PublicKey;
   subAdminAccount: web3.PublicKey;
-  userAccount: web3.PublicKey;
+  eventKey: web3.PublicKey;
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
 
+/**
+ * @name CreateEventSigners
+ * @description The signers required for creating an event.
+ */
 export type CreateEventSigners = web3.Keypair[];
 
-export type CreateEventJoinArgs = {
+/**
+ * @name CreateEventJoinHandlerArgs
+ * @description The arguments required to create an event join.
+ * @property counter - The counter for the event join.
+ * @property eventKey - The public key of the event.
+ */
+export type CreateEventJoinHandlerArgs = {
   counter: BN;
   eventKey: web3.PublicKey;
 };
 
+/**
+ * @name CreateEventJoinAccounts
+ * @description The accounts required for creating an event join.
+ * @property authority - The public key of the authority executing the action.
+ * @property eventJoinAccount - The public key of the event join account.
+ * @property eventAccount - The public key of the event account.
+ * @property projectAccount - The public key of the project account.
+ * @property systemProgram - The public key of the system program.
+ * @property rent - The public key of the rent sysvar.
+ */
 export type CreateEventJoinAccounts = {
   authority: web3.PublicKey;
   eventJoinAccount: web3.PublicKey;
-  projectAccount: web3.PublicKey;
   eventAccount: web3.PublicKey;
+  projectAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
 
+/**
+ * @name CreateEventJoinSigners
+ * @description The signers required for creating an event join.
+ */
 export type CreateEventJoinSigners = web3.Keypair[];
 
+// Define this enum based on your Rust code for EventProjectStatus
 export enum EventProjectStatus {
-  PendingApproval = 0,
-  Approved = 1,
-  Rejected = 2,
+  PendingApproval,
+  Approved,
+  // ...other statuses
 }
 
+/**
+ * @name UpdateEventStatusArgs
+ * @description The arguments required to update an event's status.
+ * @property status - The new status of the event.
+ */
 export type UpdateEventStatusArgs = {
-  status: EventProjectStatus; // Enum or type representing EventProjectStatus
+  status: EventProjectStatus;
 };
 
+/**
+ * @name UpdateEventStatusAccounts
+ * @description The accounts required for updating an event's status.
+ * @property authority - The public key of the authority executing the action.
+ * @property eventAccount - The public key of the event account.
+ * @property eventJoinAccount - The public key of the event join account.
+ * @property projectAccount - The public key of the project account.
+ * @property subAdminAccount - The public key of the sub-admin account.
+ * @property systemProgram - The public key of the system program.
+ * @property rent - The public key of the rent sysvar.
+ */
 export type UpdateEventStatusAccounts = {
   authority: web3.PublicKey;
-  subAdminAccount: web3.PublicKey;
-  eventJoinAccount: web3.PublicKey;
   eventAccount: web3.PublicKey;
+  eventJoinAccount: web3.PublicKey;
   projectAccount: web3.PublicKey;
+  subAdminAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
 
+/**
+ * @name UpdateEventStatusSigners
+ * @description The signers required for updating an event's status.
+ */
 export type UpdateEventStatusSigners = web3.Keypair[];
 
+/**
+ * @name UpdateEventArgs
+ * @description The arguments required to update an event.
+ * @property matchingPool - The matching pool amount for the event.
+ */
 export type UpdateEventArgs = {
   matchingPool: BN;
-  metadata: number[];
 };
 
+/**
+ * @name UpdateEventAccounts
+ * @description The accounts required for updating an event.
+ * @property authority - The public key of the authority executing the action.
+ * @property eventAccount - The public key of the event account.
+ * @property systemProgram - The public key of the system program.
+ * @property rent - The public key of the rent sysvar.
+ */
 export type UpdateEventAccounts = {
   authority: web3.PublicKey;
   eventAccount: web3.PublicKey;
@@ -69,10 +137,23 @@ export type UpdateEventAccounts = {
   rent: web3.PublicKey;
 };
 
+/**
+ * @name UpdateEventSigners
+ * @description The signers required for updating an event.
+ */
 export type UpdateEventSigners = web3.Keypair[];
 
-export type InviteEventJoinArgs = {}; // No explicit args in this case
-
+/**
+ * @name InviteEventJoinAccounts
+ * @description The accounts required for inviting to join an event.
+ * @property authority - The public key of the authority executing the invitation.
+ * @property eventJoinAccount - The public key of the event join account.
+ * @property subAdminAccount - The public key of the sub-admin account.
+ * @property projectAccount - The public key of the project account.
+ * @property eventAccount - The public key of the event account.
+ * @property systemProgram - The public key of the system program.
+ * @property rent - The public key of the rent sysvar.
+ */
 export type InviteEventJoinAccounts = {
   authority: web3.PublicKey;
   eventJoinAccount: web3.PublicKey;
@@ -83,4 +164,8 @@ export type InviteEventJoinAccounts = {
   rent: web3.PublicKey;
 };
 
+/**
+ * @name InviteEventJoinSigners
+ * @description The signers required for inviting to join an event.
+ */
 export type InviteEventJoinSigners = web3.Keypair[];
