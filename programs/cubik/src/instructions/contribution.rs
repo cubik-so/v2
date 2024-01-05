@@ -1,9 +1,10 @@
 use crate::errors::Errors;
-use crate::event::{self, NewContribution};
-use crate::state::{Admin, Event, EventJoin, EventProjectStatus, Project, ProjectVerification};
+use crate::event::NewContribution;
+use crate::state::{Event, EventJoin, EventProjectStatus, Project, ProjectVerification};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
+use squads_multisig_program::{SEED_PREFIX, SEED_VAULT};
 
 pub fn create_contribution_handler(
     ctx: Context<CreateContributionContext>,
@@ -13,10 +14,24 @@ pub fn create_contribution_handler(
 ) -> Result<()> {
     let event_join = &mut ctx.accounts.event_join_account.clone();
     let project_account = &ctx.accounts.project_account.clone();
-
+    let token_ata_receiver = &mut ctx.accounts.token_ata_receiver.clone();
     require!(
         event_join.status != EventProjectStatus::Approved,
         Errors::InvalidProjectVerification
+    );
+
+    let (vault_pubkey, vault_bump) = Pubkey::find_program_address(
+        &[
+            SEED_PREFIX,
+            &project_account.multisig.to_bytes(),
+            SEED_VAULT,
+            &[0],
+        ],
+        &squads_multisig_program::ID,
+    );
+    require!(
+        token_ata_receiver.owner.key() != vault_pubkey.key(),
+        Errors::InvalidReceiver
     );
 
     require!(
@@ -64,7 +79,7 @@ pub struct CreateContributionContext<'info> {
     #[account(mut, constraint = token_ata_sender.mint ==  token_mint.key(), constraint = token_ata_sender.owner == authority.key())]
     pub token_ata_sender: Box<Account<'info, TokenAccount>>,
 
-    #[account(mut, constraint = token_ata_receiver.mint ==  token_mint.key(), constraint = token_ata_receiver.owner == project_account.multisig.key())]
+    #[account(mut, constraint = token_ata_receiver.mint ==  token_mint.key())]
     pub token_ata_receiver: Box<Account<'info, TokenAccount>>,
 
     #[account(mut,

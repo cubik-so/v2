@@ -11,9 +11,7 @@ pub struct SponsorTeam {
 #[derive(Default, InitSpace)]
 pub struct Sponsor {
     pub authority: Pubkey,
-    pub vault: Pubkey,
     pub create_key: Pubkey,
     pub total_committed_usd: u64,
-    pub total_paid_usd: u64,
     pub bump: u8,
 }

@@ -14,4 +14,6 @@ pub enum Errors {
     Permission,
     #[msg("Error: Owner of project cannot tip the Project itself")]
     InvalidTip,
+    #[msg("Error: Invalid receiver")]
+    InvalidReceiver,
 }

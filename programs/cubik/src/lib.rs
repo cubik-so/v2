@@ -125,23 +125,6 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn fund_sponsor_vault_spl(
-        ctx: Context<FundSponsorVaultSPLContext>,
-        amount: u64,
-        amount_usd: u64,
-    ) -> Result<()> {
-        fund_sponsor_vault_spl_handler(ctx, amount, amount_usd)?;
-        Ok(())
-    }
-
-    pub fn fund_sponsor_vault_sol(
-        ctx: Context<FundSponsorVaultSOLContext>,
-        amount: u64,
-        amount_usd: u64,
-    ) -> Result<()> {
-        fund_sponsor_vault_sol_handler(ctx, amount, amount_usd)
-    }
-
     pub fn create_contribution(
         ctx: Context<CreateContributionContext>,
         amount: u64,
