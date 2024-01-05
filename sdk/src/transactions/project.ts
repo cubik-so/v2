@@ -1,5 +1,5 @@
-import * as anchor from "@coral-xyz/anchor";
-import { web3 } from "@coral-xyz/anchor";
+import * as anchor from '@coral-xyz/anchor';
+import { web3 } from '@coral-xyz/anchor';
 import {
   CreateProjectAccounts,
   CreateProjectArgs,
@@ -11,8 +11,8 @@ import {
   UpdateProjectStatusSigners,
   CloseProjectSigners,
   CloseProjectAccounts,
-} from "../types";
-import { program } from "../constants";
+} from '../types';
+import { createCubikProgram } from '../constants';
 
 /**
  *
@@ -20,7 +20,7 @@ import { program } from "../constants";
  * @description
  * Creates a project.
  *
- * @param provider anchor.AnchorProvider
+ * @param programId The programId.
  * @param args CreateProjectArgs
  * @param accounts CreateProjectAccounts
  * @param signers CreateProjectSigners
@@ -29,11 +29,12 @@ import { program } from "../constants";
  * @category transactions
  */
 export const createProject = async (
-  provider: anchor.AnchorProvider,
+  programId: string,
   args: CreateProjectArgs,
   accounts: CreateProjectAccounts,
-  signers: CreateProjectSigners,
+  signers: CreateProjectSigners
 ): Promise<web3.Transaction> => {
+  const program = createCubikProgram(programId);
   const ix = await program.methods
     .createProject(
       args.counter,
@@ -41,17 +42,13 @@ export const createProject = async (
       args.threshold,
       args.configAuthority,
       args.timeLock,
-      args.memo,
+      args.memo
     )
     .accounts(accounts)
     .signers(signers)
     .instruction();
 
   const tx = new web3.Transaction().add(ix);
-  tx.recentBlockhash = (
-    await provider.connection.getLatestBlockhash()
-  ).blockhash;
-  tx.feePayer = accounts.owner;
 
   return tx;
 };
@@ -60,8 +57,7 @@ export const createProject = async (
  * @name transferProject
  * @description
  * Transfers a project to new user.
- *
- * @param provider anchor.AnchorProvider
+ * @param programId The programId.
  * @param accounts TransferProjectAccounts
  * @param signers TransferProjectSigners
  * @returns Promise<web3.Transaction>
@@ -70,10 +66,11 @@ export const createProject = async (
  */
 
 export const transferProject = async (
-  provider: anchor.AnchorProvider,
+  programId: string,
   accounts: TransferProjectAccounts,
-  signers: TransferProjectSigners,
+  signers: TransferProjectSigners
 ): Promise<web3.Transaction> => {
+  const program = createCubikProgram(programId);
   const ix = await program.methods
     .transferProject()
     .accounts(accounts)
@@ -81,28 +78,25 @@ export const transferProject = async (
     .instruction();
 
   const tx = new web3.Transaction().add(ix);
-  tx.recentBlockhash = (
-    await provider.connection.getLatestBlockhash()
-  ).blockhash;
-  tx.feePayer = accounts.authority;
 
   return tx;
 };
 
 /**
  * Update the status of a project.
- * @param provider The Anchor provider.
+ * @param programId The programId.
  * @param args The arguments for the function.
  * @param accounts The accounts required for the transaction.
  * @param signers The signers for the transaction.
  * @returns A promise that resolves to a Solana transaction.
  */
 export const updateProjectStatus = async (
-  provider: anchor.AnchorProvider,
+  programId: string,
   args: ProjectStatusHandlerArgs,
   accounts: UpdateProjectStatusAccounts,
-  signers: UpdateProjectStatusSigners,
+  signers: UpdateProjectStatusSigners
 ): Promise<web3.Transaction> => {
+  const program = createCubikProgram(programId);
   const ix = await program.methods
     .updateProjectStatus(args.status) // @todo: enum issue
     .accounts(accounts)
@@ -110,17 +104,12 @@ export const updateProjectStatus = async (
     .instruction();
 
   const tx = new web3.Transaction().add(ix);
-  tx.recentBlockhash = (
-    await provider.connection.getLatestBlockhash()
-  ).blockhash;
-  tx.feePayer = accounts.authority;
 
   return tx;
 };
 
 /**
  * Close a project.
- * @param provider The Anchor provider.
  * @param accounts The accounts required for the transaction.
  * @param signers The signers for the transaction.
  * @returns A promise that resolves to a Solana transaction.

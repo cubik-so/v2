@@ -1,4 +1,4 @@
-import * as anchor from "@coral-xyz/anchor";
+import * as anchor from '@coral-xyz/anchor';
 import {
   CreateEventHandlerArgs,
   CreateEventAccounts,
@@ -14,24 +14,25 @@ import {
   UpdateEventSigners,
   InviteEventJoinAccounts,
   InviteEventJoinSigners,
-} from "../types";
+} from '../types';
 
-import { program } from "../constants";
+import { createCubikProgram } from '../constants';
 
 /**
  * Create an event.
- * @param provider The Anchor provider.
+ * @param programId The programId.
  * @param args The arguments for the function.
  * @param accounts The accounts required for the transaction.
  * @param signers The signers for the transaction.
  * @returns A promise that resolves to a Solana transaction.
  */
 export const createEvent = async (
-  provider: anchor.AnchorProvider,
+  programId: string,
   args: CreateEventHandlerArgs,
   accounts: CreateEventAccounts,
-  signers: CreateEventSigners,
+  signers: CreateEventSigners
 ): Promise<anchor.web3.Transaction> => {
+  const program = createCubikProgram(programId);
   const ix = await program.methods
     .createEvent(args.matchingPool)
     .accounts(accounts)
@@ -39,10 +40,6 @@ export const createEvent = async (
     .instruction();
 
   const tx = new anchor.web3.Transaction().add(ix);
-  tx.recentBlockhash = (
-    await provider.connection.getLatestBlockhash()
-  ).blockhash;
-  tx.feePayer = accounts.authority;
 
   return tx;
 };
@@ -56,11 +53,12 @@ export const createEvent = async (
  * @returns A promise that resolves to a Solana transaction.
  */
 export const createEventJoin = async (
-  provider: anchor.AnchorProvider,
+  programId: string,
   args: CreateEventJoinHandlerArgs,
   accounts: CreateEventJoinAccounts,
-  signers: CreateEventJoinSigners,
+  signers: CreateEventJoinSigners
 ): Promise<anchor.web3.Transaction> => {
+  const program = createCubikProgram(programId);
   const ix = await program.methods
     .createEventJoin(args.counter, args.eventKey)
     .accounts(accounts)
@@ -68,17 +66,12 @@ export const createEventJoin = async (
     .instruction();
 
   const tx = new anchor.web3.Transaction().add(ix);
-  tx.recentBlockhash = (
-    await provider.connection.getLatestBlockhash()
-  ).blockhash;
-  tx.feePayer = accounts.authority;
 
   return tx;
 };
 
 /**
  * Update an event's status.
- * @param provider The Anchor provider.
  * @param args The arguments for the function.
  * @param accounts The accounts required for the transaction.
  * @param signers The signers for the transaction.
@@ -107,18 +100,19 @@ export const createEventJoin = async (
 
 /**
  * Update an event.
- * @param provider The Anchor provider.
+ * @param programId The programId.
  * @param args The arguments for the function.
  * @param accounts The accounts required for the transaction.
  * @param signers The signers for the transaction.
  * @returns A promise that resolves to a Solana transaction.
  */
 export const updateEvent = async (
-  provider: anchor.AnchorProvider,
+  programId: string,
   args: UpdateEventArgs,
   accounts: UpdateEventAccounts,
-  signers: UpdateEventSigners,
+  signers: UpdateEventSigners
 ): Promise<anchor.web3.Transaction> => {
+  const program = createCubikProgram(programId);
   const ix = await program.methods
     .updateEvent(args.matchingPool)
     .accounts(accounts)
@@ -126,27 +120,24 @@ export const updateEvent = async (
     .instruction();
 
   const tx = new anchor.web3.Transaction().add(ix);
-  tx.recentBlockhash = (
-    await provider.connection.getLatestBlockhash()
-  ).blockhash;
-  tx.feePayer = accounts.authority;
 
   return tx;
 };
 
 /**
  * Invite to join an event.
- * @param provider The Anchor provider.
+ * @param programId The programId.
  * @param args The arguments for the function (placeholder, as there are no specific arguments).
  * @param accounts The accounts required for the transaction.
  * @param signers The signers for the transaction.
  * @returns A promise that resolves to a Solana transaction.
  */
 export const inviteEventJoin = async (
-  provider: anchor.AnchorProvider,
+  programId: string,
   accounts: InviteEventJoinAccounts,
-  signers: InviteEventJoinSigners,
+  signers: InviteEventJoinSigners
 ): Promise<anchor.web3.Transaction> => {
+  const program = createCubikProgram(programId);
   const ix = await program.methods
     .inviteEventJoin()
     .accounts(accounts)
@@ -154,10 +145,6 @@ export const inviteEventJoin = async (
     .instruction();
 
   const tx = new anchor.web3.Transaction().add(ix);
-  tx.recentBlockhash = (
-    await provider.connection.getLatestBlockhash()
-  ).blockhash;
-  tx.feePayer = accounts.authority;
 
   return tx;
 };

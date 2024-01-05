@@ -1,32 +1,25 @@
-import * as anchor from "@coral-xyz/anchor";
-import { web3 } from "@coral-xyz/anchor";
-import { Cubik } from "./types";
-
-/**
- * Program address
- *
- * @category constants
- */
-export const PROGRAM_ADDRESS = "3s9zZaosL6hJFeDToXDoPN4sQgyVwLEdqzaztZXj1Nnk";
+import * as anchor from '@coral-xyz/anchor';
+import { web3 } from '@coral-xyz/anchor';
+import { Cubik } from './types';
 
 /**
  * Program IDL
  *
  * @category constants
  */
-import IDL from "../../target/idl/cubik.json";
-export const idl = IDL;
-
-/**
- * Cubik Program Public Key
- *
- * @category constants
- */
-export const PROGRAM_ID = new web3.PublicKey(PROGRAM_ADDRESS);
+import IDL from '../../target/idl/cubik.json';
+export const idl = IDL as anchor.Idl;
 
 /**
  * Cubik Program
  *
  * @category constants
  */
-export const program = anchor.workspace.Cubik as anchor.Program<Cubik>;
+export const createCubikProgram = (
+  programId: string
+): anchor.Program<Cubik> => {
+  return new anchor.Program(
+    idl,
+    new web3.PublicKey(programId)
+  ) as unknown as anchor.Program<Cubik>;
+};
