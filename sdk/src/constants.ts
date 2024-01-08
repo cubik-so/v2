@@ -1,14 +1,13 @@
 import * as anchor from '@coral-xyz/anchor';
 import { web3 } from '@coral-xyz/anchor';
-import { Cubik } from './types';
+import { Cubik, IDL } from './types';
 
 /**
  * Program IDL
  *
  * @category constants
  */
-import IDL from '../../target/idl/cubik.json';
-export const idl = IDL as anchor.Idl;
+export const idl = IDL;
 
 /**
  * Cubik Program
