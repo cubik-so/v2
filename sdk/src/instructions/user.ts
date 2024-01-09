@@ -1,10 +1,10 @@
 import { web3 } from '@coral-xyz/anchor';
-import { Cubik } from '../index';
+import { CubikSDK } from '../index';
 import { CreateUserAccounts, CreateUserArgs } from '../types';
 
 export class User {
-  readonly cubik: Cubik;
-  constructor(cubik_sdk: Cubik) {
+  readonly cubik: CubikSDK;
+  constructor(cubik_sdk: CubikSDK) {
     this.cubik = cubik_sdk;
   }
   getPDA() {

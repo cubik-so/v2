@@ -2,8 +2,9 @@ import { AnchorProvider, Program, Wallet, web3 } from '@coral-xyz/anchor';
 import { Cubik as CubikIDLType } from './types';
 import { idl } from './constants';
 import { User } from './instructions/user';
+import { Project } from './instructions/project';
 
-export class Cubik {
+export class CubikSDK {
   readonly program: Program<CubikIDLType>;
   readonly provider: AnchorProvider;
   public programId: web3.PublicKey;
@@ -22,6 +23,8 @@ export class Cubik {
       this.provider
     ) as Program<CubikIDLType>;
   }
-
-  user = new User(this);
+  ix = {
+    user: new User(this),
+    project: new Project(this),
+  };
 }
