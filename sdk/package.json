@@ -1,16 +1,16 @@
 {
   "name": "@cubik-so/sdk",
-  "version": "0.3.0",
+  "version": "0.3.3-alpha.0",
   "description": "",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/sdk/src/index.js",
+  "types": "lib/sdk/src/index.d.ts",
   "files": [
     "lib"
   ],
   "exports": {
     ".": {
-      "import": "./lib/index.js",
-      "require": "./lib/index.mjs"
+      "import": "./lib/sdk/src/index.js",
+      "require": "./lib/sdk/src/index.mjs"
     }
   },
   "scripts": {
