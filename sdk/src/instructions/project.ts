@@ -15,7 +15,7 @@ export class Project {
         Buffer.from('project'),
         userPubkey.toBuffer(),
         create_key.toBuffer(),
-        new BN(counter).toArrayLike(Buffer, 'le', 2),
+        new BN(counter).toArrayLike(Buffer, 'le', 8),
       ],
       this.cubik.programId
     );
