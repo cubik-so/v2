@@ -112,9 +112,13 @@ export class CubikSDK {
         return ix;
       },
 
-      getPDA: (createKey: web3.PublicKey, counter: BN) => {
+      getPDA: (createKey: web3.PublicKey, counter: number) => {
         return web3.PublicKey.findProgramAddressSync(
-          [Buffer.from("project"), createKey.toBuffer(), counter.toBuffer()],
+          [
+            Buffer.from("project"),
+            createKey.toBuffer(),
+            new BN(counter).toArrayLike(Buffer, "le", 8),
+          ],
           this.programId,
         );
       },
