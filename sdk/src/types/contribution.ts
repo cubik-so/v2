@@ -66,5 +66,3 @@ export type CreateContributionAccounts = {
   tokenProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
-
-export type CreateContributionSigners = web3.Keypair[];

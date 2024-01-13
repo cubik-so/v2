@@ -3,10 +3,8 @@ import {
   AddMemberSponsorArgs,
   CloseSubAdminContext,
   CreateAdminAccounts,
-  CreateAdminSigners,
   CreateProjectAccounts,
   CreateProjectArgs,
-  CreateProjectSigners,
   CreateSubAdminContext,
   CreateSubAdminHandlerArgs,
   CreateUserAccounts,
@@ -14,31 +12,21 @@ import {
   Cubik as CubikIDLType,
   InitSponsorAccounts,
   InitSponsorArgs,
-  InitSponsorSigners,
   ProjectStatusHandlerArgs,
   SponsorTeamAccounts,
-  SponsorTeamSigners,
   TransferProjectAccounts,
-  TransferProjectSigners,
   UpdateProjectStatusAccounts,
-  UpdateProjectStatusSigners,
   UpdateSponsorAccounts,
   UpdateSponsorArgs,
-  UpdateSponsorSigners,
   CreateEventHandlerArgs,
   CreateEventAccounts,
-  CreateEventSigners,
   CreateEventJoinHandlerArgs,
   CreateEventJoinAccounts,
-  CreateEventJoinSigners,
   UpdateEventArgs,
   UpdateEventAccounts,
-  UpdateEventSigners,
   InviteEventJoinAccounts,
-  InviteEventJoinSigners,
   CreateContributionArgs,
   CreateContributionAccounts,
-  CreateContributionSigners,
 } from "./types";
 import { idl } from "./constants";
 export * from "./types";
@@ -87,7 +75,6 @@ export class CubikSDK {
       create: async (
         args: CreateProjectArgs,
         accounts: CreateProjectAccounts,
-        signers: CreateProjectSigners,
       ) => {
         const ix = await this.program.methods
           .createProject(
@@ -99,20 +86,15 @@ export class CubikSDK {
             args.memo,
           )
           .accounts(accounts)
-          .signers(signers)
           .instruction();
 
         return ix;
       },
 
-      transfer: async (
-        accounts: TransferProjectAccounts,
-        signers: TransferProjectSigners,
-      ) => {
+      transfer: async (accounts: TransferProjectAccounts) => {
         const ix = await this.program.methods
           .transferProject()
           .accounts(accounts)
-          .signers(signers)
           .instruction();
 
         return ix;
@@ -121,12 +103,10 @@ export class CubikSDK {
       updateStatus: async (
         args: ProjectStatusHandlerArgs,
         accounts: UpdateProjectStatusAccounts,
-        signers: UpdateProjectStatusSigners,
       ) => {
         const ix = await this.program.methods
           .updateProjectStatus(args.status) // @todo: enum issue
           .accounts(accounts)
-          .signers(signers)
           .instruction();
 
         return ix;
@@ -144,14 +124,10 @@ export class CubikSDK {
 
   public get admin() {
     return {
-      create: async (
-        accounts: CreateAdminAccounts,
-        signers: CreateAdminSigners,
-      ) => {
+      create: async (accounts: CreateAdminAccounts) => {
         const ix = await this.program.methods
           .createAdmin()
           .accounts(accounts)
-          .signers(signers)
           .instruction();
 
         return ix;
@@ -186,15 +162,10 @@ export class CubikSDK {
 
   public get sponsor() {
     return {
-      init: async (
-        args: InitSponsorArgs,
-        accounts: InitSponsorAccounts,
-        signers: InitSponsorSigners,
-      ) => {
+      init: async (args: InitSponsorArgs, accounts: InitSponsorAccounts) => {
         const ix = await this.program.methods
           .initSponsor(args.vault, args.totalCommitted)
           .accounts(accounts)
-          .signers(signers)
           .instruction();
 
         return ix;
@@ -203,12 +174,10 @@ export class CubikSDK {
       update: async (
         args: UpdateSponsorArgs,
         accounts: UpdateSponsorAccounts,
-        signers: UpdateSponsorSigners,
       ) => {
         const ix = await this.program.methods
           .updateSponsor(args.totalCommitted)
           .accounts(accounts)
-          .signers(signers)
           .instruction();
 
         return ix;
@@ -217,12 +186,10 @@ export class CubikSDK {
       addMember: async (
         args: AddMemberSponsorArgs,
         accounts: SponsorTeamAccounts,
-        signers: SponsorTeamSigners,
       ) => {
         const ix = await this.program.methods
           .addMemberSponsor(args.teamMemberKey)
           .accounts(accounts)
-          .signers(signers)
           .instruction();
 
         return ix;
@@ -235,12 +202,10 @@ export class CubikSDK {
       create: async (
         args: CreateEventHandlerArgs,
         accounts: CreateEventAccounts,
-        signers: CreateEventSigners,
       ) => {
         const ix = await this.program.methods
           .createEvent(args.matchingPool)
           .accounts(accounts)
-          .signers(signers)
           .instruction();
 
         return ix;
@@ -249,38 +214,27 @@ export class CubikSDK {
       createEventJoin: async (
         args: CreateEventJoinHandlerArgs,
         accounts: CreateEventJoinAccounts,
-        signers: CreateEventJoinSigners,
       ) => {
         const ix = await this.program.methods
           .createEventJoin(args.counter, args.eventKey)
           .accounts(accounts)
-          .signers(signers)
           .instruction();
 
         return ix;
       },
 
-      update: async (
-        args: UpdateEventArgs,
-        accounts: UpdateEventAccounts,
-        signers: UpdateEventSigners,
-      ) => {
+      update: async (args: UpdateEventArgs, accounts: UpdateEventAccounts) => {
         const ix = await this.program.methods
           .updateEvent(args.matchingPool)
           .accounts(accounts)
-          .signers(signers)
           .instruction();
         return ix;
       },
 
-      inviteEventJoin: async (
-        accounts: InviteEventJoinAccounts,
-        signers: InviteEventJoinSigners,
-      ) => {
+      inviteEventJoin: async (accounts: InviteEventJoinAccounts) => {
         const ix = await this.program.methods
           .inviteEventJoin()
           .accounts(accounts)
-          .signers(signers)
           .instruction();
         return ix;
       },
@@ -292,12 +246,10 @@ export class CubikSDK {
       create: async (
         args: CreateContributionArgs,
         accounts: CreateContributionAccounts,
-        signers: CreateContributionSigners,
       ) => {
         const ix = await this.program.methods
           .createContribution(args.amount, args.split, args.createKey)
           .accounts(accounts)
-          .signers(signers)
           .instruction();
 
         return ix;

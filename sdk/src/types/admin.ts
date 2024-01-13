@@ -20,15 +20,3 @@ export type CreateAdminAccounts = {
   authority: web3.PublicKey; // Authority creating the admin
   adminAccount: web3.PublicKey; // Admin account to be created
 };
-
-/**
- * @name CreateAdminSigners
- * @description
- * The signers required to create an admin.
- *
- * @category types
- * @example
- * const signers: CreateAdminSigners = [adminKeypair];
- *
- */
-export type CreateAdminSigners = web3.Keypair[];

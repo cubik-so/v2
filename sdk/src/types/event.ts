@@ -29,12 +29,6 @@ export type CreateEventAccounts = {
 };
 
 /**
- * @name CreateEventSigners
- * @description The signers required for creating an event.
- */
-export type CreateEventSigners = web3.Keypair[];
-
-/**
  * @name CreateEventJoinHandlerArgs
  * @description The arguments required to create an event join.
  * @property counter - The counter for the event join.
@@ -63,12 +57,6 @@ export type CreateEventJoinAccounts = {
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
-
-/**
- * @name CreateEventJoinSigners
- * @description The signers required for creating an event join.
- */
-export type CreateEventJoinSigners = web3.Keypair[];
 
 // Define this enum based on your Rust code for EventProjectStatus
 export enum EventProjectStatus {
@@ -108,12 +96,6 @@ export type UpdateEventStatusAccounts = {
 };
 
 /**
- * @name UpdateEventStatusSigners
- * @description The signers required for updating an event's status.
- */
-export type UpdateEventStatusSigners = web3.Keypair[];
-
-/**
  * @name UpdateEventArgs
  * @description The arguments required to update an event.
  * @property matchingPool - The matching pool amount for the event.
@@ -138,12 +120,6 @@ export type UpdateEventAccounts = {
 };
 
 /**
- * @name UpdateEventSigners
- * @description The signers required for updating an event.
- */
-export type UpdateEventSigners = web3.Keypair[];
-
-/**
  * @name InviteEventJoinAccounts
  * @description The accounts required for inviting to join an event.
  * @property authority - The public key of the authority executing the invitation.
@@ -163,9 +139,3 @@ export type InviteEventJoinAccounts = {
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
-
-/**
- * @name InviteEventJoinSigners
- * @description The signers required for inviting to join an event.
- */
-export type InviteEventJoinSigners = web3.Keypair[];

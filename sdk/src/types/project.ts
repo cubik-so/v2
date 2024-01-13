@@ -70,18 +70,6 @@ export type CreateProjectAccounts = {
 };
 
 /**
- * @name CreateProjectSigners
- * @description
- * The signers required to create a project.
- *
- * @category types
- * @example
- * const signers: CreateProjectSigners = [owner, createKey];
- *
- */
-export type CreateProjectSigners = web3.Keypair[];
-
-/**
  * @name ProjectVerification
  * @description Enum representing the various states of project verification.
  */
@@ -130,18 +118,6 @@ export type TransferProjectAccounts = {
 };
 
 /**
- * @name TransferProjectSigners
- * @description
- * The signers required to transfer a project.
- *
- * @category types
- * @example
- * const signers: TransferProjectSigners = [userKeypair];
- *
- */
-export type TransferProjectSigners = web3.Keypair[];
-
-/**
  * @name UpdateProjectStatusAccounts
  * @description The accounts required for updating the status of a project.
  * @property authority - The public key of the authority executing the action.
@@ -159,12 +135,6 @@ export type UpdateProjectStatusAccounts = {
 };
 
 /**
- * @name UpdateProjectStatusSigners
- * @description The signers required for updating the status of a project.
- */
-export type UpdateProjectStatusSigners = web3.Keypair[];
-
-/**
  * @name CloseProjectAccounts
  * @description The accounts required for closing a project.
  * @property authority - The public key of the authority executing the closure.
@@ -178,9 +148,3 @@ export type CloseProjectAccounts = {
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
-
-/**
- * @name CloseProjectSigners
- * @description The signers required to close a project.
- */
-export type CloseProjectSigners = web3.Keypair[];

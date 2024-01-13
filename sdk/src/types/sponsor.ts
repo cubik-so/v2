@@ -33,12 +33,6 @@ export type InitSponsorAccounts = {
 };
 
 /**
- * @name InitSponsorSigners
- * @description The signers required to initialize a sponsor.
- */
-export type InitSponsorSigners = web3.Keypair[];
-
-/**
  * @name UpdateSponsorArgs
  * @description The arguments required to update a sponsor.
  * @property totalCommitted - The total committed amount in USD.
@@ -67,12 +61,6 @@ export type UpdateSponsorAccounts = {
 };
 
 /**
- * @name UpdateSponsorSigners
- * @description The signers required to update a sponsor.
- */
-export type UpdateSponsorSigners = web3.Keypair[];
-
-/**
  * @name AddMemberSponsorArgs
  * @description The arguments required to add a member to a sponsor team.
  * @property teamMemberKey - The public key of the team member being added.
@@ -99,12 +87,6 @@ export type SponsorTeamAccounts = {
   tokenProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
-
-/**
- * @name SponsorTeamSigners
- * @description The signers required for adding a member to a sponsor team.
- */
-export type SponsorTeamSigners = web3.Keypair[];
 
 /**
  * @name FundSponsorVaultSPLArgs
@@ -141,12 +123,6 @@ export type FundSponsorVaultSPLAccounts = {
 };
 
 /**
- * @name FundSponsorVaultSPLSigners
- * @description The signers required for funding a sponsor's SPL token vault.
- */
-export type FundSponsorVaultSPLSigners = web3.Keypair[];
-
-/**
  * @name FundSponsorVaultSOLArgs
  * @description The arguments required to fund a sponsor's SOL vault.
  * @property amount - The amount of SOL to transfer.
@@ -175,9 +151,3 @@ export type FundSponsorVaultSOLAccounts = {
   tokenProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
-
-/**
- * @name FundSponsorVaultSOLSigners
- * @description The signers required for funding a sponsor's SOL vault.
- */
-export type FundSponsorVaultSOLSigners = web3.Keypair[];

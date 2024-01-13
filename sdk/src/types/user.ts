@@ -41,15 +41,3 @@ export type CreateUserAccounts = {
   userAccount: web3.PublicKey; // PDA
   systemProgram: web3.PublicKey; // System
 };
-
-/**
- * @name CreateUserSigners
- * @description
- * The signers required to create a user.
- *
- * @category types
- * @example
- * const signers: CreateUserSigners = [newUserKeypair];
- *
- */
-export type CreateUserSigners = web3.Keypair[];
