@@ -1,23 +1,38 @@
-import { web3 } from '@coral-xyz/anchor';
-import { CubikSDK } from '../index';
-import { CreateUserAccounts, CreateUserArgs } from '../types';
+import { web3 } from "@coral-xyz/anchor";
+import { CubikSDK } from "../index";
+import {
+  CreateUserAccounts,
+  CreateUserArgs,
+  CreateUserSigners,
+} from "../types";
 
 export class User {
   readonly cubik: CubikSDK;
   constructor(cubik_sdk: CubikSDK) {
     this.cubik = cubik_sdk;
   }
-  getPDA() {
-    const userPubkey = this.cubik.provider.wallet.publicKey;
-    return web3.PublicKey.findProgramAddressSync(
-      [Buffer.from('user'), userPubkey.toBuffer()],
-      this.cubik.programId
-    );
+  public get user() {
+    return {
+      create: async (
+        args: CreateUserArgs,
+        accounts: CreateUserAccounts,
+        signers: CreateUserSigners,
+      ) => {
+        const ix = await this.cubik.program.methods
+          .createUser(args.username)
+          .accounts(accounts)
+          .signers(signers)
+          .instruction();
+
+        return ix;
+      },
+    };
   }
-  create(args: CreateUserArgs, accounts: CreateUserAccounts) {
-    return this.cubik.program.methods
-      .createUser(args.username)
-      .accounts(accounts)
-      .instruction();
+
+  getPDA(userPubkey: web3.PublicKey) {
+    return web3.PublicKey.findProgramAddressSync(
+      [Buffer.from("user"), userPubkey.toBuffer()],
+      this.cubik.programId,
+    );
   }
 }

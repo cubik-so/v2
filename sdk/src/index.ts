@@ -1,4 +1,4 @@
-import { AnchorProvider, Program, Wallet, web3 } from "@coral-xyz/anchor";
+import { AnchorProvider, BN, Program, Wallet, web3 } from "@coral-xyz/anchor";
 import {
   AddMemberSponsorArgs,
   CloseSubAdminContext,
@@ -112,10 +112,9 @@ export class CubikSDK {
         return ix;
       },
 
-      // @todo: figure out pdas
-      getPDA: (projectPubkey: web3.PublicKey) => {
+      getPDA: (createKey: web3.PublicKey, counter: BN) => {
         return web3.PublicKey.findProgramAddressSync(
-          [Buffer.from("project"), projectPubkey.toBuffer()],
+          [Buffer.from("project"), createKey.toBuffer(), counter.toBuffer()],
           this.programId,
         );
       },
@@ -131,6 +130,13 @@ export class CubikSDK {
           .instruction();
 
         return ix;
+      },
+
+      getPDA: () => {
+        return web3.PublicKey.findProgramAddressSync(
+          [Buffer.from("admin")],
+          this.programId,
+        );
       },
     };
   }
@@ -156,6 +162,13 @@ export class CubikSDK {
           .instruction();
 
         return ix;
+      },
+
+      getPDA: (subAdmin: web3.PublicKey, createKey: web3.PublicKey) => {
+        return web3.PublicKey.findProgramAddressSync(
+          [Buffer.from("admin"), subAdmin.toBuffer(), createKey.toBuffer()],
+          this.programId,
+        );
       },
     };
   }
@@ -193,6 +206,20 @@ export class CubikSDK {
           .instruction();
 
         return ix;
+      },
+
+      getPDA: (createKey: web3.PublicKey) => {
+        return web3.PublicKey.findProgramAddressSync(
+          [Buffer.from("sponsor"), createKey.toBuffer()],
+          this.programId,
+        );
+      },
+
+      getTeamPDA: (createKey: web3.PublicKey, authority: web3.PublicKey) => {
+        return web3.PublicKey.findProgramAddressSync(
+          [Buffer.from("sponsor"), createKey.toBuffer(), authority.toBuffer()],
+          this.programId,
+        );
       },
     };
   }
@@ -237,6 +264,27 @@ export class CubikSDK {
           .accounts(accounts)
           .instruction();
         return ix;
+      },
+
+      getPDA: (eventKey: web3.PublicKey) => {
+        return web3.PublicKey.findProgramAddressSync(
+          [Buffer.from("event"), eventKey.toBuffer()],
+          this.programId,
+        );
+      },
+
+      getEventJoinPDA: (
+        eventAccount: web3.PublicKey,
+        projectAccount: web3.PublicKey,
+      ) => {
+        return web3.PublicKey.findProgramAddressSync(
+          [
+            Buffer.from("event_join"),
+            eventAccount.toBuffer(),
+            projectAccount.toBuffer(),
+          ],
+          this.programId,
+        );
       },
     };
   }
