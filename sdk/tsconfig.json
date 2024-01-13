@@ -4,6 +4,7 @@
         "module": "es2022",
         "moduleResolution": "node",
         "resolveJsonModule": true,
+        "strictPropertyInitialization": false,
         "lib": [
             "es2015",
             "DOM"
