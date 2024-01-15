@@ -181,7 +181,14 @@ export class CubikSDK {
     return {
       init: async (args: InitSponsorArgs, accounts: InitSponsorAccounts) => {
         const ix = await this.program.methods
-          .initSponsor(args.vault, args.totalCommitted)
+          .initSponsor(
+            args.totalCommitted,
+            args.membersKeys,
+            args.threshold,
+            args.configAuthority,
+            args.timeLock,
+            args.memo,
+          )
           .accounts(accounts)
           .instruction();
 

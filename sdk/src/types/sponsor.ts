@@ -7,8 +7,12 @@ import { BN, web3 } from "@coral-xyz/anchor";
  * @property totalCommitted - The total committed amount in USD.
  */
 export type InitSponsorArgs = {
-  vault: web3.PublicKey;
-  totalCommitted: BN;
+  totalCommitted: BN; // Using BN to represent u128 since JavaScript does not support 128-bit integers
+  membersKeys: web3.PublicKey[]; // Array of public keys
+  threshold: number; // u16 can be represented as a number in TypeScript
+  configAuthority: web3.PublicKey | null; // Option<Pubkey> translates to PublicKey or null
+  timeLock: number; // u32 can be represented as a number in TypeScript
+  memo: string | null; // Option<String> translates to string or null
 };
 
 /**
