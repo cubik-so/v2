@@ -105,10 +105,22 @@ pub mod cubik {
 
     pub fn init_sponsor(
         ctx: Context<InitSponsorContext>,
-        vault: Pubkey,
-        total_committed: u64,
+        total_committed: u128,
+        members_keys: Vec<Pubkey>,
+        threshold: u16,
+        config_authority: Option<Pubkey>,
+        time_lock: u32,
+        memo: Option<String>,
     ) -> Result<()> {
-        init_sponsor_handler(ctx, vault, total_committed)?;
+        init_sponsor_handler(
+            ctx,
+            total_committed,
+            members_keys,
+            threshold,
+            config_authority,
+            time_lock,
+            memo,
+        )?;
         Ok(())
     }
 
