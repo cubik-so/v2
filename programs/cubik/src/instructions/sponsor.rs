@@ -3,8 +3,8 @@ use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
 use squads_multisig_program::{Member, Permission, Permissions};
 
-use crate::event::*;
-use crate::state::{Sponsor, SponsorTeam};
+use crate::state::{sponsor, Sponsor, SponsorTeam};
+use crate::{event::*, Event};
 
 pub fn init_sponsor_handler(
     ctx: Context<InitSponsorContext>,
@@ -64,6 +64,7 @@ pub fn init_sponsor_handler(
     emit!(NewSponsor {
         authority: ctx.accounts.authority.key(),
         total_committed,
+        event_account: ctx.accounts.event_account.key(),
     });
 
     Ok(())
@@ -80,14 +81,19 @@ pub fn add_member_sponsor_handler(
     Ok(())
 }
 
-pub fn update_sponsor_handler(ctx: Context<UpdateSponsor>, total_committed: u64) -> Result<()> {
-    let sponsor_account = &mut ctx.accounts.sponsor_account;
-    // sponsor_account.total_committed_usd = total_committed;
+pub fn remove_member_sponsor_handler(
+    _: Context<CloseSponsorTeamContext>,
+    _team_member_key: Pubkey,
+) -> Result<()> {
+    Ok(())
+}
 
-    emit!(UpdateSponsorEvent {
-        authority: ctx.accounts.authority.key(),
-    });
+pub fn fund_sponsor_sol_handler(ctx: Context<FundSponsorSol>) -> Result<()> {
+    let sponsor_account = &ctx.accounts.sponsor_account;
 
+    Ok(())
+}
+pub fn fund_sponsor_spl_handler(ctx: Context<FundSponsorSpl>) -> Result<()> {
     Ok(())
 }
 
@@ -114,6 +120,12 @@ pub struct InitSponsorContext<'info> {
     )]
     pub sponsor_team_account: Account<'info, SponsorTeam>,
 
+    #[account(mut,
+        seeds = [b"event".as_ref(),event_account.event_key.as_ref()],
+        bump = event_account.bump
+    )]
+    pub event_account: Box<Account<'info, Event>>,
+
     /// CHECK: This is a CPI account
     #[account(mut)]
     pub multisig: UncheckedAccount<'info>,
@@ -121,29 +133,6 @@ pub struct InitSponsorContext<'info> {
     #[account(address = squads_multisig_program::ID)]
     pub squads_program: Program<'info, squads_multisig_program::program::SquadsMultisigProgram>,
 
-    // Misc Accounts
-    #[account(address = system_program::ID)]
-    pub system_program: Program<'info, System>,
-    #[account(address = token::ID)]
-    pub token_program: Program<'info, Token>,
-    #[account(address = solana_program::sysvar::rent::ID)]
-    pub rent: Sysvar<'info, Rent>,
-}
-
-#[derive(Accounts)]
-pub struct UpdateSponsor<'info> {
-    #[account(mut, constraint = authority.key() == sponsor_team_account.authority.key())]
-    pub authority: Signer<'info>,
-    #[account(mut,
-        seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref()],
-        bump
-    )]
-    pub sponsor_account: Account<'info, Sponsor>,
-    #[account(mut,
-        seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref(),authority.key().as_ref()],
-        bump
-    )]
-    pub sponsor_team_account: Account<'info, SponsorTeam>,
     // Misc Accounts
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
@@ -168,6 +157,78 @@ pub struct SponsorTeamContext<'info> {
     )]
     pub sponsor_team_account: Account<'info, SponsorTeam>,
 
+    #[account(mut,
+        seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref()],
+        bump = sponsor_account.bump
+    )]
+    pub sponsor_account: Account<'info, Sponsor>,
+
+    // Misc Accounts
+    #[account(address = system_program::ID)]
+    pub system_program: Program<'info, System>,
+    #[account(address = token::ID)]
+    pub token_program: Program<'info, Token>,
+    #[account(address = solana_program::sysvar::rent::ID)]
+    pub rent: Sysvar<'info, Rent>,
+}
+
+#[derive(Accounts)]
+#[instruction(team_member_key:Pubkey)]
+pub struct CloseSponsorTeamContext<'info> {
+    // todo - In future move this authority to sponsor_team_account and add a type in sponsor team account of admin or member
+    #[account(mut, constraint = sponsor_account.authority.key() == authority.key())]
+    pub authority: Signer<'info>,
+
+    #[account(mut,
+        close = authority,
+        seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref(),team_member_key.key().as_ref()],
+        bump= sponsor_team_account.bump
+    )]
+    pub sponsor_team_account: Account<'info, SponsorTeam>,
+
+    #[account(mut,
+        seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref()],
+        bump = sponsor_account.bump
+    )]
+    pub sponsor_account: Account<'info, Sponsor>,
+
+    // Misc Accounts
+    #[account(address = system_program::ID)]
+    pub system_program: Program<'info, System>,
+    #[account(address = token::ID)]
+    pub token_program: Program<'info, Token>,
+    #[account(address = solana_program::sysvar::rent::ID)]
+    pub rent: Sysvar<'info, Rent>,
+}
+
+#[derive(Accounts)]
+pub struct FundSponsorSol<'info> {
+    #[account(mut,
+        seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref(),sponsor_account.authority.key().as_ref()],
+        bump= sponsor_team_account.bump
+    )]
+    pub sponsor_team_account: Account<'info, SponsorTeam>,
+    #[account(mut,
+        seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref()],
+        bump = sponsor_account.bump
+    )]
+    pub sponsor_account: Account<'info, Sponsor>,
+    // Misc Accounts
+    #[account(address = system_program::ID)]
+    pub system_program: Program<'info, System>,
+    #[account(address = token::ID)]
+    pub token_program: Program<'info, Token>,
+    #[account(address = solana_program::sysvar::rent::ID)]
+    pub rent: Sysvar<'info, Rent>,
+}
+
+#[derive(Accounts)]
+pub struct FundSponsorSpl<'info> {
+    #[account(mut,
+        seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref(),sponsor_account.authority.key().as_ref()],
+        bump= sponsor_team_account.bump
+    )]
+    pub sponsor_team_account: Account<'info, SponsorTeam>,
     #[account(mut,
         seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref()],
         bump = sponsor_account.bump

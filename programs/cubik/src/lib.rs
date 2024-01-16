@@ -132,8 +132,11 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn update_sponsor(ctx: Context<UpdateSponsor>, total_committed: u64) -> Result<()> {
-        update_sponsor_handler(ctx, total_committed)?;
+    pub fn remove_member_sponsor(
+        ctx: Context<CloseSponsorTeamContext>,
+        team_member_key: Pubkey,
+    ) -> Result<()> {
+        remove_member_sponsor_handler(ctx, team_member_key)?;
         Ok(())
     }
 

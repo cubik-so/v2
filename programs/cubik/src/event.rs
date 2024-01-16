@@ -14,6 +14,7 @@ pub struct UpdateUser {
 #[event]
 pub struct NewSponsor {
     pub authority: Pubkey,
+    pub event_account: Pubkey,
     pub total_committed: u128,
 }
 
