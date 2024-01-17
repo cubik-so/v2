@@ -30,12 +30,12 @@ pub fn create_project_handler(
     };
 
 
-        //  let (vault_pubkey, vault_bump_seed) = Pubkey::find_program_address(&[
-        //     SEED_PREFIX,
-        //     &ctx.accounts.multisig.key().to_bytes(),
-        //     SEED_VAULT,
-        //     &[0],
-        // ], &squads_multisig_program::ID);
+         let (vault_pubkey, vault_bump_seed) = Pubkey::find_program_address(&[
+            SEED_PREFIX,
+            &ctx.accounts.multisig.key().to_bytes(),
+            SEED_VAULT,
+            &[0],
+        ], &squads_multisig_program::ID);
 
         
     let cpi_ctx_squads = CpiContext::new(
@@ -70,6 +70,7 @@ pub fn create_project_handler(
     project_account.create_key = ctx.accounts.create_key.key();
     project_account.counter = counter;
     project_account.multisig = ctx.accounts.multisig.key();
+    project_account.vault_pubkey = vault_pubkey.key()   ;
     project_account.bump = *ctx.bumps.get("project_account").unwrap();
 
     emit!(NewProject {

@@ -1,7 +1,8 @@
 use anchor_lang::prelude::*;
+use anchor_lang::solana_program::system_instruction;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
-use squads_multisig_program::{Member, Permission, Permissions};
+use squads_multisig_program::{Member, Permission, Permissions, SEED_PREFIX, SEED_VAULT};
 
 use crate::state::{sponsor, Sponsor, SponsorTeam};
 use crate::{event::*, Event};
@@ -32,7 +33,15 @@ pub fn init_sponsor_handler(
     let all_permissions = [Permission::Initiate, Permission::Vote, Permission::Execute];
 
     let permission = Permissions::from_vec(&all_permissions);
-
+    let (vault_pubkey, vault_bump_seed) = Pubkey::find_program_address(
+        &[
+            SEED_PREFIX,
+            &ctx.accounts.multisig.key().to_bytes(),
+            SEED_VAULT,
+            &[0],
+        ],
+        &squads_multisig_program::ID,
+    );
     let members: Vec<Member> = members_keys
         .iter()
         .map(|key| Member {
@@ -55,6 +64,8 @@ pub fn init_sponsor_handler(
     sponsor_account.authority = ctx.accounts.authority.key();
     sponsor_account.create_key = ctx.accounts.create_key.key();
     sponsor_account.multi_sig = ctx.accounts.multisig.key();
+    sponsor_account.event_account = ctx.accounts.event_account.key();
+    sponsor_account.vault_pubkey = vault_pubkey.key();
     sponsor_account.bump = *ctx.bumps.get("sponsor_account").unwrap();
     // sponsor team  account
     sponsor_team_account.authority = ctx.accounts.authority.key();
@@ -88,12 +99,42 @@ pub fn remove_member_sponsor_handler(
     Ok(())
 }
 
-pub fn fund_sponsor_sol_handler(ctx: Context<FundSponsorSol>) -> Result<()> {
+pub fn fund_sponsor_sol_handler(ctx: Context<FundSponsorSol>, amount: u64) -> Result<()> {
     let sponsor_account = &ctx.accounts.sponsor_account;
+    let receiver = &ctx.accounts.receiver;
+    let transfer_instruction = system_instruction::transfer(
+        ctx.accounts.authority.key,
+        &sponsor_account.vault_pubkey,
+        amount,
+    );
+
+    anchor_lang::solana_program::program::invoke_signed(
+        &transfer_instruction,
+        &[
+            ctx.accounts.authority.to_account_info(),
+            receiver.to_account_info(),
+            ctx.accounts.system_program.to_account_info(),
+        ],
+        &[],
+    )?;
 
     Ok(())
 }
-pub fn fund_sponsor_spl_handler(ctx: Context<FundSponsorSpl>) -> Result<()> {
+pub fn fund_sponsor_spl_handler(ctx: Context<FundSponsorSpl>, amount: u64) -> Result<()> {
+    let sender_ata = &ctx.accounts.from_ata;
+    let receiver_ata = &ctx.accounts.to_ata;
+
+    let transfer_instruction = anchor_spl::token::Transfer {
+        from: sender_ata.to_account_info(),
+        to: receiver_ata.to_account_info(),
+        authority: ctx.accounts.authority.to_account_info(),
+    };
+
+    let cpi_ctx_trans = CpiContext::new(
+        ctx.accounts.token_program.to_account_info(),
+        transfer_instruction,
+    );
+    anchor_spl::token::transfer(cpi_ctx_trans, amount)?;
     Ok(())
 }
 
@@ -203,6 +244,12 @@ pub struct CloseSponsorTeamContext<'info> {
 
 #[derive(Accounts)]
 pub struct FundSponsorSol<'info> {
+    #[account(mut, constraint = sponsor_team_account.authority.key() == authority.key())]
+    pub authority: Signer<'info>,
+
+    #[account(mut, constraint = sponsor_account.vault_pubkey.key() == receiver.key())]
+    pub receiver: AccountInfo<'info>,
+
     #[account(mut,
         seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref(),sponsor_account.authority.key().as_ref()],
         bump= sponsor_team_account.bump
@@ -224,11 +271,24 @@ pub struct FundSponsorSol<'info> {
 
 #[derive(Accounts)]
 pub struct FundSponsorSpl<'info> {
+    #[account(mut, constraint = sponsor_team_account.authority.key() == authority.key())]
+    pub authority: Signer<'info>,
+
+    #[account(mut, constraint = sponsor_team_account.authority.key() == authority.key())]
+    pub from_ata: Account<'info, TokenAccount>,
+
+    #[account(mut, constraint = sponsor_account.vault_pubkey.key() == to_ata.owner.key())]
+    pub to_ata: Account<'info, TokenAccount>,
+
+    #[account(mut)]
+    pub token_mint: Account<'info, Mint>,
+
     #[account(mut,
         seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref(),sponsor_account.authority.key().as_ref()],
         bump= sponsor_team_account.bump
     )]
     pub sponsor_team_account: Account<'info, SponsorTeam>,
+
     #[account(mut,
         seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref()],
         bump = sponsor_account.bump

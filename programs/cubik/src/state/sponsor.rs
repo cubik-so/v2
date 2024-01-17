@@ -13,5 +13,7 @@ pub struct Sponsor {
     pub authority: Pubkey,
     pub create_key: Pubkey,
     pub multi_sig: Pubkey,
+    pub vault_pubkey: Pubkey,
+    pub event_account: Pubkey,
     pub bump: u8,
 }
