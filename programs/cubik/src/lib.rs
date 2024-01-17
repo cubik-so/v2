@@ -140,6 +140,15 @@ pub mod cubik {
         Ok(())
     }
 
+    pub fn fund_sponsor_spl(ctx: Context<FundSponsorSpl>, amount: u64) -> Result<()> {
+        fund_sponsor_spl_handler(ctx, amount)?;
+        Ok(())
+    }
+    pub fn fund_sponsor_sol(ctx: Context<FundSponsorSol>, amount: u64) -> Result<()> {
+        fund_sponsor_sol_handler(ctx, amount)?;
+        Ok(())
+    }
+
     pub fn create_contribution(
         ctx: Context<CreateContributionContext>,
         amount: u64,
