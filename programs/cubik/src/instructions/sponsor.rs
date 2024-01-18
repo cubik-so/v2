@@ -5,7 +5,7 @@ use anchor_spl::token::{self, Mint, Token, TokenAccount};
 use squads_multisig_program::{Member, Permission, Permissions, SEED_PREFIX, SEED_VAULT};
 
 use crate::state::{sponsor, Sponsor, SponsorTeam};
-use crate::{event::*, Event};
+use crate::{event::*, Event, User};
 
 pub fn init_sponsor_handler(
     ctx: Context<InitSponsorContext>,
@@ -118,11 +118,17 @@ pub fn fund_sponsor_sol_handler(ctx: Context<FundSponsorSol>, amount: u64) -> Re
         &[],
     )?;
 
+    emit!(NewFundSponsorSOL {
+        authority: ctx.accounts.authority.key(),
+        amount: amount,
+    });
+
     Ok(())
 }
+
 pub fn fund_sponsor_spl_handler(ctx: Context<FundSponsorSpl>, amount: u64) -> Result<()> {
-    let sender_ata = &ctx.accounts.from_ata;
-    let receiver_ata = &ctx.accounts.to_ata;
+    let sender_ata = &ctx.accounts.token_ata_sender;
+    let receiver_ata = &ctx.accounts.token_ata_receiver;
 
     let transfer_instruction = anchor_spl::token::Transfer {
         from: sender_ata.to_account_info(),
@@ -135,16 +141,28 @@ pub fn fund_sponsor_spl_handler(ctx: Context<FundSponsorSpl>, amount: u64) -> Re
         transfer_instruction,
     );
     anchor_spl::token::transfer(cpi_ctx_trans, amount)?;
+
+    emit!(NewFundSponsorSPL {
+        authority: ctx.accounts.authority.key(),
+        amount: amount,
+        token: ctx.accounts.token_mint.key(),
+    });
     Ok(())
 }
 
 #[derive(Accounts)]
 pub struct InitSponsorContext<'info> {
-    #[account(mut)]
+    #[account(mut,constraint = authority.key() == user_account.authority.key())]
     pub authority: Signer<'info>,
 
     #[account(mut)]
     pub create_key: Signer<'info>,
+
+    #[account(mut,
+        seeds = [b"user".as_ref(),user_account.authority.key().as_ref()],
+        bump = user_account.bump
+    )]
+    pub user_account: Box<Account<'info, User>>,
 
     #[account(init,
         payer = authority,
@@ -152,14 +170,14 @@ pub struct InitSponsorContext<'info> {
         seeds = [b"sponsor".as_ref(),create_key.key().as_ref()],
         bump
     )]
-    pub sponsor_account: Account<'info, Sponsor>,
+    pub sponsor_account: Box<Account<'info, Sponsor>>,
     #[account(init,
         payer = authority,
         space = 8 + SponsorTeam::INIT_SPACE,
         seeds = [b"sponsor".as_ref(),create_key.key().as_ref(),authority.key().as_ref()],
         bump
     )]
-    pub sponsor_team_account: Account<'info, SponsorTeam>,
+    pub sponsor_team_account: Box<Account<'info, SponsorTeam>>,
 
     #[account(mut,
         seeds = [b"event".as_ref(),event_account.event_key.as_ref()],
@@ -204,6 +222,13 @@ pub struct SponsorTeamContext<'info> {
     )]
     pub sponsor_account: Account<'info, Sponsor>,
 
+    #[account(mut,
+        constraint = user_account.authority.key() == team_member_key.key(),
+        seeds = [b"user".as_ref(),user_account.authority.key().as_ref()],
+        bump = user_account.bump,
+    )]
+    pub user_account: Box<Account<'info, User>>,
+
     // Misc Accounts
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
@@ -225,13 +250,19 @@ pub struct CloseSponsorTeamContext<'info> {
         seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref(),team_member_key.key().as_ref()],
         bump= sponsor_team_account.bump
     )]
-    pub sponsor_team_account: Account<'info, SponsorTeam>,
+    pub sponsor_team_account: Box<Account<'info, SponsorTeam>>,
 
     #[account(mut,
         seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref()],
         bump = sponsor_account.bump
     )]
-    pub sponsor_account: Account<'info, Sponsor>,
+    pub sponsor_account: Box<Account<'info, Sponsor>>,
+
+    #[account(mut,
+        seeds = [b"user".as_ref(),user_account.authority.key().as_ref()],
+        bump = user_account.bump,
+    )]
+    pub user_account: Box<Account<'info, User>>,
 
     // Misc Accounts
     #[account(address = system_program::ID)]
@@ -254,17 +285,16 @@ pub struct FundSponsorSol<'info> {
         seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref(),sponsor_account.authority.key().as_ref()],
         bump= sponsor_team_account.bump
     )]
-    pub sponsor_team_account: Account<'info, SponsorTeam>,
+    pub sponsor_team_account: Box<Account<'info, SponsorTeam>>,
     #[account(mut,
         seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref()],
         bump = sponsor_account.bump
     )]
-    pub sponsor_account: Account<'info, Sponsor>,
+    pub sponsor_account: Box<Account<'info, Sponsor>>,
+
     // Misc Accounts
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
-    #[account(address = token::ID)]
-    pub token_program: Program<'info, Token>,
     #[account(address = solana_program::sysvar::rent::ID)]
     pub rent: Sysvar<'info, Rent>,
 }
@@ -275,25 +305,25 @@ pub struct FundSponsorSpl<'info> {
     pub authority: Signer<'info>,
 
     #[account(mut, constraint = sponsor_team_account.authority.key() == authority.key())]
-    pub from_ata: Account<'info, TokenAccount>,
+    pub token_ata_sender: Box<Account<'info, TokenAccount>>,
 
-    #[account(mut, constraint = sponsor_account.vault_pubkey.key() == to_ata.owner.key())]
-    pub to_ata: Account<'info, TokenAccount>,
+    #[account(mut, constraint = token_ata_receiver.owner.key() == sponsor_account.vault_pubkey.key())]
+    pub token_ata_receiver: Box<Account<'info, TokenAccount>>,
 
     #[account(mut)]
-    pub token_mint: Account<'info, Mint>,
+    pub token_mint: Box<Account<'info, Mint>>,
 
     #[account(mut,
         seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref(),sponsor_account.authority.key().as_ref()],
         bump= sponsor_team_account.bump
     )]
-    pub sponsor_team_account: Account<'info, SponsorTeam>,
+    pub sponsor_team_account: Box<Account<'info, SponsorTeam>>,
 
     #[account(mut,
         seeds = [b"sponsor".as_ref(),sponsor_account.create_key.key().as_ref()],
         bump = sponsor_account.bump
     )]
-    pub sponsor_account: Account<'info, Sponsor>,
+    pub sponsor_account: Box<Account<'info, Sponsor>>,
 
     // Misc Accounts
     #[account(address = system_program::ID)]

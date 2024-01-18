@@ -57,10 +57,43 @@ pub struct UpdateEventJoin {
 #[event]
 pub struct NewContribution {
     pub user: Pubkey,
-    pub create_key: Pubkey,
     pub amount: u64,
     pub split: u64,
     pub event_join_account: Pubkey,
     pub event_account: Pubkey,
     pub project_account: Pubkey,
+}
+#[event]
+pub struct NewDonationSOL {
+    pub authority: Pubkey,
+    pub amount: u64,
+}
+#[event]
+pub struct NewDonationSPL {
+    pub authority: Pubkey,
+    pub token: Pubkey,
+    pub amount: u64,
+}
+#[event]
+pub struct NewFundSponsorSOL {
+    pub authority: Pubkey,
+    pub amount: u64,
+}
+#[event]
+pub struct NewFundSponsorSPL {
+    pub authority: Pubkey,
+    pub token: Pubkey,
+    pub amount: u64,
+}
+
+#[event]
+pub struct NewTipSOL {
+    pub authority: Pubkey,
+    pub amount: u64,
+}
+#[event]
+pub struct NewTipSPL {
+    pub authority: Pubkey,
+    pub token: Pubkey,
+    pub amount: u64,
 }
