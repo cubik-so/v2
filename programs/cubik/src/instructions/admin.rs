@@ -23,7 +23,7 @@ pub struct CreateAdminContext<'info> {
         seeds = [b"admin".as_ref()],
         bump 
     )]
-    pub admin_account: Account<'info, Admin>,
+    pub admin_account: Box<Account<'info, Admin>>,
 
     // Misc Accounts
     #[account(address = system_program::ID)]

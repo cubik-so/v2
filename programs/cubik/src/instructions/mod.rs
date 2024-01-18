@@ -1,5 +1,6 @@
 pub mod admin;
 pub mod contribution;
+pub mod donation;
 pub mod event;
 pub mod project;
 pub mod sponsor;
@@ -9,6 +10,7 @@ pub mod user;
 
 pub use admin::*;
 pub use contribution::*;
+pub use donation::*;
 pub use event::*;
 pub use project::*;
 pub use sponsor::*;

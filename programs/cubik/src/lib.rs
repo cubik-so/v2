@@ -149,13 +149,22 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn create_contribution(
-        ctx: Context<CreateContributionContext>,
-        amount: u64,
-        split: u64,
-        create_key: Pubkey,
-    ) -> Result<()> {
-        create_contribution_handler(ctx, amount, split, create_key)?;
+    pub fn donate_spl(ctx: Context<DonationSPLContext>, amount: u64) -> Result<()> {
+        donation_spl_handler(ctx, amount)?;
+        Ok(())
+    }
+
+    pub fn donate_sol(ctx: Context<DonationSOLContext>, amount: u64) -> Result<()> {
+        donation_sol_handler(ctx, amount)?;
+        Ok(())
+    }
+
+    pub fn contribution_sol(ctx: Context<ContributionSOL>, amount: u64, split: u64) -> Result<()> {
+        contribution_sol_handler(ctx, amount, split)?;
+        Ok(())
+    }
+    pub fn contribution_spl(ctx: Context<ContributionSPL>, amount: u64, split: u64) -> Result<()> {
+        contribution_spl_handler(ctx, amount, split)?;
         Ok(())
     }
 }

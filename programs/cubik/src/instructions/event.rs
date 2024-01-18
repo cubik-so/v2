@@ -150,13 +150,13 @@ pub struct CreateEventContext<'info> {
         seeds = [b"admin".as_ref(),authority.key().as_ref(),create_key.key().as_ref()],
         bump 
     )]
-    pub sub_admin_account: Account<'info, SubAdmin>,
+    pub sub_admin_account: Box<Account<'info, SubAdmin>>,
 
     #[account(mut,
         seeds = [b"user",authority.key().as_ref()],
         bump = user_account.bump
     )]
-    pub user_account: Account<'info ,User>,
+    pub user_account: Box<Account<'info ,User>>,
 
     // Misc Accounts
     #[account(address = system_program::ID)]

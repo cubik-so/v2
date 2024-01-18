@@ -38,14 +38,14 @@ pub struct CreateSubAdminContext<'info> {
         seeds = [b"admin".as_ref(),new_sub_admin_authority.key().as_ref(),create_key.key().as_ref()],
         bump 
     )]
-    pub new_sub_admin_account: Account<'info, SubAdmin>,
+    pub new_sub_admin_account: Box<Account<'info, SubAdmin>>,
 
 
     #[account(mut,
         seeds = [b"admin".as_ref(),sub_admin_account.authority.key().as_ref(),sub_admin_account.create_key.key().as_ref()],
         bump = sub_admin_account.bump 
     )]
-    pub sub_admin_account: Account<'info, SubAdmin>,
+    pub sub_admin_account: Box<Account<'info, SubAdmin>>,
 
     // Misc Accounts
     #[account(address = system_program::ID)]
@@ -67,13 +67,13 @@ pub struct CloseSubAdminContext<'info> {
         seeds = [b"admin".as_ref(),close_sub_admin_account.authority.key().as_ref(),close_sub_admin_account.create_key.key().as_ref()],
         bump = close_sub_admin_account.bump
     )]
-    pub close_sub_admin_account: Account<'info, SubAdmin>,
+    pub close_sub_admin_account: Box<Account<'info, SubAdmin>>,
 
     #[account(mut,
         seeds = [b"admin".as_ref(),authority.key().as_ref(),sub_admin_account.create_key.key().as_ref()],
         bump = sub_admin_account.bump
     )]
-    pub sub_admin_account: Account<'info, SubAdmin>,
+    pub sub_admin_account: Box<Account<'info, SubAdmin>>,
     // Misc Accounts
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,

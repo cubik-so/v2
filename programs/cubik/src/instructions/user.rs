@@ -11,6 +11,7 @@ pub fn create_user_handler(
     require!(username.len() <= 32, Errors::MaxLengthExceeded);
 
     let user_account: &mut Account<'_, User> = &mut ctx.accounts.user_account;
+    
     user_account.authority = ctx.accounts.authority.key();
 
     user_account.bump = *ctx.bumps.get("user_account").unwrap();
@@ -35,7 +36,7 @@ pub struct CreateUserContext<'info> {
         seeds = [b"user".as_ref(),authority.key().as_ref()],
         bump 
     )]
-    pub user_account: Account<'info, User>,
+    pub user_account: Box<Account<'info, User>>,
 
     // Misc Accounts
     #[account(address = system_program::ID)]

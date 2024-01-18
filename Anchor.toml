@@ -20,5 +20,5 @@ cluster = "devnet"
 wallet = '/Users/dhruvraj/.config/solana/id.json'
 
 [scripts]
-test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.spec.ts"
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
 lint = "yarn prettify:fix && cargo fmt"
