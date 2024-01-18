@@ -13,3 +13,4 @@ lib
 wallets.json
 .env
 wallets
+tests/other

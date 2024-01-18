@@ -11,14 +11,21 @@ cubik_v2 = "3s9zZaosL6hJFeDToXDoPN4sQgyVwLEdqzaztZXj1Nnk"
 [programs.devnet]
 cubik_v2 = "3s9zZaosL6hJFeDToXDoPN4sQgyVwLEdqzaztZXj1Nnk"
 
+
+[test.validator]
+[[test.genesis]]
+address = "SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf"
+program = "./tests/other/squads.so"
+
+
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "devnet"
+cluster = "localnet"
 # wallet = "/Users/sahilpabale/wallets/cubik/CBKiBsr31UR58LqdMWtWkKiPAsB4VAhWgWmW4XCicj3p.json"
 wallet = '/Users/dhruvraj/.config/solana/id.json'
 
 [scripts]
-test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/index.ts"
 lint = "yarn prettify:fix && cargo fmt"
