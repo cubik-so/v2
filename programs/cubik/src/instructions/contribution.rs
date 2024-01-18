@@ -140,6 +140,7 @@ pub struct ContributionSOL<'info> {
     #[account(mut, constraint = authority.key() == user_account.authority.key())]
     pub authority: Signer<'info>,
 
+    /// CHECK: Receiver is the project vault
     #[account(mut, constraint = project_account.vault_pubkey.key() == receiver.key())]
     pub receiver: AccountInfo<'info>,
 

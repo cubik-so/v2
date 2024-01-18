@@ -278,6 +278,7 @@ pub struct FundSponsorSol<'info> {
     #[account(mut, constraint = sponsor_team_account.authority.key() == authority.key())]
     pub authority: Signer<'info>,
 
+    /// CHECK: Receiver is the project vault
     #[account(mut, constraint = sponsor_account.vault_pubkey.key() == receiver.key())]
     pub receiver: AccountInfo<'info>,
 

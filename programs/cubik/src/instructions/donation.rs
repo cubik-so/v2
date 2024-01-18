@@ -66,6 +66,7 @@ pub struct DonationSOLContext<'info> {
     #[account(mut, constraint = authority.key() == user_account.authority.key())]
     pub authority: Signer<'info>,
 
+    /// CHECK: Receiver is the project account
     #[account(mut, constraint = project_account.vault_pubkey.key() == receiver.key())]
     pub receiver: AccountInfo<'info>,
 
