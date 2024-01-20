@@ -18,4 +18,6 @@ pub enum Errors {
     InvalidTip,
     #[msg("Error: Invalid receiver")]
     InvalidReceiver,
+    #[msg("Error: Invalid Level for SubAdmin")]
+    InvalidLevel,
 }

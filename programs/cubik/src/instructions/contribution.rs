@@ -6,7 +6,6 @@ use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_instruction;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
-use squads_multisig_program::{SEED_PREFIX, SEED_VAULT};
 
 pub fn contribution_spl_handler(
     ctx: Context<ContributionSPL>,
@@ -15,7 +14,6 @@ pub fn contribution_spl_handler(
 ) -> Result<()> {
     let event_join = &mut ctx.accounts.event_join_account.clone();
     let project_account = &ctx.accounts.project_account.clone();
-    let token_ata_receiver = &mut ctx.accounts.token_ata_receiver.clone();
     require!(
         event_join.status != EventProjectStatus::Approved,
         Errors::InvalidProjectVerification

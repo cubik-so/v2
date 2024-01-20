@@ -67,6 +67,15 @@ pub fn remove_event_access_handler(
     }
 }
 
+pub fn update_sub_admin_level_handler(ctx:Context<UpdateLevelSubAdminContext>,level:u8)-> Result<()>{
+    let sub_admin_account = &mut ctx.accounts.sub_admin_account;
+    require!(
+        level <= 3,
+        Errors::InvalidLevel
+    );
+    sub_admin_account.level = level;
+    Ok(())
+}
 
 #[derive(Accounts)]
 #[instruction(new_sub_admin_authority:Pubkey)]
@@ -129,6 +138,7 @@ pub struct AddEventAccessContext<'info> {
     #[account(address = solana_program::sysvar::rent::ID)]
     pub rent: Sysvar<'info, Rent>,
 }
+
 #[derive(Accounts)]
 pub struct RemoveEventAccessContext<'info> {
   
@@ -186,4 +196,31 @@ pub struct CloseSubAdminContext<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
+#[derive(Accounts)]
+pub struct UpdateLevelSubAdminContext<'info> {
 
+    #[account(mut,
+    constraint = authority.key() == signer_sub_admin_account.authority.key() @Errors::InvalidAdmin,
+    constraint = signer_sub_admin_account.level == 3 @Errors::InvalidAdmin,
+    )]
+    pub authority: Signer<'info>,
+
+    #[account(mut,
+        seeds = [b"admin".as_ref(), sub_admin_account.authority.key().as_ref(), sub_admin_account.create_key.key().as_ref()],
+        bump  = sub_admin_account.bump
+    )]
+    pub sub_admin_account: Box<Account<'info, SubAdmin>>,
+
+
+    #[account(mut,
+        seeds = [b"admin".as_ref(),signer_sub_admin_account.authority.key().as_ref(), signer_sub_admin_account.create_key.key().as_ref()],
+        bump = signer_sub_admin_account.bump 
+    )]
+    pub signer_sub_admin_account: Box<Account<'info, SubAdmin>>,
+    
+    // Misc Accounts
+    #[account(address = system_program::ID)]
+    pub system_program: Program<'info, System>,
+    #[account(address = solana_program::sysvar::rent::ID)]
+    pub rent: Sysvar<'info, Rent>,
+}

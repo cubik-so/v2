@@ -103,6 +103,14 @@ pub mod cubik {
         Ok(())
     }
 
+    pub fn update_sub_admin_level(
+        ctx: Context<UpdateLevelSubAdminContext>,
+        level: u8,
+    ) -> Result<()> {
+        update_sub_admin_level_handler(ctx, level)?;
+        Ok(())
+    }
+
     pub fn add_event_access(ctx: Context<AddEventAccessContext>, event_key: Pubkey) -> Result<()> {
         add_event_access_handler(ctx, event_key)?;
         Ok(())
