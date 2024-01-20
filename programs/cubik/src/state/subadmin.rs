@@ -1,31 +1,18 @@
-use anchor_lang::{prelude::*, solana_program::pubkey};
+use anchor_lang::prelude::*;
 
 #[account]
 #[derive(Default, InitSpace)]
 pub struct SubAdmin {
     pub authority: Pubkey,
-    pub permission: SubAdminPermission,
+    // 1 = event-manger,
+    // 2 = manger,
+    // 3 = admin,
+    pub level: u8,
     pub create_key: Pubkey,
+    pub event_access: [Pubkey; 10],
     pub bump: u8,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq, Eq, Debug, InitSpace)]
-pub enum SubAdminPermission {
-    GOD,
-    Manger,
-    EventManger { event: Pubkey },
-}
-
-impl Default for SubAdminPermission {
-    fn default() -> Self {
-        SubAdminPermission::Manger
-    }
-}
-
-pub fn admin_permission_to_u8(perms: SubAdminPermission) -> u8 {
-    match perms {
-        SubAdminPermission::Manger => 1,
-        SubAdminPermission::EventManger { event } => 1,
-        SubAdminPermission::GOD => 2,
-    }
+pub fn find_event_key_index(event_access: &[Pubkey], event_key: &Pubkey) -> Option<usize> {
+    event_access.iter().position(|key| key == event_key)
 }

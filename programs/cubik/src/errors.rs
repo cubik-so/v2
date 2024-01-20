@@ -10,6 +10,8 @@ pub enum Errors {
     InvalidProjectVerification,
     #[msg("Error: Admin credentials invalid or not recognized")]
     InvalidAdmin,
+    #[msg("Error: Invalid Event Key")]
+    InvalidEventKey,
     #[msg("Error: Unauthorized access attempt detected")]
     Permission,
     #[msg("Error: Owner of project cannot tip the Project itself")]

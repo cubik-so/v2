@@ -3,7 +3,7 @@ use std::vec;
 use crate::errors::Errors;
 use crate::event::{NewEventJoin, NewProject, UpdateProjectStatus};
 use crate::state::{
-    user, Admin, Event, EventJoin, EventProjectStatus, Project, ProjectVerification, User, SubAdmin, admin_permission_to_u8, SubAdminPermission,
+    user, Admin, Event, EventJoin, EventProjectStatus, Project, ProjectVerification, User, SubAdmin,
 };
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
@@ -87,15 +87,6 @@ pub fn project_status_handler(
 ) -> Result<()> {
     let project_account = &mut ctx.accounts.project_account;
 
-    require!(
-        admin_permission_to_u8(ctx.accounts.sub_admin_account.permission) >= 1, 
-        Errors::InvalidAdmin
-    );
-    require!(
-     ctx.accounts.sub_admin_account.permission != SubAdminPermission::GOD &&  ctx.accounts.sub_admin_account.permission == SubAdminPermission::Manger, 
-        Errors::InvalidAdmin
-    );
-
     project_account.status = status;
 
     emit!(UpdateProjectStatus {
@@ -172,11 +163,14 @@ pub struct CreateProjectContext<'info> {
 #[derive(Accounts)]
 pub struct UpdateProjectStatusContext<'info> {
 
-    #[account(mut,constraint = authority.key() == sub_admin_account.authority.key() @ Errors::InvalidSigner)]
+    #[account(mut,
+        constraint = authority.key() == sub_admin_account.authority.key() @ Errors::InvalidSigner,
+        constraint = sub_admin_account.level > 1 @ Errors::InvalidAdmin
+    )]
     pub authority: Signer<'info>,
 
     #[account(mut,
-        seeds = [b"admin".as_ref(),authority.key().as_ref()],
+        seeds = [b"admin".as_ref(),sub_admin_account.authority.key().as_ref(),sub_admin_account.create_key.key().as_ref()],
         bump = sub_admin_account.bump
     )]
     pub sub_admin_account: Box<Account<'info, SubAdmin>>,

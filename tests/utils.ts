@@ -1,4 +1,10 @@
-import { AnchorProvider, Program, Wallet, web3 } from '@coral-xyz/anchor';
+import {
+  AnchorProvider,
+  Program,
+  Wallet,
+  utils,
+  web3,
+} from '@coral-xyz/anchor';
 import { Cubik, IDL } from '../target/types/cubik';
 
 export const PROGRAM_ID = new web3.PublicKey(
@@ -49,3 +55,13 @@ export async function generateFundedKeypair(connection: web3.Connection) {
 
   return keypair;
 }
+
+export const adminPair = () => {
+  // return generateFundedKeypair(createLocalhostConnection());
+
+  return web3.Keypair.fromSecretKey(
+    utils.bytes.bs58.decode(
+      '5aUpHxFFFQAVyp9dvz2pxHkXuFKH1G2huhexHWRRkX4rCvFmbtFpVWowHbLQMatCHgYx8zgCpbS5WMBjauPkr15o'
+    )
+  );
+};

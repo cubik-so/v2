@@ -25,3 +25,12 @@ export const getAdminPDA = () => {
     PROGRAM_ID
   );
 };
+export const getAdminSubAdminPDA = (
+  authority: web3.PublicKey,
+  createKey: web3.PublicKey
+) => {
+  return web3.PublicKey.findProgramAddressSync(
+    [Buffer.from('admin'), authority.toBuffer(), createKey.toBuffer()],
+    PROGRAM_ID
+  );
+};

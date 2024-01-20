@@ -92,14 +92,26 @@ pub mod cubik {
     }
     pub fn create_sub_admin(
         ctx: Context<CreateSubAdminContext>,
-        status: SubAdminPermission,
         new_sub_admin_authority: Pubkey,
+        level: u8,
     ) -> Result<()> {
-        create_sub_admin_handler(ctx, status, new_sub_admin_authority)?;
+        create_sub_admin_handler(ctx, new_sub_admin_authority, level)?;
         Ok(())
     }
     pub fn close_sub_admin(ctx: Context<CloseSubAdminContext>) -> Result<()> {
         close_sub_admin_handler(ctx)?;
+        Ok(())
+    }
+
+    pub fn add_event_access(ctx: Context<AddEventAccessContext>, event_key: Pubkey) -> Result<()> {
+        add_event_access_handler(ctx, event_key)?;
+        Ok(())
+    }
+    pub fn remove_event_access(
+        ctx: Context<RemoveEventAccessContext>,
+        event_key: Pubkey,
+    ) -> Result<()> {
+        remove_event_access_handler(ctx, event_key)?;
         Ok(())
     }
 
