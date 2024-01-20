@@ -1,7 +1,7 @@
 use crate::errors::Errors;
-use crate::event::{NewEvent, NewEventJoin, UpdateEvent, self};
+use crate::event::{NewEvent, NewEventJoin, UpdateEvent};
 use crate::state::{
-    Admin, SubAdminPermission, Event, EventJoin, EventProjectStatus, Project, ProjectVerification, SubAdmin, User,
+     Event, EventJoin, EventProjectStatus, Project, ProjectVerification, SubAdmin, User,
 };
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
@@ -18,11 +18,9 @@ pub fn create_event_handler(
     event_account.authority = ctx.accounts.authority.key();
     event_account.matching_pool = matching_pool;
     event_account.event_key = event_key;
-    sub_admin_account.authority = ctx.accounts.authority.key();
-    sub_admin_account.create_key = ctx.accounts.create_key.key();
-    sub_admin_account.permission = SubAdminPermission::EventManger { event: event_account.key() };
+   
+    
     event_account.bump = *ctx.bumps.get("event_account").unwrap();
-    sub_admin_account.bump = *ctx.bumps.get("sub_admin_account").unwrap();
     emit!(NewEvent {
         authority: ctx.accounts.authority.key(),
         event_key
@@ -73,11 +71,11 @@ pub fn update_event_status_handler(
         project_account.status != ProjectVerification::VerificationFailed,
         Errors::InvalidProjectVerification
     );
-
-    require!(
-        sub_admin_account.permission != SubAdminPermission::EventManger { event: event_account.key() },
-        Errors::InvalidAdmin
-    );
+    // todo 
+    // require!(
+    //     sub_admin_account.permission != SubAdminPermission::EventManger { event: event_account.key() },
+    //     Errors::InvalidAdmin
+    // );
 
 
 
@@ -128,10 +126,13 @@ pub fn invite_event_join_handler(ctx:Context<InviteEventJoinContext>)-> Result<(
 
 #[derive(Accounts)]
 pub struct CreateEventContext<'info> {
-    #[account(mut, constraint = user_account.authority.key() == authority.key() )]
+    #[account(mut, 
+        constraint = user_account.authority.key() == authority.key() @Errors::InvalidSigner,
+        constraint = sub_admin_account.authority.key() == authority.key() @Errors::InvalidAdmin,
+        constraint = sub_admin_account.level > 0 @Errors::InvalidAdmin
+    )]
     pub authority: Signer<'info>,
 
-    pub create_key: Signer<'info>,
 
     #[account(mut)]
     pub event_key: Signer<'info>,
@@ -144,11 +145,9 @@ pub struct CreateEventContext<'info> {
     )]
     pub event_account: Box<Account<'info, Event>>,
 
-    #[account(init,
-        payer = authority,
-        space = 8 + SubAdmin::INIT_SPACE,
-        seeds = [b"admin".as_ref(),authority.key().as_ref(),create_key.key().as_ref()],
-        bump 
+    #[account(mut,
+        seeds = [b"admin".as_ref(),sub_admin_account.authority.key().as_ref(),sub_admin_account.create_key.key().as_ref()],
+        bump  = sub_admin_account.bump
     )]
     pub sub_admin_account: Box<Account<'info, SubAdmin>>,
 
@@ -253,7 +252,8 @@ pub struct InviteEventJoinContext<'info>{
 
      #[account(mut,
         constraint = authority.key() == sub_admin_account.authority.key() @ Errors::InvalidSigner,
-        constraint = sub_admin_account.permission == SubAdminPermission::GOD @Errors::InvalidAdmin
+        // todo 
+        // constraint = sub_admin_account.permission == SubAdminPermission::GOD @Errors::InvalidAdmin
     )]
     pub authority: Signer<'info>,
 
