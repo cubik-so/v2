@@ -1,37 +1,64 @@
-import { web3, BN } from '@coral-xyz/anchor';
-import { CubikSDK } from '../index';
-import { CreateProjectAccounts, CreateProjectArgs } from '../types';
+import { BN, web3 } from "@coral-xyz/anchor";
+import { CubikSDK } from "..";
+import {
+  CreateProjectAccounts,
+  CreateProjectArgs,
+  ProjectStatusHandlerArgs,
+  TransferProjectAccounts,
+  UpdateProjectStatusAccounts,
+} from "../types";
 
-export class Project {
-  readonly cubik: CubikSDK;
-  constructor(cubik_sdk: CubikSDK) {
-    this.cubik = cubik_sdk;
-  }
-  getPDA(create_key: web3.PublicKey, counter: number) {
-    const userPubkey = this.cubik.provider.wallet.publicKey;
+export const project = (sdk: CubikSDK) => {
+  return {
+    create: async (
+      args: CreateProjectArgs,
+      accounts: CreateProjectAccounts,
+    ) => {
+      const ix = await sdk.program.methods
+        .createProject(
+          args.counter,
+          args.membersKeys,
+          args.threshold,
+          args.configAuthority,
+          args.timeLock,
+          args.memo,
+        )
+        .accounts(accounts)
+        .instruction();
 
-    return web3.PublicKey.findProgramAddressSync(
-      [
-        Buffer.from('project'),
-        userPubkey.toBuffer(),
-        create_key.toBuffer(),
-        new BN(counter).toArrayLike(Buffer, 'le', 8),
-      ],
-      this.cubik.programId
-    );
-  }
+      return ix;
+    },
 
-  create(args: CreateProjectArgs, accounts: CreateProjectAccounts) {
-    return this.cubik.program.methods
-      .createProject(
-        args.counter,
-        args.membersKeys,
-        args.threshold,
-        args.configAuthority,
-        args.timeLock,
-        args.memo
-      )
-      .accounts(accounts)
-      .instruction();
-  }
-}
+    transfer: async (accounts: TransferProjectAccounts) => {
+      const ix = await sdk.program.methods
+        .transferProject()
+        .accounts(accounts)
+        .instruction();
+
+      return ix;
+    },
+
+    updateStatus: async (
+      args: ProjectStatusHandlerArgs,
+      accounts: UpdateProjectStatusAccounts,
+    ) => {
+      const ix = await sdk.program.methods
+        .updateProjectStatus(args.status) // @todo: enum issue
+        .accounts(accounts)
+        .instruction();
+
+      return ix;
+    },
+
+    getPDA: (createKey: web3.PublicKey, counter: number) => {
+      return web3.PublicKey.findProgramAddressSync(
+        [
+          Buffer.from("project"),
+          createKey.toBuffer(),
+          new BN(counter).toArrayLike(Buffer, "le", 8),
+        ],
+        sdk.programId,
+      );
+    },
+  };
+};
