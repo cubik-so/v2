@@ -93,31 +93,22 @@ export type SponsorTeamAccounts = {
 };
 
 /**
- * @name FundSponsorVaultSPLArgs
+ * @name FundSponsorSPLArgs
  * @description The arguments required to fund a sponsor's SPL token vault.
  * @property amount - The amount of SPL tokens to transfer.
- * @property amountUsd - The equivalent amount in USD.
  */
-export type FundSponsorVaultSPLArgs = {
+export type FundSponsorSPLArgs = {
   amount: BN;
-  amountUsd: BN;
 };
 
 /**
- * @name FundSponsorVaultSPLAccounts
+ * @name FundSponsorSPLAccounts
  * @description The accounts required for funding a sponsor's SPL token vault.
- * @property authority - The public key of the authority executing the action.
- * @property sponsorAccount - The public key of the sponsor account.
- * @property tokenMint - The public key of the token mint.
- * @property tokenAtaSender - The public key of the sender's token account.
- * @property tokenAtaReceiver - The public key of the receiver's token account.
- * @property systemProgram - The public key of the system program.
- * @property tokenProgram - The public key of the token program.
- * @property rent - The public key of the rent sysvar.
  */
-export type FundSponsorVaultSPLAccounts = {
+export type FundSponsorSPLAccounts = {
   authority: web3.PublicKey;
   sponsorAccount: web3.PublicKey;
+  sponsorTeamAccount: web3.PublicKey;
   tokenMint: web3.PublicKey;
   tokenAtaSender: web3.PublicKey;
   tokenAtaReceiver: web3.PublicKey;
@@ -127,31 +118,23 @@ export type FundSponsorVaultSPLAccounts = {
 };
 
 /**
- * @name FundSponsorVaultSOLArgs
+ * @name FundSponsorSOLArgs
  * @description The arguments required to fund a sponsor's SOL vault.
  * @property amount - The amount of SOL to transfer.
- * @property amountUsd - The equivalent amount in USD.
  */
-export type FundSponsorVaultSOLArgs = {
+export type FundSponsorSOLArgs = {
   amount: BN;
-  amountUsd: BN;
 };
 
 /**
- * @name FundSponsorVaultSOLAccounts
+ * @name FundSponsorSOLAccounts
  * @description The accounts required for funding a sponsor's SOL vault.
- * @property authority - The public key of the authority executing the action.
- * @property sponsorAccount - The public key of the sponsor account.
- * @property receiverAccount - The public key of the receiver account.
- * @property systemProgram - The public key of the system program.
- * @property tokenProgram - The public key of the token program.
- * @property rent - The public key of the rent sysvar.
  */
-export type FundSponsorVaultSOLAccounts = {
+export type FundSponsorSOLAccounts = {
   authority: web3.PublicKey;
   sponsorAccount: web3.PublicKey;
-  receiverAccount: web3.PublicKey;
+  sponsorTeamAccount: web3.PublicKey;
+  receiver: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  tokenProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };

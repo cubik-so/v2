@@ -19,7 +19,7 @@ export enum SubAdminPermission {
  * @property newSubAdminAuthority - The public key of the new sub-admin authority.
  */
 export type CreateSubAdminHandlerArgs = {
-  status: any;
+  level: any;
   newSubAdminAuthority: web3.PublicKey;
 };
 
@@ -28,7 +28,7 @@ export type CreateSubAdminHandlerArgs = {
  * @description The accounts required for creating a sub-admin.
  * @property authority - The public key of the authority.
  * @property createKey - The public key used for creation.
- * @property newSubAdminAccount - The public key of the new sub-admin account.
+ * @property adminAccount - The public key of the admin account.
  * @property subAdminAccount - The public key of the existing sub-admin account.
  * @property systemProgram - The public key of the system program.
  * @property rent - The public key of the rent sysvar.
@@ -36,10 +36,10 @@ export type CreateSubAdminHandlerArgs = {
 export type CreateSubAdminContext = {
   authority: web3.PublicKey;
   createKey: web3.PublicKey;
-  newSubAdminAccount: web3.PublicKey;
   subAdminAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;
+  adminAccount: web3.PublicKey;
 };
 
 /**
@@ -55,6 +55,42 @@ export type CloseSubAdminContext = {
   authority: web3.PublicKey;
   closeSubAdminAccount: web3.PublicKey;
   subAdminAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
+  rent: web3.PublicKey;
+};
+
+export type AddEventAccessArgs = {
+  eventKey: web3.PublicKey;
+};
+
+export type AddEventAccessAccounts = {
+  authority: web3.PublicKey;
+  subAdminAccount: web3.PublicKey;
+  signerSubAdminAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
+  rent: web3.PublicKey;
+};
+
+export type RemoveEventAccessArgs = {
+  eventKey: web3.PublicKey;
+};
+
+export type RemoveEventAccessAccounts = {
+  authority: web3.PublicKey;
+  subAdminAccount: web3.PublicKey;
+  signerSubAdminAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
+  rent: web3.PublicKey;
+};
+
+export type UpdateSubAdminLevelArgs = {
+  level: any;
+};
+
+export type UpdateSubAdminLevelAccounts = {
+  authority: web3.PublicKey;
+  subAdminAccount: web3.PublicKey;
+  signerSubAdminAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
