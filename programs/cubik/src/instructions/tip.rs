@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 
 use crate::event::NewTipSPL;
-use crate::state::{Project, User};
+use crate::state::User;
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
 
 // todo -- Fix these ix

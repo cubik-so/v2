@@ -123,8 +123,8 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn init_sponsor(
-        ctx: Context<InitSponsorContext>,
+    pub fn init_sponsor_with_self_custody(
+        ctx: Context<InitSponsorWithSelfCustodyContext>,
         total_committed: u128,
         members_keys: Vec<Pubkey>,
         threshold: u16,
@@ -132,7 +132,36 @@ pub mod cubik {
         time_lock: u32,
         memo: Option<String>,
     ) -> Result<()> {
-        init_sponsor_handler(
+        init_sponsor_with_self_custody_handler(
+            ctx,
+            total_committed,
+            members_keys,
+            threshold,
+            config_authority,
+            time_lock,
+            memo,
+        )?;
+        Ok(())
+    }
+
+    pub fn init_sponsor_without_self_custody(
+        ctx: Context<InitSponsorWithoutSelfCustodyContext>,
+        total_committed: u128,
+    ) -> Result<()> {
+        init_sponsor_without_self_custody_handler(ctx, total_committed)?;
+        Ok(())
+    }
+
+    pub fn init_cubik_sponsor(
+        ctx: Context<InitCubikSponsorContext>,
+        total_committed: u128,
+        members_keys: Vec<Pubkey>,
+        threshold: u16,
+        config_authority: Option<Pubkey>,
+        time_lock: u32,
+        memo: Option<String>,
+    ) -> Result<()> {
+        init_cubik_sponsor_handler(
             ctx,
             total_committed,
             members_keys,
