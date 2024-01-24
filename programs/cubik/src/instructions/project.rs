@@ -1,9 +1,9 @@
 use std::vec;
 
 use crate::errors::Errors;
-use crate::event::{NewEventJoin, NewProject, UpdateProjectStatus};
+use crate::event::{ NewProject, UpdateProjectStatus};
 use crate::state::{
-    user, Admin, Event, EventJoin, EventProjectStatus, Project, ProjectVerification, User, SubAdmin,
+    Project, ProjectVerification, User, SubAdmin,
 };
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
@@ -30,7 +30,7 @@ pub fn create_project_handler(
     };
 
 
-         let (vault_pubkey, vault_bump_seed) = Pubkey::find_program_address(&[
+         let (vault_pubkey, _vault_bump_seed) = Pubkey::find_program_address(&[
             SEED_PREFIX,
             &ctx.accounts.multisig.key().to_bytes(),
             SEED_VAULT,
@@ -107,10 +107,8 @@ pub fn transfer_project_handler(ctx: Context<TransferProjectContext>
     project_account.owner = transfer_account.authority;
     Ok(())
 }
-pub fn close_project_handler(ctx: Context<CloseProjectContext>
+pub fn close_project_handler(_ctx: Context<CloseProjectContext>
 )-> Result<()>{
-
-    let project_account = &mut ctx.accounts.project_account;
     
     Ok(())
 }

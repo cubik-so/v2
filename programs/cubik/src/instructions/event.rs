@@ -1,7 +1,7 @@
 use crate::errors::Errors;
-use crate::event::{NewEvent, NewEventJoin, UpdateEvent};
+use crate::event::{NewEvent, UpdateEvent};
 use crate::state::{
-     Event, EventJoin, EventProjectStatus, Project, ProjectVerification, SubAdmin, User,
+     Event, SubAdmin, User,
 };
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
