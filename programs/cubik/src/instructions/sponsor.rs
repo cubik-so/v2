@@ -66,10 +66,10 @@ pub fn init_sponsor_with_self_custody_handler(
     sponsor_account.multi_sig = ctx.accounts.multisig.key();
     sponsor_account.event_account = ctx.accounts.event_account.key();
     sponsor_account.vault_pubkey = vault_pubkey.key();
-    sponsor_account.bump = *ctx.bumps.get("sponsor_account").unwrap();
+    sponsor_account.bump = ctx.bumps.sponsor_account;
     // sponsor team  account
     sponsor_team_account.authority = ctx.accounts.authority.key();
-    sponsor_team_account.bump = *ctx.bumps.get("sponsor_team_account").unwrap();
+    sponsor_team_account.bump = ctx.bumps.sponsor_team_account;
 
     // team account
     emit!(NewSponsor {
@@ -94,10 +94,10 @@ pub fn init_sponsor_without_self_custody_handler(
     sponsor_account.multi_sig = cubik_sponsor_account.multi_sig;
     sponsor_account.event_account = ctx.accounts.event_account.key();
     sponsor_account.vault_pubkey = cubik_sponsor_account.vault_pubkey;
-    sponsor_account.bump = *ctx.bumps.get("sponsor_account").unwrap();
+    sponsor_account.bump = ctx.bumps.sponsor_account;
     // sponsor team  account
     sponsor_team_account.authority = ctx.accounts.authority.key();
-    sponsor_team_account.bump = *ctx.bumps.get("sponsor_team_account").unwrap();
+    sponsor_team_account.bump = ctx.bumps.sponsor_team_account;
 
     // team account
     emit!(NewSponsor {
@@ -168,10 +168,10 @@ pub fn init_cubik_sponsor_handler(
     sponsor_account.multi_sig = ctx.accounts.multisig.key();
     sponsor_account.event_account = ctx.accounts.event_account.key();
     sponsor_account.vault_pubkey = vault_pubkey.key();
-    sponsor_account.bump = *ctx.bumps.get("sponsor_account").unwrap();
+    sponsor_account.bump = ctx.bumps.sponsor_account;
     // sponsor team  account
     sponsor_team_account.authority = ctx.accounts.authority.key();
-    sponsor_team_account.bump = *ctx.bumps.get("sponsor_team_account").unwrap();
+    sponsor_team_account.bump = ctx.bumps.sponsor_team_account;
 
     // team account
     emit!(NewSponsor {
@@ -189,7 +189,7 @@ pub fn add_member_sponsor_handler(
 ) -> Result<()> {
     let sponsor_team_account = &mut ctx.accounts.sponsor_team_account;
     sponsor_team_account.authority = team_member_key.key();
-    sponsor_team_account.bump = *ctx.bumps.get("sponsor_team_account").unwrap();
+    sponsor_team_account.bump = ctx.bumps.sponsor_team_account;
 
     Ok(())
 }

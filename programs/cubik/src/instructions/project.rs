@@ -71,7 +71,7 @@ pub fn create_project_handler(
     project_account.counter = counter;
     project_account.multisig = ctx.accounts.multisig.key();
     project_account.vault_pubkey = vault_pubkey.key()   ;
-    project_account.bump = *ctx.bumps.get("project_account").unwrap();
+    project_account.bump = ctx.bumps.project_account;
 
     emit!(NewProject {
         authority: user_account.authority.key(),

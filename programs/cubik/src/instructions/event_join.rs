@@ -19,7 +19,7 @@ pub fn create_event_join_handler(
     event_join_account.authority = ctx.accounts.authority.key();
     event_join_account.donation = 0;
     event_join_account.status = EventProjectStatus::PendingApproval;
-    event_join_account.bump = *ctx.bumps.get("event_join_account").unwrap();
+    event_join_account.bump = ctx.bumps.event_join_account;
 
     emit!(NewEventJoin {
         authority: ctx.accounts.authority.key(),
@@ -135,7 +135,7 @@ pub fn invite_event_join_handler(ctx:Context<InviteEventJoinContext>)-> Result<(
     event_join_account.authority = project_account.owner.key();
     event_join_account.donation = 0;
     event_join_account.status = EventProjectStatus::PendingApproval;
-    event_join_account.bump = *ctx.bumps.get("event_join_account").unwrap();
+    event_join_account.bump = ctx.bumps.event_join_account;
 
     emit!(NewEventJoin {
         authority: project_account.owner.key(),

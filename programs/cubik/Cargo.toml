@@ -16,9 +16,9 @@ cpi = ["no-entrypoint"]
 default = []
 
 [dependencies]
-anchor-lang = "0.28.0"
-squads-multisig-program = { version = "0.2.1", features = [
+anchor-lang = "0.29.0"
+squads-multisig-program = { version = "2.0.0", features = [
     "cpi",
     "no-entrypoint",
 ] }
-anchor-spl = "0.28.0"
+anchor-spl = "0.29.0"

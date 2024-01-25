@@ -19,7 +19,7 @@ pub fn create_event_handler(
     event_account.event_key = event_key;
    
     
-    event_account.bump = *ctx.bumps.get("event_account").unwrap();
+    event_account.bump = ctx.bumps.event_account;
     emit!(NewEvent {
         authority: ctx.accounts.authority.key(),
         event_key

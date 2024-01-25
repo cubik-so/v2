@@ -6,7 +6,7 @@ pub fn create_admin_handler(ctx: Context<CreateAdminContext>) -> Result<()> {
     let admin_account = &mut ctx.accounts.admin_account;
     admin_account.authority = ctx.accounts.authority.key();
    
-    admin_account.bump = *ctx.bumps.get("admin_account").unwrap();
+    admin_account.bump = ctx.bumps.admin_account;
     Ok(())
 }
 

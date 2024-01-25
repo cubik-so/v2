@@ -10,7 +10,7 @@ pub fn create_sub_admin_handler(ctx:Context<CreateSubAdminContext>,new_sub_admin
     sub_admin_account.level = level;
     sub_admin_account.event_access = [Pubkey::default(); 10];
     sub_admin_account.create_key = ctx.accounts.create_key.key();
-    sub_admin_account.bump = *ctx.bumps.get("sub_admin_account").unwrap();
+    sub_admin_account.bump = ctx.bumps.sub_admin_account;
     Ok(())
 }
 

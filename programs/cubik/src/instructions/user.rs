@@ -14,7 +14,7 @@ pub fn create_user_handler(
     
     user_account.authority = ctx.accounts.authority.key();
 
-    user_account.bump = *ctx.bumps.get("user_account").unwrap();
+    user_account.bump = ctx.bumps.user_account;
 
     emit!(NewUser {
         authority: ctx.accounts.authority.key(),
