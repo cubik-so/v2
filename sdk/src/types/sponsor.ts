@@ -1,12 +1,16 @@
 import { BN, web3 } from "@coral-xyz/anchor";
 
 /**
- * @name InitSponsorArgs
+ * @name InitSponsorWithSelfCustodyArgs
  * @description The arguments required to initialize a sponsor.
- * @property vault - The public key of the vault.
  * @property totalCommitted - The total committed amount in USD.
+ * @property membersKeys - The public keys of the members.
+ * @property threshold - The threshold for the multisig.
+ * @property configAuthority - The public key of the config authority.
+ * @property timeLock - The time lock.
+ * @property memo - The memo.
  */
-export type InitSponsorArgs = {
+export type InitSponsorWithSelfCustodyArgs = {
   totalCommitted: BN; // Using BN to represent u128 since JavaScript does not support 128-bit integers
   membersKeys: web3.PublicKey[]; // Array of public keys
   threshold: number; // u16 can be represented as a number in TypeScript
@@ -16,20 +20,119 @@ export type InitSponsorArgs = {
 };
 
 /**
- * @name InitSponsorAccounts
+ * @name InitSponsorWithSelfCustodyAccounts
  * @description The accounts required for initializing a sponsor.
  * @property authority - The public key of the authority executing the initialization.
  * @property createKey - The public key used for creation.
+ * @property userAccount - The public key of the user account.
+ * @property eventAccount - The public key of the event account.
+ * @property multisig - The public key of the multisig.
  * @property sponsorAccount - The public key of the sponsor account.
+ * @property squadsProgram - The public key of the squads program.
  * @property sponsorTeamAccount - The public key of the sponsor team account.
  * @property systemProgram - The public key of the system program.
  * @property tokenProgram - The public key of the token program.
  * @property rent - The public key of the rent sysvar.
  */
-export type InitSponsorAccounts = {
+export type InitSponsorWithSelfCustodyAccounts = {
   authority: web3.PublicKey;
   createKey: web3.PublicKey;
+  userAccount: web3.PublicKey;
+  eventAccount: web3.PublicKey;
+  multisig: web3.PublicKey;
   sponsorAccount: web3.PublicKey;
+  squadsProgram: web3.PublicKey;
+  sponsorTeamAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
+  tokenProgram: web3.PublicKey;
+  rent: web3.PublicKey;
+};
+
+/**
+ * @name InitSponsorWithoutSelfCustodyArgs
+ * @description The arguments required to initialize a sponsor.
+ * @property totalCommitted - The total committed amount in USD.
+ * @property membersKeys - The public keys of the members.
+ * @property threshold - The threshold for the multisig.
+ * @property configAuthority - The public key of the config authority.
+ * @property timeLock - The time lock.
+ * @property memo - The memo.
+ */
+export type InitSponsorWithoutSelfCustodyArgs = {
+  totalCommitted: BN; // Using BN to represent u128 since JavaScript does not support 128-bit integers
+};
+
+/**
+ * @name InitSponsorWithoutSelfCustodyAccounts
+ * @description The accounts required for initializing a sponsor.
+ * @property authority - The public key of the authority executing the initialization.
+ * @property createKey - The public key used for creation.
+ * @property userAccount - The public key of the user account.
+ * @property eventAccount - The public key of the event account.
+ * @property sponsorAccount - The public key of the sponsor account.
+ * @property cubikSponsor - The public key of the cubik sponsor account.
+ * @property sponsorTeamAccount - The public key of the sponsor team account.
+ * @property systemProgram - The public key of the system program.
+ * @property tokenProgram - The public key of the token program.
+ * @property rent - The public key of the rent sysvar.
+ */
+export type InitSponsorWithoutSelfCustodyAccounts = {
+  authority: web3.PublicKey;
+  createKey: web3.PublicKey;
+  userAccount: web3.PublicKey;
+  eventAccount: web3.PublicKey;
+  sponsorAccount: web3.PublicKey;
+  cubikSponsor: web3.PublicKey;
+  sponsorTeamAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
+  tokenProgram: web3.PublicKey;
+  rent: web3.PublicKey;
+};
+
+/**
+ * @name InitCubikSponsorArgs
+ * @description The arguments required to initialize a sponsor.
+ * @property totalCommitted - The total committed amount in USD.
+ * @property membersKeys - The public keys of the members.
+ * @property threshold - The threshold for the multisig.
+ * @property configAuthority - The public key of the config authority.
+ * @property timeLock - The time lock.
+ * @property memo - The memo.
+ */
+export type InitCubikSponsorArgs = {
+  totalCommitted: BN; // Using BN to represent u128 since JavaScript does not support 128-bit integers
+  membersKeys: web3.PublicKey[]; // Array of public keys
+  threshold: number; // u16 can be represented as a number in TypeScript
+  configAuthority: web3.PublicKey | null; // Option<Pubkey> translates to PublicKey or null
+  timeLock: number; // u32 can be represented as a number in TypeScript
+  memo: string | null; // Option<String> translates to string or null
+};
+
+/**
+ * @name InitCubikSponsorAccounts
+ * @description The accounts required for initializing a sponsor.
+ * @property authority - The public key of the authority executing the initialization.
+ * @property createKey - The public key used for creation.
+ * @property userAccount - The public key of the user account.
+ * @property subAdminAccount - The public key of the sub admin account.
+ * @property eventAccount - The public key of the event account.
+ * @property multisig - The public key of the multisig.
+ * @property sponsorAccount - The public key of the sponsor account.
+ * @property squadsProgram - The public key of the squads program.
+ * @property sponsorTeamAccount - The public key of the sponsor team account.
+ * @property systemProgram - The public key of the system program.
+ * @property tokenProgram - The public key of the token program.
+ * @property rent - The public key of the rent sysvar.
+ */
+export type InitCubikSponsorAccounts = {
+  authority: web3.PublicKey;
+  createKey: web3.PublicKey;
+  userAccount: web3.PublicKey;
+  subAdminAccount: web3.PublicKey;
+  eventAccount: web3.PublicKey;
+  multisig: web3.PublicKey;
+  sponsorAccount: web3.PublicKey;
+  squadsProgram: web3.PublicKey;
   sponsorTeamAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
   tokenProgram: web3.PublicKey;

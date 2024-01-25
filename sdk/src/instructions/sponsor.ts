@@ -5,17 +5,55 @@ import {
   FundSponsorSOLAccounts,
   FundSponsorSPLArgs,
   FundSponsorSPLAccounts,
-  InitSponsorAccounts,
-  InitSponsorArgs,
   SponsorTeamAccounts,
+  InitSponsorWithSelfCustodyArgs,
+  InitSponsorWithSelfCustodyAccounts,
+  InitSponsorWithoutSelfCustodyArgs,
+  InitSponsorWithoutSelfCustodyAccounts,
+  InitCubikSponsorArgs,
+  InitCubikSponsorAccounts,
 } from "../types";
 import { web3 } from "@coral-xyz/anchor";
 
 export const sponsor = (sdk: CubikSDK) => {
   return {
-    init: async (args: InitSponsorArgs, accounts: InitSponsorAccounts) => {
+    initWithSelfCustody: async (
+      args: InitSponsorWithSelfCustodyArgs,
+      accounts: InitSponsorWithSelfCustodyAccounts,
+    ) => {
       const ix = await sdk.program.methods
-        .initSponsor(
+        .initSponsorWithSelfCustody(
+          args.totalCommitted,
+          args.membersKeys,
+          args.threshold,
+          args.configAuthority,
+          args.timeLock,
+          args.memo,
+        )
+        .accounts(accounts)
+        .instruction();
+
+      return ix;
+    },
+
+    initWithoutSelfCustody: async (
+      args: InitSponsorWithoutSelfCustodyArgs,
+      accounts: InitSponsorWithoutSelfCustodyAccounts,
+    ) => {
+      const ix = await sdk.program.methods
+        .initSponsorWithoutSelfCustody(args.totalCommitted)
+        .accounts(accounts)
+        .instruction();
+
+      return ix;
+    },
+
+    initCubikSponsor: async (
+      args: InitCubikSponsorArgs,
+      accounts: InitCubikSponsorAccounts,
+    ) => {
+      const ix = await sdk.program.methods
+        .initCubikSponsor(
           args.totalCommitted,
           args.membersKeys,
           args.threshold,
