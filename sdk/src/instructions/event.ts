@@ -1,5 +1,5 @@
-import { web3 } from "@coral-xyz/anchor";
-import { CubikSDK } from "..";
+import { web3 } from '@coral-xyz/anchor';
+import { CubikSDK } from '..';
 import {
   CreateEventAccounts,
   CreateEventHandlerArgs,
@@ -8,13 +8,13 @@ import {
   InviteEventJoinAccounts,
   UpdateEventAccounts,
   UpdateEventArgs,
-} from "../types";
+} from '../types';
 
 export const event = (sdk: CubikSDK) => {
   return {
     create: async (
       args: CreateEventHandlerArgs,
-      accounts: CreateEventAccounts,
+      accounts: CreateEventAccounts
     ) => {
       const ix = await sdk.program.methods
         .createEvent(args.matchingPool)
@@ -26,7 +26,7 @@ export const event = (sdk: CubikSDK) => {
 
     createEventJoin: async (
       args: CreateEventJoinHandlerArgs,
-      accounts: CreateEventJoinAccounts,
+      accounts: CreateEventJoinAccounts
     ) => {
       const ix = await sdk.program.methods
         .createEventJoin(args.counter, args.eventKey)
@@ -54,22 +54,22 @@ export const event = (sdk: CubikSDK) => {
 
     getPDA: (eventKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from("event"), eventKey.toBuffer()],
-        sdk.programId,
+        [Buffer.from('event'), eventKey.toBuffer()],
+        sdk.programId
       );
     },
 
     getEventJoinPDA: (
       eventAccount: web3.PublicKey,
-      projectAccount: web3.PublicKey,
+      projectAccount: web3.PublicKey
     ) => {
       return web3.PublicKey.findProgramAddressSync(
         [
-          Buffer.from("event_join"),
+          Buffer.from('event_join'),
           eventAccount.toBuffer(),
           projectAccount.toBuffer(),
         ],
-        sdk.programId,
+        sdk.programId
       );
     },
   };

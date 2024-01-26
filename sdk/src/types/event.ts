@@ -1,4 +1,4 @@
-import { BN, web3 } from "@coral-xyz/anchor";
+import { BN, web3 } from '@coral-xyz/anchor';
 
 /**
  * @name CreateEventHandlerArgs
@@ -23,6 +23,7 @@ export type CreateEventAccounts = {
   authority: web3.PublicKey;
   eventAccount: web3.PublicKey;
   subAdminAccount: web3.PublicKey;
+  userAccount: web3.PublicKey;
   eventKey: web3.PublicKey;
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;
