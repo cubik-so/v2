@@ -8,7 +8,7 @@ import {
 import { Cubik, IDL } from '../target/types/cubik';
 
 export const PROGRAM_ID = new web3.PublicKey(
-  'D4QbbabmtqmkjJFcE2qnHihuXa4NT7Ap2tqqh5nyCG4T'
+  'GsKHdvSBodD3ZGMAMWZ6sSwNZAixsE6XZ4xKA4KyEwc'
 );
 
 export function createLocalhostConnection() {
@@ -59,9 +59,5 @@ export async function generateFundedKeypair(connection: web3.Connection) {
 export const adminPair = () => {
   // return generateFundedKeypair(createLocalhostConnection());
 
-  return web3.Keypair.fromSecretKey(
-    utils.bytes.bs58.decode(
-      '5aUpHxFFFQAVyp9dvz2pxHkXuFKH1G2huhexHWRRkX4rCvFmbtFpVWowHbLQMatCHgYx8zgCpbS5WMBjauPkr15o'
-    )
-  );
+  return web3.Keypair.fromSecretKey(utils.bytes.bs58.decode(process.env.KP));
 };

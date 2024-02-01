@@ -8,7 +8,8 @@ pub mod state;
 use state::*;
 
 // declare_id!("CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7");
-declare_id!("D4QbbabmtqmkjJFcE2qnHihuXa4NT7Ap2tqqh5nyCG4T");
+// declare_id!("D4QbbabmtqmkjJFcE2qnHihuXa4NT7Ap2tqqh5nyCG4T");
+declare_id!("GsKHdvSBodD3ZGMAMWZ6sSwNZAixsE6XZ4xKA4KyEwc");
 
 #[program]
 pub mod cubik {
@@ -214,6 +215,15 @@ pub mod cubik {
     }
     pub fn contribution_spl(ctx: Context<ContributionSPL>, amount: u64, split: u64) -> Result<()> {
         contribution_spl_handler(ctx, amount, split)?;
+        Ok(())
+    }
+
+    pub fn create_admin_vault(
+        ctx: Context<CreateAdminVaultContext>,
+        members_keys: Vec<Pubkey>,
+        memo: Option<String>,
+    ) -> Result<()> {
+        create_admin_vault_handler(ctx, members_keys, memo)?;
         Ok(())
     }
 }

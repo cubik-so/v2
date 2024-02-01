@@ -20,4 +20,6 @@ pub enum Errors {
     InvalidReceiver,
     #[msg("Error: Invalid Level for SubAdmin")]
     InvalidLevel,
+    #[msg("Error: Invalid Members Length")]
+    InvalidMembersLength,
 }

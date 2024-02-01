@@ -16,12 +16,10 @@ describe('Admin', () => {
   //   console.log(utils.bytes.bs58.encode(admin.secretKey));
   //   console.log('---');
   //   console.log(admin.publicKey.toBase58());
+  //   connection.requestAirdrop(admin.publicKey, 1 * web3.LAMPORTS_PER_SOL);
   // });
   it('Success: Create Admin', async () => {
-    const keypair = await adminPair();
-    console.log(utils.bytes.bs58.encode(keypair.secretKey));
-    console.log('-------------');
-    console.log(utils.bytes.utf8.decode(keypair.secretKey));
+    const keypair = adminPair();
     const wallet = new Wallet(keypair);
     const program = createCubikProgram(wallet);
 
