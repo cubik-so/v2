@@ -1,5 +1,5 @@
-import { web3 } from "@coral-xyz/anchor";
-import { CubikSDK } from "..";
+import { web3 } from '@coral-xyz/anchor';
+import { CubikSDK } from '..';
 import {
   AddEventAccessAccounts,
   AddEventAccessArgs,
@@ -8,13 +8,16 @@ import {
   CreateSubAdminHandlerArgs,
   RemoveEventAccessAccounts,
   RemoveEventAccessArgs,
-} from "../types";
+} from '../types';
 
 export const subAdmin = (sdk: CubikSDK) => {
   return {
+    get: async (pda: web3.PublicKey) => {
+      return await sdk.program.account.subAdmin.fetch(pda);
+    },
     create: async (
       args: CreateSubAdminHandlerArgs,
-      accounts: CreateSubAdminContext,
+      accounts: CreateSubAdminContext
     ) => {
       const ix = await sdk.program.methods
         .createSubAdmin(args.newSubAdminAuthority, args.level)
@@ -35,7 +38,7 @@ export const subAdmin = (sdk: CubikSDK) => {
 
     addEventAccess: async (
       args: AddEventAccessArgs,
-      accounts: AddEventAccessAccounts,
+      accounts: AddEventAccessAccounts
     ) => {
       const ix = await sdk.program.methods
         .addEventAccess(args.eventKey)
@@ -47,7 +50,7 @@ export const subAdmin = (sdk: CubikSDK) => {
 
     removeEventAccess: async (
       args: RemoveEventAccessArgs,
-      accounts: RemoveEventAccessAccounts,
+      accounts: RemoveEventAccessAccounts
     ) => {
       const ix = await sdk.program.methods
         .removeEventAccess(args.eventKey)
@@ -59,8 +62,8 @@ export const subAdmin = (sdk: CubikSDK) => {
 
     getPDA: (subAdmin: web3.PublicKey, createKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from("admin"), subAdmin.toBuffer(), createKey.toBuffer()],
-        sdk.programId,
+        [Buffer.from('admin'), subAdmin.toBuffer(), createKey.toBuffer()],
+        sdk.programId
       );
     },
   };
