@@ -1,18 +1,18 @@
-import { BN, web3 } from "@coral-xyz/anchor";
-import { CubikSDK } from "..";
+import { BN, web3 } from '@coral-xyz/anchor';
+import { CubikSDK } from '..';
 import {
   CreateProjectAccounts,
   CreateProjectArgs,
   ProjectStatusHandlerArgs,
   TransferProjectAccounts,
   UpdateProjectStatusAccounts,
-} from "../types";
+} from '../types';
 
 export const project = (sdk: CubikSDK) => {
   return {
     create: async (
       args: CreateProjectArgs,
-      accounts: CreateProjectAccounts,
+      accounts: CreateProjectAccounts
     ) => {
       const ix = await sdk.program.methods
         .createProject(
@@ -21,7 +21,7 @@ export const project = (sdk: CubikSDK) => {
           args.threshold,
           args.configAuthority,
           args.timeLock,
-          args.memo,
+          args.memo
         )
         .accounts(accounts)
         .instruction();
@@ -40,7 +40,7 @@ export const project = (sdk: CubikSDK) => {
 
     updateStatus: async (
       args: ProjectStatusHandlerArgs,
-      accounts: UpdateProjectStatusAccounts,
+      accounts: UpdateProjectStatusAccounts
     ) => {
       const ix = await sdk.program.methods
         .updateProjectStatus(args.status) // @todo: enum issue
@@ -50,14 +50,18 @@ export const project = (sdk: CubikSDK) => {
       return ix;
     },
 
+    get: async (pda: web3.PublicKey) => {
+      return await sdk.program.account.project.fetch(pda);
+    },
+
     getPDA: (createKey: web3.PublicKey, counter: number) => {
       return web3.PublicKey.findProgramAddressSync(
         [
-          Buffer.from("project"),
+          Buffer.from('project'),
           createKey.toBuffer(),
-          new BN(counter).toArrayLike(Buffer, "le", 8),
+          new BN(counter).toArrayLike(Buffer, 'le', 8),
         ],
-        sdk.programId,
+        sdk.programId
       );
     },
   };
