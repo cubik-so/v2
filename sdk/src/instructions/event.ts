@@ -8,6 +8,8 @@ import {
   InviteEventJoinAccounts,
   UpdateEventAccounts,
   UpdateEventArgs,
+  UpdateEventStatusAccounts,
+  UpdateEventStatusArgs,
 } from '../types';
 
 export const event = (sdk: CubikSDK) => {
@@ -44,6 +46,24 @@ export const event = (sdk: CubikSDK) => {
       return ix;
     },
 
+    updateStatus: async (
+      args: UpdateEventStatusArgs,
+      accounts: UpdateEventStatusAccounts
+    ) => {
+      const ix = await sdk.program.methods
+        .updateEventJoinStatus(args.status)
+        .accounts({
+          authority: accounts.authority,
+          eventAccount: accounts.eventAccount,
+          eventJoinAccount: accounts.eventJoinAccount,
+          projectAccount: accounts.projectAccount,
+          subAdminAccount: accounts.subAdminAccount,
+          rent: accounts.rent,
+          systemProgram: accounts.systemProgram,
+        })
+        .instruction();
+      return ix;
+    },
     inviteEventJoin: async (accounts: InviteEventJoinAccounts) => {
       const ix = await sdk.program.methods
         .inviteEventJoin()

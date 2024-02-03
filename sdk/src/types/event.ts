@@ -66,14 +66,14 @@ export enum EventProjectStatus {
   // ...other statuses
 }
 
-/**
- * @name UpdateEventStatusArgs
- * @description The arguments required to update an event's status.
- * @property status - The new status of the event.
- */
-export type UpdateEventStatusArgs = {
-  status: EventProjectStatus;
-};
+// /**
+//  * @name UpdateEventStatusArgs
+//  * @description The arguments required to update an event's status.
+//  * @property status - The new status of the event.
+//  */
+// export type UpdateEventStatusArgs = {
+//   status: EventProjectStatus;
+// };
 
 /**
  * @name UpdateEventStatusAccounts
@@ -139,4 +139,8 @@ export type InviteEventJoinAccounts = {
   eventAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;
+};
+
+export type UpdateEventStatusArgs = {
+  status: any;
 };
