@@ -5,6 +5,9 @@ use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 
 pub fn create_sub_admin_handler(ctx:Context<CreateSubAdminContext>,new_sub_admin_authority:Pubkey,level:u8,) -> Result<()> {
 
+    if level > 3 {
+        return Err(Errors::InvalidLevel.into());
+    }
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
     sub_admin_account.authority = new_sub_admin_authority;
     sub_admin_account.level = level;
