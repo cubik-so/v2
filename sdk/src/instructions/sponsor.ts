@@ -1,4 +1,4 @@
-import { CubikSDK } from "..";
+import { CubikSDK } from '..';
 import {
   AddMemberSponsorArgs,
   FundSponsorSOLArgs,
@@ -12,14 +12,14 @@ import {
   InitSponsorWithoutSelfCustodyAccounts,
   InitCubikSponsorArgs,
   InitCubikSponsorAccounts,
-} from "../types";
-import { web3 } from "@coral-xyz/anchor";
+} from '../types';
+import { web3 } from '@coral-xyz/anchor';
 
 export const sponsor = (sdk: CubikSDK) => {
   return {
     initWithSelfCustody: async (
       args: InitSponsorWithSelfCustodyArgs,
-      accounts: InitSponsorWithSelfCustodyAccounts,
+      accounts: InitSponsorWithSelfCustodyAccounts
     ) => {
       const ix = await sdk.program.methods
         .initSponsorWithSelfCustody(
@@ -28,7 +28,7 @@ export const sponsor = (sdk: CubikSDK) => {
           args.threshold,
           args.configAuthority,
           args.timeLock,
-          args.memo,
+          args.memo
         )
         .accounts(accounts)
         .instruction();
@@ -38,7 +38,7 @@ export const sponsor = (sdk: CubikSDK) => {
 
     initWithoutSelfCustody: async (
       args: InitSponsorWithoutSelfCustodyArgs,
-      accounts: InitSponsorWithoutSelfCustodyAccounts,
+      accounts: InitSponsorWithoutSelfCustodyAccounts
     ) => {
       const ix = await sdk.program.methods
         .initSponsorWithoutSelfCustody(args.totalCommitted)
@@ -50,7 +50,7 @@ export const sponsor = (sdk: CubikSDK) => {
 
     initCubikSponsor: async (
       args: InitCubikSponsorArgs,
-      accounts: InitCubikSponsorAccounts,
+      accounts: InitCubikSponsorAccounts
     ) => {
       const ix = await sdk.program.methods
         .initCubikSponsor(
@@ -59,7 +59,7 @@ export const sponsor = (sdk: CubikSDK) => {
           args.threshold,
           args.configAuthority,
           args.timeLock,
-          args.memo,
+          args.memo
         )
         .accounts(accounts)
         .instruction();
@@ -69,7 +69,7 @@ export const sponsor = (sdk: CubikSDK) => {
 
     addMember: async (
       args: AddMemberSponsorArgs,
-      accounts: SponsorTeamAccounts,
+      accounts: SponsorTeamAccounts
     ) => {
       const ix = await sdk.program.methods
         .addMemberSponsor(args.teamMemberKey)
@@ -81,7 +81,7 @@ export const sponsor = (sdk: CubikSDK) => {
 
     _removeMember: async (
       args: AddMemberSponsorArgs,
-      accounts: SponsorTeamAccounts,
+      accounts: SponsorTeamAccounts
     ) => {
       const ix = await sdk.program.methods
         .removeMemberSponsor(args.teamMemberKey)
@@ -93,7 +93,7 @@ export const sponsor = (sdk: CubikSDK) => {
 
     fundSponsorSol: async (
       args: FundSponsorSOLArgs,
-      accounts: FundSponsorSOLAccounts,
+      accounts: FundSponsorSOLAccounts
     ) => {
       const ix = await sdk.program.methods
         .fundSponsorSol(args.amount)
@@ -105,7 +105,7 @@ export const sponsor = (sdk: CubikSDK) => {
 
     fundSponsorSpl: async (
       args: FundSponsorSPLArgs,
-      accounts: FundSponsorSPLAccounts,
+      accounts: FundSponsorSPLAccounts
     ) => {
       const ix = await sdk.program.methods
         .fundSponsorSpl(args.amount)
@@ -117,15 +117,15 @@ export const sponsor = (sdk: CubikSDK) => {
 
     getPDA: (createKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from("sponsor"), createKey.toBuffer()],
-        sdk.programId,
+        [Buffer.from('sponsor'), createKey.toBuffer()],
+        sdk.programId
       );
     },
 
     getTeamPDA: (createKey: web3.PublicKey, authority: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from("sponsor"), createKey.toBuffer(), authority.toBuffer()],
-        sdk.programId,
+        [Buffer.from('sponsor'), createKey.toBuffer(), authority.toBuffer()],
+        sdk.programId
       );
     },
   };

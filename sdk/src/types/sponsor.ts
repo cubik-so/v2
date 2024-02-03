@@ -1,4 +1,4 @@
-import { BN, web3 } from "@coral-xyz/anchor";
+import { BN, web3 } from '@coral-xyz/anchor';
 
 /**
  * @name InitSponsorWithSelfCustodyArgs
@@ -31,7 +31,6 @@ export type InitSponsorWithSelfCustodyArgs = {
  * @property squadsProgram - The public key of the squads program.
  * @property sponsorTeamAccount - The public key of the sponsor team account.
  * @property systemProgram - The public key of the system program.
- * @property tokenProgram - The public key of the token program.
  * @property rent - The public key of the rent sysvar.
  */
 export type InitSponsorWithSelfCustodyAccounts = {
@@ -44,7 +43,6 @@ export type InitSponsorWithSelfCustodyAccounts = {
   squadsProgram: web3.PublicKey;
   sponsorTeamAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  tokenProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
 
@@ -73,7 +71,6 @@ export type InitSponsorWithoutSelfCustodyArgs = {
  * @property cubikSponsor - The public key of the cubik sponsor account.
  * @property sponsorTeamAccount - The public key of the sponsor team account.
  * @property systemProgram - The public key of the system program.
- * @property tokenProgram - The public key of the token program.
  * @property rent - The public key of the rent sysvar.
  */
 export type InitSponsorWithoutSelfCustodyAccounts = {
@@ -85,7 +82,6 @@ export type InitSponsorWithoutSelfCustodyAccounts = {
   cubikSponsor: web3.PublicKey;
   sponsorTeamAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  tokenProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
 
@@ -121,7 +117,6 @@ export type InitCubikSponsorArgs = {
  * @property squadsProgram - The public key of the squads program.
  * @property sponsorTeamAccount - The public key of the sponsor team account.
  * @property systemProgram - The public key of the system program.
- * @property tokenProgram - The public key of the token program.
  * @property rent - The public key of the rent sysvar.
  */
 export type InitCubikSponsorAccounts = {
@@ -135,7 +130,6 @@ export type InitCubikSponsorAccounts = {
   squadsProgram: web3.PublicKey;
   sponsorTeamAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  tokenProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
 
@@ -155,7 +149,6 @@ export type UpdateSponsorArgs = {
  * @property sponsorAccount - The public key of the sponsor account.
  * @property sponsorTeamAccount - The public key of the sponsor team account.
  * @property systemProgram - The public key of the system program.
- * @property tokenProgram - The public key of the token program.
  * @property rent - The public key of the rent sysvar.
  */
 export type UpdateSponsorAccounts = {
@@ -163,7 +156,6 @@ export type UpdateSponsorAccounts = {
   sponsorAccount: web3.PublicKey;
   sponsorTeamAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  tokenProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
 
@@ -183,7 +175,6 @@ export type AddMemberSponsorArgs = {
  * @property sponsorTeamAccount - The public key of the sponsor team account.
  * @property sponsorAccount - The public key of the sponsor account.
  * @property systemProgram - The public key of the system program.
- * @property tokenProgram - The public key of the token program.
  * @property rent - The public key of the rent sysvar.
  */
 export type SponsorTeamAccounts = {
@@ -191,7 +182,6 @@ export type SponsorTeamAccounts = {
   sponsorTeamAccount: web3.PublicKey;
   sponsorAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  tokenProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
 
