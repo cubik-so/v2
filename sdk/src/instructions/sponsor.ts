@@ -114,7 +114,9 @@ export const sponsor = (sdk: CubikSDK) => {
 
       return ix;
     },
-
+    getSponsor: async (pda: web3.PublicKey) => {
+      return await sdk.program.account.sponsor.fetch(pda);
+    },
     getPDA: (createKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
         [Buffer.from('sponsor'), createKey.toBuffer()],
