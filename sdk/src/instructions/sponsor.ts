@@ -121,6 +121,12 @@ export const sponsor = (sdk: CubikSDK) => {
         sdk.programId
       );
     },
+    getCubikSponsorPDA: (eventKey: web3.PublicKey) => {
+      return web3.PublicKey.findProgramAddressSync(
+        [Buffer.from('sponsor'), eventKey.toBuffer()],
+        sdk.programId
+      );
+    },
 
     getTeamPDA: (createKey: web3.PublicKey, authority: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
