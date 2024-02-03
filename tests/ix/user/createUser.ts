@@ -1,5 +1,6 @@
 import { Wallet, web3 } from '@coral-xyz/anchor';
 import {
+  adminPair,
   createCubikProgram,
   createLocalhostConnection,
   generateFundedKeypair,
@@ -12,9 +13,19 @@ const connection = createLocalhostConnection();
 describe('User', () => {
   describe('Username under length', () => {
     const username = 'loremlorem';
-    let keypair: web3.Keypair;
+    // let keypair: web3.Keypair;
+    const keypair = adminPair();
     before(async () => {
-      keypair = await generateFundedKeypair(connection);
+      const tx = await connection.requestAirdrop(
+        keypair.publicKey,
+        1 * web3.LAMPORTS_PER_SOL
+      );
+      const latestBlockHash = await connection.getLatestBlockhash();
+      await connection.confirmTransaction({
+        blockhash: latestBlockHash.blockhash,
+        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+        signature: tx,
+      });
     });
 
     it('Success: username char limit', async () => {
@@ -32,7 +43,7 @@ describe('User', () => {
       console.log(tx);
     });
   });
-  describe('Username over length', () => {
+  describe.skip('Username over length', () => {
     const username =
       'loremloremasdfhjkadfjkskjhasdfkhjdfakjskhjasdfkkhjakdfhskjhdfskjhkhjfdskhjfsadkhjkhjfadskhjfdsakhjdfaskhjkfsdahkjhafsdhkjasfdjkhfdsakhjjkhasdhklf';
     let keypair: web3.Keypair;

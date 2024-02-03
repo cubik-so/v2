@@ -21,7 +21,7 @@ describe('SubAdmin', () => {
     newSubAdmin = await generateFundedKeypair(connection);
     // admin = await generateFundedKeypair(connection);
   });
-  it.skip('SubAdmin level 3', async () => {
+  it('SubAdmin level 3', async () => {
     const wallet = new Wallet(admin);
     const program = createCubikProgram(wallet);
     const tx = await program.methods
