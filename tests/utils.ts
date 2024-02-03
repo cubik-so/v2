@@ -58,6 +58,8 @@ export async function generateFundedKeypair(connection: web3.Connection) {
 
 export const adminPair = () => {
   // return generateFundedKeypair(createLocalhostConnection());
-
-  return web3.Keypair.fromSecretKey(utils.bytes.bs58.decode(process.env.KP));
+  console.log('KP', process.env.KP);
+  return web3.Keypair.fromSecretKey(
+    utils.bytes.bs58.decode(process.env.KP || '')
+  );
 };

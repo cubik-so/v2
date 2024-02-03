@@ -8,7 +8,7 @@ pub fn create_sub_admin_handler(ctx:Context<CreateSubAdminContext>,new_sub_admin
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
     sub_admin_account.authority = new_sub_admin_authority;
     sub_admin_account.level = level;
-    sub_admin_account.event_access = [Pubkey::default(); 10];
+    sub_admin_account.event_access = Vec::from([]);
     sub_admin_account.create_key = ctx.accounts.create_key.key();
     sub_admin_account.bump = ctx.bumps.sub_admin_account;
     Ok(())
@@ -30,20 +30,14 @@ pub fn add_event_access_handler(
 ) -> Result<()> {
 
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
-    let mut event_access = sub_admin_account.event_access;    
-      
- 
 
-    match find_event_key_index(&event_access, &event_key) {
-        Some(idx) => {
-            event_access[idx] = event_key;
-            sub_admin_account.event_access = event_access;
-            Ok(())
-        },
-        None => {
-            err!(Errors::InvalidEventKey)
-        }
-    }
+        let mut new_event_access = sub_admin_account.event_access.clone();
+        new_event_access.push(event_key);
+        msg!("Event Access Added {:?}",new_event_access);
+        sub_admin_account.event_access = new_event_access;
+
+      Ok(())
+   
 }
 
 pub fn remove_event_access_handler(
@@ -52,14 +46,14 @@ pub fn remove_event_access_handler(
 ) -> Result<()> {
 
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
-    let mut event_access = sub_admin_account.event_access;
 
 
-    match find_event_key_index(&event_access, &event_key) {
+    match find_event_key_index(sub_admin_account.event_access.clone(), &event_key) {
         Some(idx) => {
-            event_access[idx] = Pubkey::default();
-            sub_admin_account.event_access = event_access;
-            Ok(())
+            let mut event_access_clone = sub_admin_account.event_access.clone();
+            event_access_clone.remove(idx);
+            sub_admin_account.event_access = event_access_clone;
+            Ok(()) 
         },
         None => {
             err!(Errors::InvalidEventKey)
@@ -123,7 +117,7 @@ pub struct AddEventAccessContext<'info> {
         seeds = [b"admin".as_ref(), sub_admin_account.authority.key().as_ref(), sub_admin_account.create_key.key().as_ref()],
         bump  = sub_admin_account.bump
     )]
-    pub sub_admin_account: Box<Account<'info, SubAdmin>>,
+    pub sub_admin_account:Account<'info, SubAdmin>,
 
 
     #[account(mut,

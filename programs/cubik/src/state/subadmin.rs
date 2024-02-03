@@ -9,10 +9,11 @@ pub struct SubAdmin {
     // 3 = admin,
     pub level: u8,
     pub create_key: Pubkey,
-    pub event_access: [Pubkey; 10],
+    #[max_len(10)]
+    pub event_access: Vec<Pubkey>,
     pub bump: u8,
 }
 
-pub fn find_event_key_index(event_access: &[Pubkey], event_key: &Pubkey) -> Option<usize> {
+pub fn find_event_key_index(event_access: Vec<Pubkey>, event_key: &Pubkey) -> Option<usize> {
     event_access.iter().position(|key| key == event_key)
 }

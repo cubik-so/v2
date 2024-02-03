@@ -45,7 +45,7 @@ pub fn update_event_status_handler(
     );
 
     require!(
-        find_event_key_index(&sub_admin_account.event_access,&event_account.key()) != None,
+        find_event_key_index(sub_admin_account.event_access.clone(),&event_account.key()) != None,
         Errors::InvalidAdmin
     );
     event_join_account.status =status;

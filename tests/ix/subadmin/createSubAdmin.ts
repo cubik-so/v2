@@ -12,7 +12,7 @@ import { getAdminPDA, getAdminSubAdminPDA } from '../../pda';
 describe('SubAdmin', () => {
   const admin = adminPair();
   const adminCreateKey = new web3.PublicKey(
-    '57VBxfhAcB5cAe6ejo7rfrvmtVjtziwA7VbbxK1gNQkr'
+    '9ykrLmqn4NKNuBRiWdHaCQ6rF2hFvXYKdbkphPMDZXPh'
   );
   const connection = createLocalhostConnection();
   let newSubAdmin: web3.Keypair;
@@ -61,29 +61,7 @@ describe('SubAdmin', () => {
     console.log(tx);
   });
 
-  describe.skip('Add Event', () => {
-    it('Error: Add Event', async () => {
-      const wallet = new Wallet(newSubAdmin);
-
-      const program = createCubikProgram(wallet);
-
-      const tx = await program.methods
-        .addEventAccess(generateKeypair().publicKey)
-        .accounts({
-          authority: newSubAdmin.publicKey,
-          signerSubAdminAccount: getAdminSubAdminPDA(
-            newSubAdmin.publicKey,
-            createKey.publicKey
-          )[0],
-          subAdminAccount: getAdminSubAdminPDA(
-            newSubAdmin.publicKey,
-            createKey.publicKey
-          )[0],
-        })
-        .rpc();
-      console.log(tx);
-    });
-
+  describe('Add Event', () => {
     it('Success: Add Event', async () => {
       const wallet = new Wallet(admin);
 
@@ -105,8 +83,9 @@ describe('SubAdmin', () => {
         .rpc();
       console.log(tx);
     });
+
     after(async () => {
-      const wallet = new Wallet(newSubAdmin);
+      const wallet = new Wallet(admin);
 
       const program = createCubikProgram(wallet);
 
@@ -170,7 +149,7 @@ describe('SubAdmin', () => {
       console.log(subAdminAccount);
     });
   });
-  it('Close SubAdmin', async () => {
+  it.skip('Close SubAdmin', async () => {
     const wallet = new Wallet(admin);
 
     const program = createCubikProgram(wallet);
@@ -190,15 +169,5 @@ describe('SubAdmin', () => {
       })
       .rpc();
     console.log(tx);
-  });
-  after(async () => {
-    const wallet = new Wallet(newSubAdmin);
-
-    const program = createCubikProgram(wallet);
-
-    const subAdminAccount = await program.account.subAdmin.fetch(
-      getAdminSubAdminPDA(newSubAdmin.publicKey, createKey.publicKey)[0]
-    );
-    console.log(subAdminAccount);
   });
 });

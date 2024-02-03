@@ -1,7 +1,8 @@
 use crate::errors::Errors;
 use crate::event::{NewEvent, UpdateEvent};
+use crate::find_event_key_index;
 use crate::state::{
-     Event, SubAdmin, User,
+     subadmin, Event, SubAdmin, User
 };
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
@@ -11,14 +12,25 @@ pub fn create_event_handler(
     matching_pool: u64,
 ) -> Result<()> {
     let event_account = &mut ctx.accounts.event_account;
+    let subadmin = &mut ctx.accounts.sub_admin_account;
 
     let event_key = ctx.accounts.event_key.key();
 
     event_account.authority = ctx.accounts.authority.key();
     event_account.matching_pool = matching_pool;
     event_account.event_key = event_key;
-   
     
+    // adding event key to subadmin event access
+    let mut new_event_access = subadmin.event_access.clone();
+   match  find_event_key_index(subadmin.event_access.clone(),&event_account.key())
+    {
+        Some(idx) => {
+        },
+        None => {
+            new_event_access.push(event_key);
+            subadmin.event_access = new_event_access;
+        }
+    }
     event_account.bump = ctx.bumps.event_account;
     emit!(NewEvent {
         authority: ctx.accounts.authority.key(),
