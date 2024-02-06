@@ -74,7 +74,9 @@ export const event = (sdk: CubikSDK) => {
         sdk.programId
       );
     },
-
+    getEventJoin: (pda: web3.PublicKey) => {
+      return sdk.program.account.eventJoin.fetch(pda);
+    },
     getEventJoinPDA: (
       eventAccount: web3.PublicKey,
       projectAccount: web3.PublicKey
