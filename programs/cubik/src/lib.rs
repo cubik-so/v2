@@ -55,12 +55,8 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn create_event_join(
-        ctx: Context<CreateEventJoinContext>,
-        counter: u64,
-        event_key: Pubkey,
-    ) -> Result<()> {
-        create_event_join_handler(ctx, counter, event_key)?;
+    pub fn create_event_join(ctx: Context<CreateEventJoinContext>) -> Result<()> {
+        create_event_join_handler(ctx)?;
         Ok(())
     }
 
@@ -112,15 +108,12 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn add_event_access(ctx: Context<AddEventAccessContext>, event_key: Pubkey) -> Result<()> {
-        add_event_access_handler(ctx, event_key)?;
+    pub fn add_event_access(ctx: Context<AddEventAccessContext>) -> Result<()> {
+        add_event_access_handler(ctx)?;
         Ok(())
     }
-    pub fn remove_event_access(
-        ctx: Context<RemoveEventAccessContext>,
-        event_key: Pubkey,
-    ) -> Result<()> {
-        remove_event_access_handler(ctx, event_key)?;
+    pub fn remove_event_access(ctx: Context<RemoveEventAccessContext>) -> Result<()> {
+        remove_event_access_handler(ctx)?;
         Ok(())
     }
 

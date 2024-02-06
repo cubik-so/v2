@@ -9,8 +9,6 @@ use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 
 pub fn create_event_join_handler(
     ctx: Context<CreateEventJoinContext>,
-    counter: u64,
-    event_key: Pubkey,
 ) -> Result<()> {
     let event_join_account = &mut ctx.accounts.event_join_account;
     let event_account = &mut ctx.accounts.event_account;
@@ -85,7 +83,6 @@ pub struct CreateEventJoinContext<'info> {
 #[derive(Accounts)]
 pub struct UpdateEventJoinStatusContext<'info> {
     #[account(mut,
-        constraint = authority.key() == event_join_account.authority.key() @ Errors::InvalidSigner,
         constraint = sub_admin_account.level > 0 @Errors::InvalidAdmin,
     )]
     pub authority: Signer<'info>,

@@ -29,13 +29,12 @@ pub fn close_sub_admin_handler(
 
 pub fn add_event_access_handler(
     ctx: Context<AddEventAccessContext>,
-    event_key: Pubkey,
 ) -> Result<()> {
 
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
-
+    let event_account = &ctx.accounts.event_account;
         let mut new_event_access = sub_admin_account.event_access.clone();
-        new_event_access.push(event_key);
+        new_event_access.push(event_account.key());
         msg!("Event Access Added {:?}",new_event_access);
         sub_admin_account.event_access = new_event_access;
 
@@ -45,13 +44,12 @@ pub fn add_event_access_handler(
 
 pub fn remove_event_access_handler(
     ctx: Context<RemoveEventAccessContext>,
-    event_key: Pubkey,
 ) -> Result<()> {
 
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
+     let event_account = &ctx.accounts.event_account;
 
-
-    match find_event_key_index(sub_admin_account.event_access.clone(), &event_key) {
+    match find_event_key_index(sub_admin_account.event_access.clone(), &event_account.key()) {
         Some(idx) => {
             let mut event_access_clone = sub_admin_account.event_access.clone();
             event_access_clone.remove(idx);
@@ -128,6 +126,12 @@ pub struct AddEventAccessContext<'info> {
         bump = signer_sub_admin_account.bump 
     )]
     pub signer_sub_admin_account: Box<Account<'info, SubAdmin>>,
+
+        #[account(mut,
+        seeds = [b"event".as_ref(),event_account.event_key.as_ref()],
+        bump = event_account.bump
+    )]
+    pub event_account: Box<Account<'info , Event>>,
     
     // Misc Accounts
     #[account(address = system_program::ID)]
@@ -157,6 +161,12 @@ pub struct RemoveEventAccessContext<'info> {
         bump = signer_sub_admin_account.bump 
     )]
     pub signer_sub_admin_account: Box<Account<'info, SubAdmin>>,
+
+    #[account(mut,
+        seeds = [b"event".as_ref(),event_account.event_key.as_ref()],
+        bump = event_account.bump
+    )]
+    pub event_account: Box<Account<'info , Event>>,
 
      // Misc Accounts
     #[account(address = system_program::ID)]

@@ -27,7 +27,7 @@ pub fn create_event_handler(
         Some(idx) => {
         },
         None => {
-            new_event_access.push(event_key);
+            new_event_access.push(event_account.key());
             subadmin.event_access = new_event_access;
         }
     }

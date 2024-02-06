@@ -14,6 +14,6 @@ pub struct SubAdmin {
     pub bump: u8,
 }
 
-pub fn find_event_key_index(event_access: Vec<Pubkey>, event_key: &Pubkey) -> Option<usize> {
-    event_access.iter().position(|key| key == event_key)
+pub fn find_event_key_index(event_access: Vec<Pubkey>, event_account: &Pubkey) -> Option<usize> {
+    event_access.iter().position(|key| key == event_account)
 }
