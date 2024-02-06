@@ -1,4 +1,4 @@
-import { web3 } from "@coral-xyz/anchor";
+import { web3 } from '@coral-xyz/anchor';
 
 /**
  * @name SubAdminPermission
@@ -59,25 +59,19 @@ export type CloseSubAdminContext = {
   rent: web3.PublicKey;
 };
 
-export type AddEventAccessArgs = {
-  eventKey: web3.PublicKey;
-};
-
 export type AddEventAccessAccounts = {
   authority: web3.PublicKey;
   subAdminAccount: web3.PublicKey;
+  eventAccount: web3.PublicKey;
   signerSubAdminAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;
 };
 
-export type RemoveEventAccessArgs = {
-  eventKey: web3.PublicKey;
-};
-
 export type RemoveEventAccessAccounts = {
   authority: web3.PublicKey;
   subAdminAccount: web3.PublicKey;
+  eventAccount: web3.PublicKey;
   signerSubAdminAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
   rent: web3.PublicKey;

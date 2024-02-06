@@ -4,7 +4,6 @@ import {
   CreateEventAccounts,
   CreateEventHandlerArgs,
   CreateEventJoinAccounts,
-  CreateEventJoinHandlerArgs,
   InviteEventJoinAccounts,
   UpdateEventAccounts,
   UpdateEventArgs,
@@ -26,12 +25,9 @@ export const event = (sdk: CubikSDK) => {
       return ix;
     },
 
-    createEventJoin: async (
-      args: CreateEventJoinHandlerArgs,
-      accounts: CreateEventJoinAccounts
-    ) => {
+    createEventJoin: async (accounts: CreateEventJoinAccounts) => {
       const ix = await sdk.program.methods
-        .createEventJoin(args.counter, args.eventKey)
+        .createEventJoin()
         .accounts(accounts)
         .instruction();
 

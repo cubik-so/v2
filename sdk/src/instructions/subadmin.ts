@@ -2,12 +2,10 @@ import { web3 } from '@coral-xyz/anchor';
 import { CubikSDK } from '..';
 import {
   AddEventAccessAccounts,
-  AddEventAccessArgs,
   CloseSubAdminContext,
   CreateSubAdminContext,
   CreateSubAdminHandlerArgs,
   RemoveEventAccessAccounts,
-  RemoveEventAccessArgs,
 } from '../types';
 
 export const subAdmin = (sdk: CubikSDK) => {
@@ -36,24 +34,18 @@ export const subAdmin = (sdk: CubikSDK) => {
       return ix;
     },
 
-    addEventAccess: async (
-      args: AddEventAccessArgs,
-      accounts: AddEventAccessAccounts
-    ) => {
+    addEventAccess: async (accounts: AddEventAccessAccounts) => {
       const ix = await sdk.program.methods
-        .addEventAccess(args.eventKey)
+        .addEventAccess()
         .accounts(accounts)
         .instruction();
 
       return ix;
     },
 
-    removeEventAccess: async (
-      args: RemoveEventAccessArgs,
-      accounts: RemoveEventAccessAccounts
-    ) => {
+    removeEventAccess: async (accounts: RemoveEventAccessAccounts) => {
       const ix = await sdk.program.methods
-        .removeEventAccess(args.eventKey)
+        .removeEventAccess()
         .accounts(accounts)
         .instruction();
 

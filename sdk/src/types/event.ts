@@ -30,17 +30,6 @@ export type CreateEventAccounts = {
 };
 
 /**
- * @name CreateEventJoinHandlerArgs
- * @description The arguments required to create an event join.
- * @property counter - The counter for the event join.
- * @property eventKey - The public key of the event.
- */
-export type CreateEventJoinHandlerArgs = {
-  counter: BN;
-  eventKey: web3.PublicKey;
-};
-
-/**
  * @name CreateEventJoinAccounts
  * @description The accounts required for creating an event join.
  * @property authority - The public key of the authority executing the action.
