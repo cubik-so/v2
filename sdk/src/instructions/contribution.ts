@@ -1,16 +1,16 @@
-import { CubikSDK } from "..";
+import { CubikSDK } from '..';
 import {
   ContributionSolAccounts,
   ContributionSolArgs,
   ContributionSplAccounts,
   ContributionSplArgs,
-} from "../types";
+} from '../types';
 
 export const contribution = (sdk: CubikSDK) => {
   return {
-    solHandler: async (
+    sol: async (
       args: ContributionSolArgs,
-      accounts: ContributionSolAccounts,
+      accounts: ContributionSolAccounts
     ) => {
       const ix = await sdk.program.methods
         .contributionSol(args.amount, args.split)
@@ -19,9 +19,9 @@ export const contribution = (sdk: CubikSDK) => {
 
       return ix;
     },
-    splHandler: async (
+    spl: async (
       args: ContributionSplArgs,
-      accounts: ContributionSplAccounts,
+      accounts: ContributionSplAccounts
     ) => {
       const ix = await sdk.program.methods
         .contributionSpl(args.amount, args.split)

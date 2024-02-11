@@ -14,13 +14,14 @@ pub fn contribution_spl_handler(
 ) -> Result<()> {
     let event_join = &mut ctx.accounts.event_join_account.clone();
     let project_account = &ctx.accounts.project_account.clone();
+
     require!(
-        event_join.status != EventProjectStatus::Approved,
+        event_join.status == EventProjectStatus::Approved,
         Errors::InvalidProjectVerification
     );
 
     require!(
-        project_account.status != ProjectVerification::Verified,
+        project_account.status == ProjectVerification::Verified,
         Errors::InvalidProjectVerification
     );
 
@@ -57,6 +58,17 @@ pub fn contribution_sol_handler(
     split: u64,
 ) -> Result<()> {
     let project_account = &ctx.accounts.project_account;
+    let event_join = &mut ctx.accounts.event_join_account;
+
+    require!(
+        event_join.status == EventProjectStatus::Approved,
+        Errors::InvalidProjectVerification
+    );
+
+    require!(
+        project_account.status == ProjectVerification::Verified,
+        Errors::InvalidProjectVerification
+    );
     let receiver = &ctx.accounts.receiver;
     let transfer_instruction = system_instruction::transfer(
         ctx.accounts.authority.key,
@@ -168,8 +180,7 @@ pub struct ContributionSOL<'info> {
 
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
-    #[account(address = token::ID)]
-    pub token_program: Program<'info, Token>,
+
     #[account(address = solana_program::sysvar::rent::ID)]
     pub rent: Sysvar<'info, Rent>,
 }

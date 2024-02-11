@@ -1,4 +1,4 @@
-import { BN, web3 } from "@coral-xyz/anchor";
+import { BN, web3 } from '@coral-xyz/anchor';
 
 /**
  * @name ContributionSolArgs
@@ -25,7 +25,6 @@ export type ContributionSolAccounts = {
   eventAccount: web3.PublicKey;
   eventJoinAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  tokenProgram: web3.PublicKey;
   rent: web3.PublicKey;
   userAccount: web3.PublicKey;
 };

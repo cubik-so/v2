@@ -1,5 +1,4 @@
 pub mod admin;
-pub mod contribution;
 pub mod event;
 pub mod event_join;
 pub mod project;

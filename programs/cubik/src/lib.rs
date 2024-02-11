@@ -60,8 +60,12 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn create_event(ctx: Context<CreateEventContext>, matching_pool: u64) -> Result<()> {
-        create_event_handler(ctx, matching_pool)?;
+    pub fn create_event(
+        ctx: Context<CreateEventContext>,
+        matching_pool: u64,
+        event_admin_signer: Pubkey,
+    ) -> Result<()> {
+        create_event_handler(ctx, matching_pool, event_admin_signer)?;
         Ok(())
     }
 
@@ -208,15 +212,6 @@ pub mod cubik {
     }
     pub fn contribution_spl(ctx: Context<ContributionSPL>, amount: u64, split: u64) -> Result<()> {
         contribution_spl_handler(ctx, amount, split)?;
-        Ok(())
-    }
-
-    pub fn create_admin_vault(
-        ctx: Context<CreateAdminVaultContext>,
-        members_keys: Vec<Pubkey>,
-        memo: Option<String>,
-    ) -> Result<()> {
-        create_admin_vault_handler(ctx, members_keys, memo)?;
         Ok(())
     }
 }

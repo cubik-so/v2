@@ -10,7 +10,7 @@ pub fn create_user_handler(
 ) -> Result<()> {
     require!(username.len() <= 32, Errors::MaxLengthExceeded);
 
-    let user_account: &mut Account<'_, User> = &mut ctx.accounts.user_account;
+    let user_account = &mut ctx.accounts.user_account;
     
     user_account.authority = ctx.accounts.authority.key();
 

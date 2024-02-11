@@ -2,7 +2,7 @@ use crate::errors::Errors;
 use crate::event::{NewEvent, UpdateEvent};
 use crate::find_event_key_index;
 use crate::state::{
-     subadmin, Event, SubAdmin, User
+    Event, SubAdmin, User
 };
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
@@ -10,6 +10,7 @@ use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 pub fn create_event_handler(
     ctx: Context<CreateEventContext>,
     matching_pool: u64,
+    event_admin_signer: Pubkey,
 ) -> Result<()> {
     let event_account = &mut ctx.accounts.event_account;
     let subadmin = &mut ctx.accounts.sub_admin_account;
@@ -18,11 +19,11 @@ pub fn create_event_handler(
 
     event_account.authority = ctx.accounts.authority.key();
     event_account.matching_pool = matching_pool;
+    event_account.event_admin_signer = event_admin_signer;
     event_account.event_key = event_key;
     
-    // adding event key to subadmin event access
     let mut new_event_access = subadmin.event_access.clone();
-   match  find_event_key_index(subadmin.event_access.clone(),&event_account.key())
+   match find_event_key_index(subadmin.event_access.clone(),&event_account.key())
     {
         Some(idx) => {
         },

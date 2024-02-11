@@ -7,6 +7,7 @@ import { BN, web3 } from '@coral-xyz/anchor';
  */
 export type CreateEventHandlerArgs = {
   matchingPool: BN;
+  event_admin_signer: web3.PublicKey;
 };
 
 /**

@@ -18,7 +18,7 @@ export const event = (sdk: CubikSDK) => {
       accounts: CreateEventAccounts
     ) => {
       const ix = await sdk.program.methods
-        .createEvent(args.matchingPool)
+        .createEvent(args.matchingPool, args.event_admin_signer)
         .accounts(accounts)
         .instruction();
 
@@ -76,6 +76,10 @@ export const event = (sdk: CubikSDK) => {
     },
     getEventJoin: (pda: web3.PublicKey) => {
       return sdk.program.account.eventJoin.fetch(pda);
+    },
+
+    get: (pda: web3.PublicKey) => {
+      return sdk.program.account.event.fetch(pda);
     },
     getEventJoinPDA: (
       eventAccount: web3.PublicKey,
