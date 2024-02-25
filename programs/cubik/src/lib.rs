@@ -7,8 +7,8 @@ use instructions::*;
 pub mod state;
 use state::*;
 
-// declare_id!("GsKHdvSBodD3ZGMAMWZ6sSwNZAixsE6XZ4xKA4KyEwc");
-declare_id!("CUbkXMRWxumGzDwf43ysyFm3da77JRuUqLF1bmW4tGoZ");
+declare_id!("GsKHdvSBodD3ZGMAMWZ6sSwNZAixsE6XZ4xKA4KyEwc");
+// declare_id!("CUbkXMRWxumGzDwf43ysyFm3da77JRuUqLF1bmW4tGoZ");
 
 #[program]
 pub mod cubik {
@@ -205,12 +205,12 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn contribution_sol(ctx: Context<ContributionSOL>, amount: u64, split: u64) -> Result<()> {
-        contribution_sol_handler(ctx, amount, split)?;
+    pub fn contribution_sol(ctx: Context<ContributionSOL>, amount: u64) -> Result<()> {
+        contribution_sol_handler(ctx, amount)?;
         Ok(())
     }
-    pub fn contribution_spl(ctx: Context<ContributionSPL>, amount: u64, split: u64) -> Result<()> {
-        contribution_spl_handler(ctx, amount, split)?;
+    pub fn contribution_spl(ctx: Context<ContributionSPL>, amount: u64) -> Result<()> {
+        contribution_spl_handler(ctx, amount)?;
         Ok(())
     }
 }

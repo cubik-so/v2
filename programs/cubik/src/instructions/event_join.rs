@@ -38,7 +38,7 @@ pub fn update_event_status_handler(
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
 
     require!(
-        project_account.status != ProjectVerification::VerificationFailed,
+        project_account.status == ProjectVerification::Verified,
         Errors::InvalidProjectVerification
     );
 
