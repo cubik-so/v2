@@ -1,5 +1,5 @@
-import { web3 } from '@coral-xyz/anchor';
-import { CubikSDK } from '..';
+import { web3 } from "@coral-xyz/anchor";
+import { CubikSDK } from "..";
 import {
   CreateEventAccounts,
   CreateEventHandlerArgs,
@@ -9,7 +9,7 @@ import {
   UpdateEventArgs,
   UpdateEventStatusAccounts,
   UpdateEventStatusArgs,
-} from '../types';
+} from "../types";
 
 export const event = (sdk: CubikSDK) => {
   return {
@@ -70,7 +70,7 @@ export const event = (sdk: CubikSDK) => {
 
     getPDA: (eventKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from('event'), eventKey.toBuffer()],
+        [Buffer.from("event"), eventKey.toBuffer()],
         sdk.programId
       );
     },
@@ -87,7 +87,7 @@ export const event = (sdk: CubikSDK) => {
     ) => {
       return web3.PublicKey.findProgramAddressSync(
         [
-          Buffer.from('event_join'),
+          Buffer.from("event_join"),
           eventAccount.toBuffer(),
           projectAccount.toBuffer(),
         ],

@@ -1,4 +1,4 @@
-import { CubikSDK } from '..';
+import { CubikSDK } from "..";
 import {
   AddMemberSponsorArgs,
   FundSponsorSOLArgs,
@@ -12,8 +12,8 @@ import {
   InitSponsorWithoutSelfCustodyAccounts,
   InitCubikSponsorArgs,
   InitCubikSponsorAccounts,
-} from '../types';
-import { web3 } from '@coral-xyz/anchor';
+} from "../types";
+import { web3 } from "@coral-xyz/anchor";
 
 export const sponsor = (sdk: CubikSDK) => {
   return {
@@ -119,20 +119,20 @@ export const sponsor = (sdk: CubikSDK) => {
     },
     getPDA: (createKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from('sponsor'), createKey.toBuffer()],
+        [Buffer.from("sponsor"), createKey.toBuffer()],
         sdk.programId
       );
     },
     getCubikSponsorPDA: (eventKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from('sponsor'), eventKey.toBuffer()],
+        [Buffer.from("sponsor"), eventKey.toBuffer()],
         sdk.programId
       );
     },
 
     getTeamPDA: (createKey: web3.PublicKey, authority: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from('sponsor'), createKey.toBuffer(), authority.toBuffer()],
+        [Buffer.from("sponsor"), createKey.toBuffer(), authority.toBuffer()],
         sdk.programId
       );
     },

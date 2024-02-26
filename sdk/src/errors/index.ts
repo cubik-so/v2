@@ -31,7 +31,7 @@ export class MaxLengthExceededError extends Error {
 createErrorFromCodeLookup.set(0x1770, () => new MaxLengthExceededError());
 createErrorFromNameLookup.set(
   "MaxLengthExceeded",
-  () => new MaxLengthExceededError(),
+  () => new MaxLengthExceededError()
 );
 
 /**
@@ -73,11 +73,11 @@ export class InvalidProjectVerificationError extends Error {
 
 createErrorFromCodeLookup.set(
   0x1772,
-  () => new InvalidProjectVerificationError(),
+  () => new InvalidProjectVerificationError()
 );
 createErrorFromNameLookup.set(
   "InvalidProjectVerification",
-  () => new InvalidProjectVerificationError(),
+  () => new InvalidProjectVerificationError()
 );
 
 /**

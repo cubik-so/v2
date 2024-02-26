@@ -1,12 +1,12 @@
-import { web3 } from '@coral-xyz/anchor';
-import { CubikSDK } from '..';
+import { web3 } from "@coral-xyz/anchor";
+import { CubikSDK } from "..";
 import {
   AddEventAccessAccounts,
   CloseSubAdminContext,
   CreateSubAdminContext,
   CreateSubAdminHandlerArgs,
   RemoveEventAccessAccounts,
-} from '../types';
+} from "../types";
 
 export const subAdmin = (sdk: CubikSDK) => {
   return {
@@ -54,7 +54,7 @@ export const subAdmin = (sdk: CubikSDK) => {
 
     getPDA: (subAdmin: web3.PublicKey, createKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from('admin'), subAdmin.toBuffer(), createKey.toBuffer()],
+        [Buffer.from("admin"), subAdmin.toBuffer(), createKey.toBuffer()],
         sdk.programId
       );
     },

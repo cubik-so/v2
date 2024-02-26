@@ -1,13 +1,14 @@
 use std::vec;
 
 use crate::errors::Errors;
-use crate::event::{ NewProject, UpdateProjectStatus};
-use crate::state::{
-    Project, ProjectVerification, User, SubAdmin,
-};
+use crate::event::{NewProject, UpdateProjectStatus};
+use crate::state::{Project, ProjectVerification, SubAdmin, User};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
-use squads_multisig_program::{Member, Permission, Permissions, SEED_PREFIX, SEED_VAULT};
+use squads_multisig_program::state::ProgramConfig;
+use squads_multisig_program::{
+    Member, Permission, Permissions, SEED_PREFIX, SEED_PROGRAM_CONFIG, SEED_VAULT,
+};
 
 pub fn create_project_handler(
     ctx: Context<CreateProjectContext>,
@@ -18,26 +19,28 @@ pub fn create_project_handler(
     time_lock: u32,
     memo: Option<String>,
 ) -> Result<()> {
-
     let project_account = &mut ctx.accounts.project_account;
     let user_account = &mut ctx.accounts.user_account;
 
-    let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreate {
+    let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreateV2 {
+        program_config: ctx.accounts.program_config_pda.to_account_info(),
+        treasury: ctx.accounts.treasury.to_account_info(),
         create_key: ctx.accounts.create_key.to_account_info(), // this is example
         creator: ctx.accounts.owner.to_account_info(),
         multisig: ctx.accounts.multisig.to_account_info(),
         system_program: ctx.accounts.system_program.to_account_info(),
     };
 
-
-         let (vault_pubkey, _vault_bump_seed) = Pubkey::find_program_address(&[
+    let (vault_pubkey, _vault_bump_seed) = Pubkey::find_program_address(
+        &[
             SEED_PREFIX,
             &ctx.accounts.multisig.key().to_bytes(),
             SEED_VAULT,
             &[0],
-        ], &squads_multisig_program::ID);
+        ],
+        &squads_multisig_program::ID,
+    );
 
-        
     let cpi_ctx_squads = CpiContext::new(
         ctx.accounts.squads_program.to_account_info(),
         create_multisig,
@@ -54,23 +57,24 @@ pub fn create_project_handler(
         })
         .collect();
 
-    squads_multisig_program::cpi::multisig_create(
+    squads_multisig_program::cpi::multisig_create_v2(
         cpi_ctx_squads,
-        squads_multisig_program::MultisigCreateArgs {
+        squads_multisig_program::MultisigCreateArgsV2 {
             config_authority,
             members,
             memo,
             threshold,
             time_lock,
+            rent_collector: None,
         },
     )?;
-    
+
     project_account.owner = user_account.authority.key();
     project_account.status = ProjectVerification::UnderReview;
     project_account.create_key = ctx.accounts.create_key.key();
     project_account.counter = counter;
     project_account.multisig = ctx.accounts.multisig.key();
-    project_account.vault_pubkey = vault_pubkey.key()   ;
+    project_account.vault_pubkey = vault_pubkey.key();
     project_account.bump = ctx.bumps.project_account;
 
     emit!(NewProject {
@@ -83,7 +87,7 @@ pub fn create_project_handler(
 
 pub fn project_status_handler(
     ctx: Context<UpdateProjectStatusContext>,
-    status:ProjectVerification,
+    status: ProjectVerification,
 ) -> Result<()> {
     let project_account = &mut ctx.accounts.project_account;
 
@@ -96,26 +100,18 @@ pub fn project_status_handler(
     Ok(())
 }
 
-
-
-
-pub fn transfer_project_handler(ctx: Context<TransferProjectContext>
-)-> Result<()>{
-
+pub fn transfer_project_handler(ctx: Context<TransferProjectContext>) -> Result<()> {
     let project_account = &mut ctx.accounts.project_account;
     let transfer_account = &mut ctx.accounts.transfer_user_account;
     project_account.owner = transfer_account.authority;
     Ok(())
 }
-pub fn close_project_handler(_ctx: Context<CloseProjectContext>
-)-> Result<()>{
-    
+pub fn close_project_handler(_ctx: Context<CloseProjectContext>) -> Result<()> {
     Ok(())
 }
 
-
 #[derive(Accounts)]
-#[instruction( 
+#[instruction(
     counter: u64,
     // multi_sig: Pubkey,
     // metadata: String,
@@ -145,6 +141,13 @@ pub struct CreateProjectContext<'info> {
     )]
     pub user_account: Box<Account<'info, User>>,
 
+    #[account(seeds = [SEED_PREFIX, SEED_PROGRAM_CONFIG], bump)]
+    pub program_config_pda: Account<'info, ProgramConfig>,
+
+    /// CHECK: This is a program config treasury account
+    #[account(mut)]
+    pub treasury: AccountInfo<'info>,
+
     /// CHECK: This is a CPI account
     #[account(mut)]
     pub multisig: UncheckedAccount<'info>,
@@ -160,7 +163,6 @@ pub struct CreateProjectContext<'info> {
 
 #[derive(Accounts)]
 pub struct UpdateProjectStatusContext<'info> {
-
     #[account(mut,
         constraint = authority.key() == sub_admin_account.authority.key() @ Errors::InvalidSigner,
         constraint = sub_admin_account.level > 1 @ Errors::InvalidAdmin
@@ -186,10 +188,8 @@ pub struct UpdateProjectStatusContext<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-
 #[derive(Accounts)]
-pub struct  TransferProjectContext<'info>{
-
+pub struct TransferProjectContext<'info> {
     #[account(mut,constraint = authority.key() == project_account.owner.key() @ Errors::InvalidSigner)]
     pub authority: Signer<'info>,
 
@@ -210,13 +210,10 @@ pub struct  TransferProjectContext<'info>{
     pub system_program: Program<'info, System>,
     #[account(address = solana_program::sysvar::rent::ID)]
     pub rent: Sysvar<'info, Rent>,
-
 }
 
-
 #[derive(Accounts)]
-pub struct  CloseProjectContext<'info>{
-
+pub struct CloseProjectContext<'info> {
     #[account(mut,constraint = authority.key() == project_account.owner.key() @ Errors::InvalidSigner)]
     pub authority: Signer<'info>,
 

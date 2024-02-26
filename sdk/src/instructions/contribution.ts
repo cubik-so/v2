@@ -1,10 +1,10 @@
-import { CubikSDK } from '..';
+import { CubikSDK } from "..";
 import {
   ContributionSolAccounts,
   ContributionSolArgs,
   ContributionSplAccounts,
   ContributionSplArgs,
-} from '../types';
+} from "../types";
 
 export const contribution = (sdk: CubikSDK) => {
   return {
