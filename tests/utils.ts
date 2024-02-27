@@ -4,46 +4,46 @@ import {
   Wallet,
   utils,
   web3,
-} from "@coral-xyz/anchor";
-import { readFileSync } from "fs";
-import path from "path";
-import { Cubik, IDL } from "../target/types/cubik";
-import * as beet from "@metaplex-foundation/beet";
-import * as beetSolana from "@metaplex-foundation/beet-solana";
+} from '@coral-xyz/anchor';
+import { readFileSync } from 'fs';
+import path from 'path';
+import { Cubik, IDL } from '../target/types/cubik';
+import * as beet from '@metaplex-foundation/beet';
+import * as beetSolana from '@metaplex-foundation/beet-solana';
 import {
   Connection,
   LAMPORTS_PER_SOL,
   PublicKey,
   Transaction,
   SystemProgram,
-} from "@solana/web3.js";
+} from '@solana/web3.js';
 
 export const PROGRAM_ID = new web3.PublicKey(
-  "GsKHdvSBodD3ZGMAMWZ6sSwNZAixsE6XZ4xKA4KyEwc",
+  '4GgcGdn4mVtudPoX3a4xYv62ed4GKbuqn1AcxU5tU4SD'
 );
 
 export function createDevnetConnection() {
-  return new web3.Connection("https://api.devnet.solana.com", "confirmed");
+  return new web3.Connection('https://api.devnet.solana.com', 'confirmed');
 }
 
 export const SQUADS_PROGRAM_ID = new web3.PublicKey(
-  "SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf",
+  'SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf'
 );
 
 function toUtfBytes(str: string): Uint8Array {
   return new TextEncoder().encode(str);
 }
-export const SEED_PREFIX = toUtfBytes("multisig");
-export const SEED_MULTISIG = toUtfBytes("multisig");
-const SEED_PROGRAM_CONFIG = toUtfBytes("program_config");
+export const SEED_PREFIX = toUtfBytes('multisig');
+export const SEED_MULTISIG = toUtfBytes('multisig');
+const SEED_PROGRAM_CONFIG = toUtfBytes('program_config');
 
 export const createCubikProgram = (wallet: Wallet): Program<Cubik> => {
   return new Program(
     IDL,
     PROGRAM_ID,
     new AnchorProvider(createDevnetConnection(), wallet, {
-      commitment: "confirmed",
-    }),
+      commitment: 'confirmed',
+    })
   ) as unknown as Program<Cubik>;
 };
 
@@ -54,7 +54,7 @@ export function getProgramConfigPda({
 }): [web3.PublicKey, number] {
   return web3.PublicKey.findProgramAddressSync(
     [SEED_PREFIX, SEED_PROGRAM_CONFIG],
-    SQUADS_PROGRAM_ID,
+    SQUADS_PROGRAM_ID
   );
 }
 
@@ -74,12 +74,12 @@ export class ProgramConfig implements ProgramConfigArgs {
     readonly authority: web3.PublicKey,
     readonly multisigCreationFee: beet.bignum,
     readonly treasury: web3.PublicKey,
-    readonly reserved: number[] /* size: 64 */,
+    readonly reserved: number[] /* size: 64 */
   ) {}
 
   static fromAccountInfo(
     accountInfo: web3.AccountInfo<Buffer>,
-    offset = 0,
+    offset = 0
   ): [ProgramConfig, number] {
     return ProgramConfig.deserialize(accountInfo.data, offset);
   }
@@ -108,7 +108,7 @@ export class ProgramConfig implements ProgramConfigArgs {
       args.authority,
       args.multisigCreationFee,
       args.treasury,
-      args.reserved,
+      args.reserved
     );
   }
 
@@ -121,11 +121,11 @@ export class ProgramConfig implements ProgramConfigArgs {
   static async fromAccountAddress(
     connection: web3.Connection,
     address: web3.PublicKey,
-    commitmentOrConfig?: web3.Commitment | web3.GetAccountInfoConfig,
+    commitmentOrConfig?: web3.Commitment | web3.GetAccountInfoConfig
   ): Promise<ProgramConfig> {
     const accountInfo = await connection.getAccountInfo(
       address,
-      commitmentOrConfig,
+      commitmentOrConfig
     );
     if (accountInfo == null) {
       throw new Error(`Unable to find ProgramConfig account at ${address}`);
@@ -140,14 +140,14 @@ export const programConfigBeet = new beet.BeetStruct<
   }
 >(
   [
-    ["accountDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
-    ["authority", beetSolana.publicKey],
-    ["multisigCreationFee", beet.u64],
-    ["treasury", beetSolana.publicKey],
-    ["reserved", beet.uniformFixedSizeArray(beet.u8, 64)],
+    ['accountDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
+    ['authority', beetSolana.publicKey],
+    ['multisigCreationFee', beet.u64],
+    ['treasury', beetSolana.publicKey],
+    ['reserved', beet.uniformFixedSizeArray(beet.u8, 64)],
   ],
   ProgramConfig.fromArgs,
-  "ProgramConfig",
+  'ProgramConfig'
 );
 
 export function generateKeypair() {
@@ -157,15 +157,15 @@ export function generateKeypair() {
 const adminKeypair = web3.Keypair.fromSecretKey(
   Buffer.from(
     JSON.parse(
-      readFileSync(path.join(__dirname, "./test-admin-keypair.json"), "utf-8"),
-    ),
-  ),
+      readFileSync(path.join(__dirname, './test-admin-keypair.json'), 'utf-8')
+    )
+  )
 );
 
 export async function airdrop(
   connection: Connection,
   to: PublicKey,
-  amount?: number,
+  amount?: number
 ) {
   // transfer from the default account to the new account
   const tx = new Transaction().add(
@@ -173,7 +173,7 @@ export async function airdrop(
       fromPubkey: new PublicKey(adminKeypair.publicKey),
       toPubkey: to,
       lamports: amount || LAMPORTS_PER_SOL * 0.01,
-    }),
+    })
   );
 
   tx.feePayer = adminKeypair.publicKey;
@@ -185,14 +185,14 @@ export async function airdrop(
 
 export async function generateFundedKeypair(connection: web3.Connection) {
   const keypair = web3.Keypair.generate();
-  await airdrop(connection, keypair.publicKey, LAMPORTS_PER_SOL * 1);
+  await airdrop(connection, keypair.publicKey, LAMPORTS_PER_SOL * 0.1);
   return keypair;
 }
 
 export const adminPair = () => {
   // return generateFundedKeypair(createLocalhostConnection());
-  console.log("KP", process.env.KP);
+  console.log('KP', process.env.KP);
   return web3.Keypair.fromSecretKey(
-    utils.bytes.bs58.decode(process.env.KP || ""),
+    utils.bytes.bs58.decode(process.env.KP || '')
   );
 };

@@ -25,7 +25,7 @@ pub fn create_project_handler(
     let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreateV2 {
         program_config: ctx.accounts.program_config_pda.to_account_info(),
         treasury: ctx.accounts.treasury.to_account_info(),
-        create_key: ctx.accounts.create_key.to_account_info(), // this is example
+        create_key: ctx.accounts.create_key.to_account_info(),
         creator: ctx.accounts.owner.to_account_info(),
         multisig: ctx.accounts.multisig.to_account_info(),
         system_program: ctx.accounts.system_program.to_account_info(),
@@ -113,13 +113,6 @@ pub fn close_project_handler(_ctx: Context<CloseProjectContext>) -> Result<()> {
 #[derive(Accounts)]
 #[instruction(
     counter: u64,
-    // multi_sig: Pubkey,
-    // metadata: String,
-    // members: Vec<Member>,
-    // threshold: u16,
-    // config_authority: Option<Pubkey>,
-    // time_lock: u32,
-    // memo: Option<String>
 )]
 pub struct CreateProjectContext<'info> {
     #[account(mut)]
@@ -141,8 +134,9 @@ pub struct CreateProjectContext<'info> {
     )]
     pub user_account: Box<Account<'info, User>>,
 
-    #[account(seeds = [SEED_PREFIX, SEED_PROGRAM_CONFIG], bump)]
-    pub program_config_pda: Account<'info, ProgramConfig>,
+    /// CHECK: This is a program config treasury account
+    #[account(mut)]
+    pub program_config_pda: UncheckedAccount<'info>,
 
     /// CHECK: This is a program config treasury account
     #[account(mut)]
