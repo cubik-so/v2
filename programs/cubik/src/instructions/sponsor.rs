@@ -19,7 +19,9 @@ pub fn init_sponsor_with_self_custody_handler(
     let sponsor_account = &mut ctx.accounts.sponsor_account;
     let sponsor_team_account = &mut ctx.accounts.sponsor_team_account;
 
-    let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreate {
+    let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreateV2 {
+        program_config: ctx.accounts.program_config_pda.to_account_info(),
+        treasury: ctx.accounts.treasury.to_account_info(),
         create_key: ctx.accounts.create_key.to_account_info(), // this is example
         creator: ctx.accounts.authority.to_account_info(),
         multisig: ctx.accounts.multisig.to_account_info(),
@@ -50,14 +52,15 @@ pub fn init_sponsor_with_self_custody_handler(
         })
         .collect();
 
-    squads_multisig_program::cpi::multisig_create(
+    squads_multisig_program::cpi::multisig_create_v2(
         cpi_ctx_squads,
-        squads_multisig_program::MultisigCreateArgs {
+        squads_multisig_program::MultisigCreateArgsV2 {
             config_authority,
             members,
             memo,
             threshold,
             time_lock,
+            rent_collector: None,
         },
     )?;
     // sponsor account
@@ -121,7 +124,9 @@ pub fn init_cubik_sponsor_handler(
     let sponsor_account = &mut ctx.accounts.sponsor_account;
     let sponsor_team_account = &mut ctx.accounts.sponsor_team_account;
 
-    let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreate {
+    let create_multisig = squads_multisig_program::cpi::accounts::MultisigCreateV2 {
+        program_config: ctx.accounts.program_config_pda.to_account_info(),
+        treasury: ctx.accounts.treasury.to_account_info(),
         create_key: ctx.accounts.create_key.to_account_info(), // this is example
         creator: ctx.accounts.authority.to_account_info(),
         multisig: ctx.accounts.multisig.to_account_info(),
@@ -152,14 +157,15 @@ pub fn init_cubik_sponsor_handler(
         })
         .collect();
 
-    squads_multisig_program::cpi::multisig_create(
+    squads_multisig_program::cpi::multisig_create_v2(
         cpi_ctx_squads,
-        squads_multisig_program::MultisigCreateArgs {
+        squads_multisig_program::MultisigCreateArgsV2 {
             config_authority,
             members,
             memo,
             threshold,
             time_lock,
+            rent_collector: None,
         },
     )?;
     // sponsor account
@@ -335,6 +341,14 @@ pub struct InitSponsorWithSelfCustodyContext<'info> {
     )]
     pub event_account: Box<Account<'info, Event>>,
 
+    /// CHECK: This is a program config account
+    #[account(mut)]
+    pub program_config_pda: UncheckedAccount<'info>,
+
+    /// CHECK: This is a program config treasury account
+    #[account(mut)]
+    pub treasury: UncheckedAccount<'info>,
+
     /// CHECK: This is a CPI account
     #[account(mut)]
     pub multisig: UncheckedAccount<'info>,
@@ -391,6 +405,14 @@ pub struct InitCubikSponsorContext<'info> {
         bump = event_account.bump
     )]
     pub event_account: Box<Account<'info, Event>>,
+
+    /// CHECK: This is a program config account
+    #[account(mut)]
+    pub program_config_pda: UncheckedAccount<'info>,
+
+    /// CHECK: This is a program config treasury account
+    #[account(mut)]
+    pub treasury: UncheckedAccount<'info>,
 
     /// CHECK: This is a CPI account
     #[account(mut)]

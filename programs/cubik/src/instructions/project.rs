@@ -140,7 +140,7 @@ pub struct CreateProjectContext<'info> {
     )]
     pub user_account: Box<Account<'info, User>>,
 
-    /// CHECK: This is a program config treasury account
+    /// CHECK: This is a program config account
     #[account(mut)]
     pub program_config_pda: UncheckedAccount<'info>,
 
