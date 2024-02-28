@@ -47,6 +47,7 @@ describe("Project", () => {
       const wallet = new Wallet(keypair);
       const signer2 = generateKeypair();
       const program = createCubikProgram(wallet);
+
       const [multisigPDA] = web3.PublicKey.findProgramAddressSync(
         [SEED_PREFIX, SEED_MULTISIG, createKey.publicKey.toBytes()],
         SQUADS_PROGRAM_ID,
@@ -54,7 +55,9 @@ describe("Project", () => {
 
       console.log("multisigPDA", multisigPDA.toBase58());
 
-      const programConfigPda = getProgramConfigPda({})[0];
+      const programConfigPda = getProgramConfigPda({
+        programId: SQUADS_PROGRAM_ID,
+      })[0];
 
       console.log("programConfigPda", programConfigPda.toBase58());
 
@@ -98,57 +101,63 @@ describe("Project", () => {
         .signers([createKey, wallet.payer])
         .rpc({
           commitment: "confirmed",
+          maxRetries: 3,
           skipPreflight: false,
         });
 
       console.log(tx);
     });
-    // it("Success: Create Project - 2", async () => {
-    //   const wallet = new Wallet(keypair);
-    //   const signer2 = generateKeypair();
-    //   const program = createCubikProgram(wallet);
-    //   const [multisigPDA] = web3.PublicKey.findProgramAddressSync(
-    //     [SEED_PREFIX, SEED_MULTISIG, createKey.publicKey.toBytes()],
-    //     SQUADS_PROGRAM_ID,
-    //   );
-    //   const programConfigPda = getProgramConfigPda({
-    //     programId: SQUADS_PROGRAM_ID,
-    //   })[0];
+    it("Success: Create Project - 2", async () => {
+      const wallet = new Wallet(keypair);
+      const signer2 = generateKeypair();
+      const program = createCubikProgram(wallet);
+      const [multisigPDA] = web3.PublicKey.findProgramAddressSync(
+        [SEED_PREFIX, SEED_MULTISIG, createKey.publicKey.toBytes()],
+        SQUADS_PROGRAM_ID,
+      );
+      const programConfigPda = getProgramConfigPda({
+        programId: SQUADS_PROGRAM_ID,
+      })[0];
 
-    //   const programConfig = await ProgramConfig.fromAccountAddress(
-    //     connection,
-    //     programConfigPda,
-    //   );
+      const programConfig = await ProgramConfig.fromAccountAddress(
+        connection,
+        programConfigPda,
+      );
 
-    //   const configTreasury = programConfig.treasury;
+      const configTreasury = programConfig.treasury;
 
-    //   const tx = await program.methods
-    //     .createProject(
-    //       new BN(counter + 1),
-    //       [wallet.publicKey, signer2.publicKey],
-    //       2,
-    //       signer2.publicKey,
-    //       0,
-    //       "{}",
-    //     )
-    //     .accounts({
-    //       createKey: createKey.publicKey,
-    //       owner: wallet.publicKey,
-    //       projectAccount: getProjectPDA(createKey.publicKey, counter + 1)[0],
-    //       userAccount: getUserPDA(wallet.publicKey)[0],
-    //       squadsProgram: SQUADS_PROGRAM_ID,
-    //       multisig: multisigPDA,
-    //       programConfigPda,
-    //       treasury: configTreasury,
-    //     })
-    //     .signers([createKey])
-    //     .rpc({
-    //       commitment: "confirmed",
-    //       maxRetries: 3,
-    //     });
+      const tx = await program.methods
+        .createProject(
+          new BN(counter + 1),
+          [wallet.publicKey, signer2.publicKey],
+          2,
+          signer2.publicKey,
+          0,
+          "{}",
+        )
+        .accounts({
+          createKey: createKey.publicKey,
+          owner: wallet.publicKey,
+          projectAccount: getProjectPDA(createKey.publicKey, counter + 1)[0],
+          userAccount: getUserPDA(wallet.publicKey)[0],
+          squadsProgram: SQUADS_PROGRAM_ID,
+          multisig: multisigPDA,
+          programConfigPda,
+          treasury: configTreasury,
+        })
+        .signers([createKey])
+        .rpc({
+          commitment: "confirmed",
+          maxRetries: 3,
+          skipPreflight: true,
+        });
 
-    //   console.log("create proj 2", tx);
-    // });
+      console.log("create proj 2", tx);
+    });
+  });
+  describe("Change Status", () => {
+    it("Success: Change Status Verified", async () => {});
+    it("Success: Change Status Rejected", async () => {});
   });
   // describe("Change Status", () => {
   //   it("Success: Change Status Verified", async () => {});
