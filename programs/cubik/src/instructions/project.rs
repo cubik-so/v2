@@ -31,6 +31,15 @@ pub fn create_project_handler(
         system_program: ctx.accounts.system_program.to_account_info(),
     };
 
+    msg!(&ctx
+        .accounts
+        .squads_program
+        .to_account_info()
+        .key()
+        .to_string());
+
+    msg!(&ctx.accounts.treasury.to_account_info().key().to_string());
+
     let (vault_pubkey, _vault_bump_seed) = Pubkey::find_program_address(
         &[
             SEED_PREFIX,
@@ -141,12 +150,12 @@ pub struct CreateProjectContext<'info> {
     )]
     pub user_account: Box<Account<'info, User>>,
 
-    #[account(seeds = [SEED_PREFIX, SEED_PROGRAM_CONFIG], bump)]
+    #[account(mut)]
     pub program_config_pda: Account<'info, ProgramConfig>,
 
     /// CHECK: This is a program config treasury account
     #[account(mut)]
-    pub treasury: AccountInfo<'info>,
+    pub treasury: UncheckedAccount<'info>,
 
     /// CHECK: This is a CPI account
     #[account(mut)]
