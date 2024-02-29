@@ -4,7 +4,7 @@ use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 use anchor_lang::{
     accounts::signer::Signer, context::Context, solana_program::account_info::AccountInfo,
 };
-use anchor_spl::token::{self, Mint, Token, TokenAccount};
+use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
 use crate::event::{NewDonationSOL, NewDonationSPL};
 use crate::{Project, User};
@@ -31,6 +31,8 @@ pub fn donation_sol_handler(ctx: Context<DonationSOLContext>, amount: u64) -> Re
     emit!(NewDonationSOL {
         authority: ctx.accounts.authority.key(),
         amount: amount,
+        project_create_key: ctx.accounts.project_account.create_key.key(),
+        counter: ctx.accounts.project_account.counter,
     });
 
     Ok(())
@@ -38,9 +40,9 @@ pub fn donation_sol_handler(ctx: Context<DonationSOLContext>, amount: u64) -> Re
 
 pub fn donation_spl_handler(ctx: Context<DonationSPLContext>, amount: u64) -> Result<()> {
     let sender_ata = &ctx.accounts.token_ata_sender;
-    let receiver_ata = &ctx.accounts.token_ata_sender;
+    let receiver_ata = &ctx.accounts.token_ata_receiver;
 
-    let transfer_instruction = anchor_spl::token::Transfer {
+    let transfer_instruction = Transfer {
         from: sender_ata.to_account_info(),
         to: receiver_ata.to_account_info(),
         authority: ctx.accounts.authority.to_account_info(),
@@ -56,12 +58,13 @@ pub fn donation_spl_handler(ctx: Context<DonationSPLContext>, amount: u64) -> Re
         authority: ctx.accounts.authority.key(),
         amount: amount,
         token: ctx.accounts.token_mint.key(),
+        project_create_key: ctx.accounts.project_account.create_key.key(),
+        counter: ctx.accounts.project_account.counter,
     });
     Ok(())
 }
 
 #[derive(Accounts)]
-#[instruction(amount: u64,create_key: Pubkey)]
 pub struct DonationSOLContext<'info> {
     #[account(mut, constraint = authority.key() == user_account.authority.key())]
     pub authority: Signer<'info>,
@@ -77,7 +80,7 @@ pub struct DonationSOLContext<'info> {
     pub user_account: Box<Account<'info, User>>,
 
     #[account(mut,
-        seeds = [b"project".as_ref(),project_account.owner.key().as_ref(),&project_account.counter.to_le_bytes()],
+        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),&project_account.counter.to_le_bytes()],
         bump = project_account.bump
     )]
     pub project_account: Box<Account<'info, Project>>,
@@ -90,7 +93,6 @@ pub struct DonationSOLContext<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(amount: u64,create_key: Pubkey)]
 pub struct DonationSPLContext<'info> {
     #[account(mut, constraint = authority.key() == user_account.authority.key())]
     pub authority: Signer<'info>,
@@ -111,7 +113,7 @@ pub struct DonationSPLContext<'info> {
     pub user_account: Box<Account<'info, User>>,
 
     #[account(mut,
-        seeds = [b"project".as_ref(),project_account.owner.key().as_ref(),&project_account.counter.to_le_bytes()],
+        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),&project_account.counter.to_le_bytes()],
         bump = project_account.bump
     )]
     pub project_account: Box<Account<'info, Project>>,

@@ -1,5 +1,5 @@
 use crate::errors::Errors;
-use crate::event::NewContribution;
+use crate::event::{NewContributionSOL, NewContributionSPL};
 use crate::state::{Event, EventJoin, EventProjectStatus, Project, ProjectVerification};
 use crate::User;
 use anchor_lang::prelude::*;
@@ -7,11 +7,7 @@ use anchor_lang::solana_program::system_instruction;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
 
-pub fn contribution_spl_handler(
-    ctx: Context<ContributionSPL>,
-    amount: u64,
-    split: u64,
-) -> Result<()> {
+pub fn contribution_spl_handler(ctx: Context<ContributionSPL>, amount: u64) -> Result<()> {
     let event_join = &mut ctx.accounts.event_join_account.clone();
     let project_account = &ctx.accounts.project_account.clone();
 
@@ -40,23 +36,18 @@ pub fn contribution_spl_handler(
 
     event_join.donation = event_join.donation + amount;
 
-    emit!(NewContribution {
-        user: ctx.accounts.authority.key(),
+    emit!(NewContributionSPL {
         amount: amount,
-        split: split,
         event_account: ctx.accounts.event_account.key(),
         event_join_account: ctx.accounts.event_join_account.key(),
-        project_account: ctx.accounts.project_account.key()
+        project_account: ctx.accounts.project_account.key(),
+        token: ctx.accounts.token_mint.key()
     });
 
     Ok(())
 }
 
-pub fn contribution_sol_handler(
-    ctx: Context<ContributionSOL>,
-    amount: u64,
-    split: u64,
-) -> Result<()> {
+pub fn contribution_sol_handler(ctx: Context<ContributionSOL>, amount: u64) -> Result<()> {
     let project_account = &ctx.accounts.project_account;
     let event_join = &mut ctx.accounts.event_join_account;
 
@@ -86,10 +77,8 @@ pub fn contribution_sol_handler(
         &[],
     )?;
 
-    emit!(NewContribution {
-        user: ctx.accounts.authority.key(),
+    emit!(NewContributionSOL {
         amount: amount,
-        split: split,
         event_account: ctx.accounts.event_account.key(),
         event_join_account: ctx.accounts.event_join_account.key(),
         project_account: ctx.accounts.project_account.key()
@@ -113,7 +102,7 @@ pub struct ContributionSPL<'info> {
     pub token_ata_receiver: Box<Account<'info, TokenAccount>>,
 
     #[account(mut,
-        seeds = [b"project".as_ref(),project_account.owner.key().as_ref(),&project_account.counter.to_le_bytes()],
+        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),&project_account.counter.to_le_bytes()],
         bump = project_account.bump
     )]
     pub project_account: Box<Account<'info, Project>>,
@@ -155,7 +144,7 @@ pub struct ContributionSOL<'info> {
     pub receiver: AccountInfo<'info>,
 
     #[account(mut,
-        seeds = [b"project".as_ref(),project_account.owner.key().as_ref(),&project_account.counter.to_le_bytes()],
+        seeds = [b"project".as_ref(),project_account.create_key.key().as_ref(),&project_account.counter.to_le_bytes()],
         bump = project_account.bump
     )]
     pub project_account: Box<Account<'info, Project>>,

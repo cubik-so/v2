@@ -207,12 +207,12 @@ pub mod cubik {
         Ok(())
     }
 
-    pub fn contribution_sol(ctx: Context<ContributionSOL>, amount: u64, split: u64) -> Result<()> {
-        contribution_sol_handler(ctx, amount, split)?;
+    pub fn contribution_sol(ctx: Context<ContributionSOL>, amount: u64) -> Result<()> {
+        contribution_sol_handler(ctx, amount)?;
         Ok(())
     }
-    pub fn contribution_spl(ctx: Context<ContributionSPL>, amount: u64, split: u64) -> Result<()> {
-        contribution_spl_handler(ctx, amount, split)?;
+    pub fn contribution_spl(ctx: Context<ContributionSPL>, amount: u64) -> Result<()> {
+        contribution_spl_handler(ctx, amount)?;
         Ok(())
     }
 }
