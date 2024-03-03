@@ -1,4 +1,4 @@
-import { Wallet, web3 } from "@coral-xyz/anchor";
+import { Wallet, web3 } from '@coral-xyz/anchor';
 import {
   ProgramConfig,
   SEED_MULTISIG,
@@ -9,23 +9,23 @@ import {
   generateFundedKeypair,
   generateKeypair,
   getProgramConfigPda,
-} from "../../utils";
-import { getProjectPDA, getUserPDA } from "../../pda";
-import { BN } from "bn.js";
+} from '../../utils';
+import { getProjectPDA, getUserPDA } from '../../pda';
+import { BN } from 'bn.js';
 
-console.log("createProject Test....");
+console.log('createProject Test....');
 
 const connection = createDevnetConnection();
-describe("Project", () => {
-  const username = "sahil2";
+describe('Project', () => {
+  const username = 'sahil2';
   let keypair: web3.Keypair;
   const counter = 0;
   const createKey = generateKeypair();
   before(async () => {
     keypair = await generateFundedKeypair(connection);
   });
-  describe("Create Project Full", () => {
-    it("Success: Test User", async () => {
+  describe('Create Project Full', () => {
+    it('Success: Test User', async () => {
       const wallet = new Wallet(keypair);
       const program = createCubikProgram(wallet);
       const tx = await program.methods
@@ -36,48 +36,46 @@ describe("Project", () => {
         })
         .rpc({
           skipPreflight: true,
-          commitment: "confirmed",
+          commitment: 'confirmed',
           maxRetries: 3,
         });
 
       console.log(tx);
     });
 
-    it("Success: Create Project - 1", async () => {
+    it('Success: Create Project - 1', async () => {
       const wallet = new Wallet(keypair);
       const signer2 = generateKeypair();
       const program = createCubikProgram(wallet);
 
       const [multisigPDA] = web3.PublicKey.findProgramAddressSync(
         [SEED_PREFIX, SEED_MULTISIG, createKey.publicKey.toBytes()],
-        SQUADS_PROGRAM_ID,
+        SQUADS_PROGRAM_ID
       );
 
-      console.log("multisigPDA", multisigPDA.toBase58());
+      console.log('multisigPDA', multisigPDA.toBase58());
 
       const programConfigPda = getProgramConfigPda({
         programId: SQUADS_PROGRAM_ID,
       })[0];
 
-      console.log("programConfigPda", programConfigPda.toBase58());
-
       const programConfig = await ProgramConfig.fromAccountAddress(
         connection,
-        programConfigPda,
+        programConfigPda
       );
 
       const configTreasury = programConfig.treasury;
 
-      console.log("squadsProgram", SQUADS_PROGRAM_ID.toBase58());
-      console.log("configTreasury", configTreasury.toBase58());
-      console.log("createKey", createKey.publicKey.toBase58());
-      console.log("owner", wallet.publicKey.toBase58());
+      console.log('squadsProgram', SQUADS_PROGRAM_ID.toBase58());
+      console.log('configTreasury', configTreasury.toBase58());
+      console.log('createKey', createKey.publicKey.toBase58());
+      console.log('owner', wallet.publicKey.toBase58());
       console.log(
-        "projectAccount",
-        getProjectPDA(createKey.publicKey, counter)[0].toBase58(),
+        'projectAccount',
+        getProjectPDA(createKey.publicKey, counter)[0].toBase58()
       );
-      console.log("userAccount", getUserPDA(wallet.publicKey)[0].toBase58());
-      console.log("signer2", signer2.publicKey.toBase58());
+      console.log('userAccount', getUserPDA(wallet.publicKey)[0].toBase58());
+      console.log('signer2', signer2.publicKey.toBase58());
 
       const tx = await program.methods
         .createProject(
@@ -86,7 +84,7 @@ describe("Project", () => {
           2,
           wallet.publicKey,
           0,
-          "{}",
+          '{}'
         )
         .accounts({
           createKey: createKey.publicKey,
@@ -100,7 +98,7 @@ describe("Project", () => {
         })
         .signers([createKey, wallet.payer])
         .rpc({
-          commitment: "confirmed",
+          commitment: 'confirmed',
           maxRetries: 3,
           skipPreflight: false,
         });
@@ -155,9 +153,9 @@ describe("Project", () => {
     //   console.log("create proj 2", tx);
     // });
   });
-  describe("Change Status", () => {
-    it("Success: Change Status Verified", async () => {});
-    it("Success: Change Status Rejected", async () => {});
+  describe('Change Status', () => {
+    it('Success: Change Status Verified', async () => {});
+    it('Success: Change Status Rejected', async () => {});
   });
   // describe("Change Status", () => {
   //   it("Success: Change Status Verified", async () => {});

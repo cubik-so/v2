@@ -31,6 +31,7 @@ export type CreateProjectArgs = {
   configAuthority: web3.PublicKey | null;
   timeLock: number;
   memo: string | null;
+  rentCollector: web3.PublicKey;
 };
 
 /**

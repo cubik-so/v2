@@ -8,9 +8,7 @@ skip-lint = false
 # cubik_v2 = "CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7"
 cubik_v2 = "3s9zZaosL6hJFeDToXDoPN4sQgyVwLEdqzaztZXj1Nnk"
 
-# [programs.devnet]
-# # cubik_v2 = "3s9zZaosL6hJFeDToXDoPN4sQgyVwLEdqzaztZXj1Nnk"
-# cubik_v2 = "4GgcGdn4mVtudPoX3a4xYv62ed4GKbuqn1AcxU5tU4SD"
+
 
 
 [test.validator]
@@ -24,8 +22,8 @@ url = "https://api.apr.dev"
 
 [provider]
 cluster = "devnet"
-wallet = "/Users/sahilpabale/wallets/cubik/CBKiBsr31UR58LqdMWtWkKiPAsB4VAhWgWmW4XCicj3p.json"
-# wallet = '/Users/dhruvraj/.config/solana/id.json'
+# wallet = "/Users/sahilpabale/wallets/cubik/CBKiBsr31UR58LqdMWtWkKiPAsB4VAhWgWmW4XCicj3p.json"
+wallet = '/Users/dhruvraj/.config/solana/id.json'
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/index.ts"

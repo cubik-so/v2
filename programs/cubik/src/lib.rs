@@ -8,9 +8,7 @@ pub mod state;
 use state::*;
 
 // declare_id!("CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7");
-// declare_id!("D4QbbabmtqmkjJFcE2qnHihuXa4NT7Ap2tqqh5nyCG4T");
-// declare_id!("GsKHdvSBodD3ZGMAMWZ6sSwNZAixsE6XZ4xKA4KyEwc");
-declare_id!("4GgcGdn4mVtudPoX3a4xYv62ed4GKbuqn1AcxU5tU4SD");
+declare_id!("GsKHdvSBodD3ZGMAMWZ6sSwNZAixsE6XZ4xKA4KyEwc");
 
 #[program]
 pub mod cubik {
@@ -30,6 +28,7 @@ pub mod cubik {
         config_authority: Option<Pubkey>,
         time_lock: u32,
         memo: Option<String>,
+        rent_collector: Option<Pubkey>,
     ) -> Result<()> {
         create_project_handler(
             ctx,
@@ -39,6 +38,7 @@ pub mod cubik {
             config_authority,
             time_lock,
             memo,
+            rent_collector,
         )?;
         Ok(())
     }

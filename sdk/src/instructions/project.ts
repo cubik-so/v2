@@ -1,12 +1,12 @@
-import { BN, web3 } from "@coral-xyz/anchor";
-import { CubikSDK } from "..";
+import { BN, web3 } from '@coral-xyz/anchor';
+import { CubikSDK } from '..';
 import {
   CreateProjectAccounts,
   CreateProjectArgs,
   ProjectStatusHandlerArgs,
   TransferProjectAccounts,
   UpdateProjectStatusAccounts,
-} from "../types";
+} from '../types';
 
 export const project = (sdk: CubikSDK) => {
   return {
@@ -21,7 +21,8 @@ export const project = (sdk: CubikSDK) => {
           args.threshold,
           args.configAuthority,
           args.timeLock,
-          args.memo
+          args.memo,
+          args.rentCollector
         )
         .accounts(accounts)
         .instruction();
@@ -57,9 +58,9 @@ export const project = (sdk: CubikSDK) => {
     getPDA: (createKey: web3.PublicKey, counter: number) => {
       return web3.PublicKey.findProgramAddressSync(
         [
-          Buffer.from("project"),
+          Buffer.from('project'),
           createKey.toBuffer(),
-          new BN(counter).toArrayLike(Buffer, "le", 8),
+          new BN(counter).toArrayLike(Buffer, 'le', 8),
         ],
         sdk.programId
       );

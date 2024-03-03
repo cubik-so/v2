@@ -15,6 +15,7 @@ pub fn create_project_handler(
     config_authority: Option<Pubkey>,
     time_lock: u32,
     memo: Option<String>,
+    rent_collector: Option<Pubkey>,
 ) -> Result<()> {
     let project_account = &mut ctx.accounts.project_account;
     let user_account = &mut ctx.accounts.user_account;
@@ -27,13 +28,6 @@ pub fn create_project_handler(
         multisig: ctx.accounts.multisig.to_account_info(),
         system_program: ctx.accounts.system_program.to_account_info(),
     };
-
-    msg!(&ctx
-        .accounts
-        .squads_program
-        .to_account_info()
-        .key()
-        .to_string());
 
     msg!(&ctx.accounts.treasury.to_account_info().key().to_string());
 
@@ -71,7 +65,7 @@ pub fn create_project_handler(
             memo,
             threshold,
             time_lock,
-            rent_collector: None,
+            rent_collector: rent_collector,
         },
     )?;
 
