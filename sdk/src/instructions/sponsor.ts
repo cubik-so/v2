@@ -26,9 +26,7 @@ export const sponsor = (sdk: CubikSDK) => {
           args.totalCommitted,
           args.membersKeys,
           args.threshold,
-          args.configAuthority,
-          args.timeLock,
-          args.memo
+          args.configAuthority
         )
         .accounts(accounts)
         .instruction();
@@ -57,9 +55,7 @@ export const sponsor = (sdk: CubikSDK) => {
           args.totalCommitted,
           args.membersKeys,
           args.threshold,
-          args.configAuthority,
-          args.timeLock,
-          args.memo
+          args.configAuthority
         )
         .accounts(accounts)
         .instruction();

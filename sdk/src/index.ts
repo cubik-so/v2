@@ -19,14 +19,14 @@ export class CubikSDK {
     wallet: Wallet,
     programId: web3.PublicKey,
     connection: web3.Connection,
-    opts: web3.ConfirmOptions,
+    opts: web3.ConfirmOptions
   ) {
     this.provider = new AnchorProvider(connection, wallet, opts);
     this.programId = programId;
     this.program = new Program(
       idl,
       this.programId,
-      this.provider,
+      this.provider
     ) as Program<CubikIDLType>;
   }
 

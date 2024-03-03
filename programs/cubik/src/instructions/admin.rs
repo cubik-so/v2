@@ -1,5 +1,5 @@
-use anchor_lang::prelude::*;
 use crate::state::*;
+use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 
 pub fn create_admin_handler(ctx: Context<CreateAdminContext>) -> Result<()> {
@@ -8,10 +8,6 @@ pub fn create_admin_handler(ctx: Context<CreateAdminContext>) -> Result<()> {
     admin_account.bump = ctx.bumps.admin_account;
     Ok(())
 }
-
-
-
-
 
 #[derive(Accounts)]
 pub struct CreateAdminContext<'info> {
@@ -22,7 +18,7 @@ pub struct CreateAdminContext<'info> {
         payer = authority,
         space = 8 + Admin::INIT_SPACE,
         seeds = [b"admin".as_ref()],
-        bump 
+        bump
     )]
     pub admin_account: Box<Account<'info, Admin>>,
 
@@ -32,11 +28,3 @@ pub struct CreateAdminContext<'info> {
     #[account(address = solana_program::sysvar::rent::ID)]
     pub rent: Sysvar<'info, Rent>,
 }
-
-
-
-
-
-
-
-

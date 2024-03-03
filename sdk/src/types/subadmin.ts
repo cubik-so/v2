@@ -1,4 +1,4 @@
-import { web3 } from '@coral-xyz/anchor';
+import { web3 } from "@coral-xyz/anchor";
 
 /**
  * @name SubAdminPermission

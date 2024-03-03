@@ -1,15 +1,11 @@
 use crate::errors::Errors;
 use crate::event::NewEventJoin;
 use crate::find_event_key_index;
-use crate::state::{
-     Event, EventJoin, EventProjectStatus, Project, ProjectVerification, SubAdmin,
-};
+use crate::state::{Event, EventJoin, EventProjectStatus, Project, ProjectVerification, SubAdmin};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 
-pub fn create_event_join_handler(
-    ctx: Context<CreateEventJoinContext>,
-) -> Result<()> {
+pub fn create_event_join_handler(ctx: Context<CreateEventJoinContext>) -> Result<()> {
     let event_join_account = &mut ctx.accounts.event_join_account;
     let event_account = &mut ctx.accounts.event_account;
     let project_account = &mut ctx.accounts.project_account;
@@ -22,7 +18,7 @@ pub fn create_event_join_handler(
     emit!(NewEventJoin {
         authority: ctx.accounts.authority.key(),
         event_account: event_account.key(),
-        project_account:project_account.key()
+        project_account: project_account.key()
     });
 
     Ok(())
@@ -30,7 +26,7 @@ pub fn create_event_join_handler(
 
 pub fn update_event_status_handler(
     ctx: Context<UpdateEventJoinStatusContext>,
-    status:EventProjectStatus
+    status: EventProjectStatus,
 ) -> Result<()> {
     let event_account = &mut ctx.accounts.event_account;
     let event_join_account = &mut ctx.accounts.event_join_account;
@@ -43,10 +39,10 @@ pub fn update_event_status_handler(
     );
 
     require!(
-        find_event_key_index(sub_admin_account.event_access.clone(),&event_account.key()) != None,
+        find_event_key_index(sub_admin_account.event_access.clone(), &event_account.key()) != None,
         Errors::InvalidAdmin
     );
-    event_join_account.status =status;
+    event_join_account.status = status;
 
     Ok(())
 }
@@ -60,7 +56,7 @@ pub struct CreateEventJoinContext<'info> {
         payer = authority,
         space = 8 + EventJoin::INIT_SPACE,
         seeds = [b"event_join".as_ref(),event_account.key().as_ref(),project_account.key().as_ref()],
-        bump 
+        bump
     )]
     pub event_join_account: Box<Account<'info, EventJoin>>,
 
@@ -69,7 +65,6 @@ pub struct CreateEventJoinContext<'info> {
             bump = project_account.bump
         )]
     pub project_account: Box<Account<'info, Project>>,
-
 
     #[account(mut,seeds=[b"event",event_account.event_key.key().as_ref()],bump=event_account.bump)]
     pub event_account: Box<Account<'info, Event>>,
@@ -118,8 +113,7 @@ pub struct UpdateEventJoinStatusContext<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-
-pub fn invite_event_join_handler(ctx:Context<InviteEventJoinContext>)-> Result<()>{
+pub fn invite_event_join_handler(ctx: Context<InviteEventJoinContext>) -> Result<()> {
     let event_join_account = &mut ctx.accounts.event_join_account;
     let event_account = &mut ctx.accounts.event_account;
     let project_account = &mut ctx.accounts.project_account;
@@ -143,9 +137,8 @@ pub fn invite_event_join_handler(ctx:Context<InviteEventJoinContext>)-> Result<(
 }
 
 #[derive(Accounts)]
-pub struct InviteEventJoinContext<'info>{
-
-     #[account(mut,
+pub struct InviteEventJoinContext<'info> {
+    #[account(mut,
         constraint = authority.key() == sub_admin_account.authority.key() @ Errors::InvalidSigner,
         constraint = sub_admin_account.level == 3 @Errors::InvalidAdmin,
     )]
@@ -155,11 +148,11 @@ pub struct InviteEventJoinContext<'info>{
         payer = authority,
         space = 8 + EventJoin::INIT_SPACE,
         seeds = [b"event_join".as_ref(),event_account.key().as_ref(),project_account.key().as_ref()],
-        bump 
+        bump
     )]
     pub event_join_account: Box<Account<'info, EventJoin>>,
 
-   #[account(mut,
+    #[account(mut,
         seeds = [b"admin".as_ref(), sub_admin_account.authority.key().as_ref(), sub_admin_account.create_key.key().as_ref()],
         bump = sub_admin_account.bump
     )]
@@ -170,7 +163,6 @@ pub struct InviteEventJoinContext<'info>{
             bump = project_account.bump
         )]
     pub project_account: Box<Account<'info, Project>>,
-
 
     #[account(mut,seeds=[b"event",event_account.event_key.key().as_ref()],bump=event_account.bump)]
     pub event_account: Box<Account<'info, Event>>,

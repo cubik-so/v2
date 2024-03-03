@@ -12,13 +12,11 @@ name = "cubik"
 no-entrypoint = []
 no-idl = []
 no-log-ix-name = []
-cpi = ["no-entrypoint"]
+mainnet-beta = []
+cpi = []
 default = []
 
 [dependencies]
 anchor-lang = "0.29.0"
-squads-multisig-program = { version = "2.0.0", features = [
-    "cpi",
-    "no-entrypoint",
-] }
+squads-multisig-program = { version = "2.0.0", features = ["cpi"] }
 anchor-spl = "0.29.0"

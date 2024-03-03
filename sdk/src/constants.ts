@@ -1,6 +1,6 @@
-import * as anchor from '@coral-xyz/anchor';
-import { web3 } from '@coral-xyz/anchor';
-import { Cubik, IDL } from './types';
+import * as anchor from "@coral-xyz/anchor";
+import { web3 } from "@coral-xyz/anchor";
+import { Cubik, IDL } from "./types";
 
 /**
  * Program IDL

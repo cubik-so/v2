@@ -1,6 +1,6 @@
-import { web3 } from '@coral-xyz/anchor';
-import { CreateUserAccounts, CreateUserArgs } from '../types';
-import { CubikSDK } from '..';
+import { web3 } from "@coral-xyz/anchor";
+import { CreateUserAccounts, CreateUserArgs } from "../types";
+import { CubikSDK } from "..";
 
 export const user = (sdk: CubikSDK) => {
   return {
@@ -17,7 +17,7 @@ export const user = (sdk: CubikSDK) => {
     },
     getPDA: (userPubkey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from('user'), userPubkey.toBuffer()],
+        [Buffer.from("user"), userPubkey.toBuffer()],
         sdk.programId
       );
     },

@@ -1,10 +1,10 @@
-import { web3 } from '@coral-xyz/anchor';
-import { CubikSDK } from '..';
+import { web3 } from "@coral-xyz/anchor";
+import { CubikSDK } from "..";
 import {
   CreateAdminAccounts,
   CreateAdminVaultAccounts,
   CreateAdminVaultArgs,
-} from '../types';
+} from "../types";
 
 export const admin = (sdk: CubikSDK) => {
   return {
@@ -19,7 +19,7 @@ export const admin = (sdk: CubikSDK) => {
 
     getPDA: () => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from('admin')],
+        [Buffer.from("admin")],
         sdk.programId
       );
     },

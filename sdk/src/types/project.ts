@@ -1,4 +1,4 @@
-import { BN, web3 } from "@coral-xyz/anchor";
+import { BN, web3 } from '@coral-xyz/anchor';
 
 /**
  * @name CreateProjectArgs
@@ -41,6 +41,8 @@ export type CreateProjectArgs = {
  * @property owner - The public key of the owner who is creating the project.
  * @property createKey - A signer key used in the creation of the project.
  * @property projectAccount - The public key of the project account.
+ * @property treasury - The public key of the treasury.
+ * @property programConfigPda - The public key of the programConfigPda.
  * @property userAccount - The public key of the user account associated with the project.
  * @property multisig - The public key of the multisig account (UncheckedAccount).
  * @property squadsProgram - The public key of the squads program.
@@ -64,6 +66,8 @@ export type CreateProjectAccounts = {
   createKey: web3.PublicKey; // random keypair
   projectAccount: web3.PublicKey; // Project PDA
   userAccount: web3.PublicKey; // User PDA
+  treasury: web3.PublicKey;
+  programConfigPda: web3.PublicKey;
   multisig: web3.PublicKey; // Multisig PDA
   squadsProgram: web3.PublicKey; // Squads program id
   systemProgram: web3.PublicKey; // System program id

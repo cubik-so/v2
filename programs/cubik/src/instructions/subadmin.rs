@@ -3,8 +3,11 @@ use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 
-pub fn create_sub_admin_handler(ctx:Context<CreateSubAdminContext>,new_sub_admin_authority:Pubkey,level:u8,) -> Result<()> {
-
+pub fn create_sub_admin_handler(
+    ctx: Context<CreateSubAdminContext>,
+    new_sub_admin_authority: Pubkey,
+    level: u8,
+) -> Result<()> {
     if level > 3 {
         return Err(Errors::InvalidLevel.into());
     }
@@ -17,57 +20,46 @@ pub fn create_sub_admin_handler(ctx:Context<CreateSubAdminContext>,new_sub_admin
     Ok(())
 }
 
-pub fn close_sub_admin_handler(
-    ctx: Context<CloseSubAdminContext>,
-) -> Result<()> {
-
+pub fn close_sub_admin_handler(_ctx: Context<CloseSubAdminContext>) -> Result<()> {
     msg!("Account Closed");
 
     Ok(())
 }
 
-
-pub fn add_event_access_handler(
-    ctx: Context<AddEventAccessContext>,
-) -> Result<()> {
-
+pub fn add_event_access_handler(ctx: Context<AddEventAccessContext>) -> Result<()> {
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
     let event_account = &ctx.accounts.event_account;
-        let mut new_event_access = sub_admin_account.event_access.clone();
-        new_event_access.push(event_account.key());
-        msg!("Event Access Added {:?}",new_event_access);
-        sub_admin_account.event_access = new_event_access;
+    let mut new_event_access = sub_admin_account.event_access.clone();
+    new_event_access.push(event_account.key());
+    msg!("Event Access Added {:?}", new_event_access);
+    sub_admin_account.event_access = new_event_access;
 
-      Ok(())
-   
+    Ok(())
 }
 
-pub fn remove_event_access_handler(
-    ctx: Context<RemoveEventAccessContext>,
-) -> Result<()> {
-
+pub fn remove_event_access_handler(ctx: Context<RemoveEventAccessContext>) -> Result<()> {
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
-     let event_account = &ctx.accounts.event_account;
+    let event_account = &ctx.accounts.event_account;
 
     match find_event_key_index(sub_admin_account.event_access.clone(), &event_account.key()) {
         Some(idx) => {
             let mut event_access_clone = sub_admin_account.event_access.clone();
             event_access_clone.remove(idx);
             sub_admin_account.event_access = event_access_clone;
-            Ok(()) 
-        },
+            Ok(())
+        }
         None => {
             err!(Errors::InvalidEventKey)
         }
     }
 }
 
-pub fn update_sub_admin_level_handler(ctx:Context<UpdateLevelSubAdminContext>,level:u8)-> Result<()>{
+pub fn update_sub_admin_level_handler(
+    ctx: Context<UpdateLevelSubAdminContext>,
+    level: u8,
+) -> Result<()> {
     let sub_admin_account = &mut ctx.accounts.sub_admin_account;
-    require!(
-        level <= 3,
-        Errors::InvalidLevel
-    );
+    require!(level <= 3, Errors::InvalidLevel);
     sub_admin_account.level = level;
     Ok(())
 }
@@ -86,14 +78,13 @@ pub struct CreateSubAdminContext<'info> {
         payer = authority,
         space = 8 + SubAdmin::INIT_SPACE,
         seeds = [b"admin".as_ref(),new_sub_admin_authority.key().as_ref(),create_key.key().as_ref()],
-        bump 
+        bump
     )]
     pub sub_admin_account: Box<Account<'info, SubAdmin>>,
 
-
     #[account(mut,
         seeds = [b"admin".as_ref()],
-        bump = admin_account.bump 
+        bump = admin_account.bump
     )]
     pub admin_account: Box<Account<'info, Admin>>,
 
@@ -104,10 +95,8 @@ pub struct CreateSubAdminContext<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-
 #[derive(Accounts)]
 pub struct AddEventAccessContext<'info> {
-
     #[account(mut,
     constraint = authority.key() == signer_sub_admin_account.authority.key() @Errors::InvalidAdmin,
     constraint = signer_sub_admin_account.level == 3 @Errors::InvalidAdmin,
@@ -118,21 +107,20 @@ pub struct AddEventAccessContext<'info> {
         seeds = [b"admin".as_ref(), sub_admin_account.authority.key().as_ref(), sub_admin_account.create_key.key().as_ref()],
         bump  = sub_admin_account.bump
     )]
-    pub sub_admin_account:Account<'info, SubAdmin>,
-
+    pub sub_admin_account: Account<'info, SubAdmin>,
 
     #[account(mut,
         seeds = [b"admin".as_ref(),signer_sub_admin_account.authority.key().as_ref(), signer_sub_admin_account.create_key.key().as_ref()],
-        bump = signer_sub_admin_account.bump 
+        bump = signer_sub_admin_account.bump
     )]
     pub signer_sub_admin_account: Box<Account<'info, SubAdmin>>,
 
-        #[account(mut,
+    #[account(mut,
         seeds = [b"event".as_ref(),event_account.event_key.as_ref()],
         bump = event_account.bump
     )]
-    pub event_account: Box<Account<'info , Event>>,
-    
+    pub event_account: Box<Account<'info, Event>>,
+
     // Misc Accounts
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
@@ -142,23 +130,21 @@ pub struct AddEventAccessContext<'info> {
 
 #[derive(Accounts)]
 pub struct RemoveEventAccessContext<'info> {
-  
     #[account(mut,
     constraint = authority.key() == signer_sub_admin_account.authority.key() @Errors::InvalidAdmin,
     constraint = signer_sub_admin_account.level == 3 @Errors::InvalidAdmin,
     )]
     pub authority: Signer<'info>,
-    
+
     #[account(mut,
         seeds = [b"admin".as_ref(), sub_admin_account.authority.key().as_ref(), sub_admin_account.create_key.key().as_ref()],
         bump  = sub_admin_account.bump
     )]
     pub sub_admin_account: Box<Account<'info, SubAdmin>>,
 
-
     #[account(mut,
         seeds = [b"admin".as_ref(),signer_sub_admin_account.authority.key().as_ref(), signer_sub_admin_account.create_key.key().as_ref()],
-        bump = signer_sub_admin_account.bump 
+        bump = signer_sub_admin_account.bump
     )]
     pub signer_sub_admin_account: Box<Account<'info, SubAdmin>>,
 
@@ -166,9 +152,9 @@ pub struct RemoveEventAccessContext<'info> {
         seeds = [b"event".as_ref(),event_account.event_key.as_ref()],
         bump = event_account.bump
     )]
-    pub event_account: Box<Account<'info , Event>>,
+    pub event_account: Box<Account<'info, Event>>,
 
-     // Misc Accounts
+    // Misc Accounts
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
     #[account(address = solana_program::sysvar::rent::ID)]
@@ -205,7 +191,6 @@ pub struct CloseSubAdminContext<'info> {
 
 #[derive(Accounts)]
 pub struct UpdateLevelSubAdminContext<'info> {
-
     #[account(mut,
     constraint = authority.key() == signer_sub_admin_account.authority.key() @Errors::InvalidAdmin,
     constraint = signer_sub_admin_account.level == 3 @Errors::InvalidAdmin,
@@ -218,13 +203,12 @@ pub struct UpdateLevelSubAdminContext<'info> {
     )]
     pub sub_admin_account: Box<Account<'info, SubAdmin>>,
 
-
     #[account(mut,
         seeds = [b"admin".as_ref(),signer_sub_admin_account.authority.key().as_ref(), signer_sub_admin_account.create_key.key().as_ref()],
-        bump = signer_sub_admin_account.bump 
+        bump = signer_sub_admin_account.bump
     )]
     pub signer_sub_admin_account: Box<Account<'info, SubAdmin>>,
-    
+
     // Misc Accounts
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,

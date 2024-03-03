@@ -7,16 +7,12 @@ import { BN, web3 } from '@coral-xyz/anchor';
  * @property membersKeys - The public keys of the members.
  * @property threshold - The threshold for the multisig.
  * @property configAuthority - The public key of the config authority.
- * @property timeLock - The time lock.
- * @property memo - The memo.
  */
 export type InitSponsorWithSelfCustodyArgs = {
   totalCommitted: BN; // Using BN to represent u128 since JavaScript does not support 128-bit integers
   membersKeys: web3.PublicKey[]; // Array of public keys
   threshold: number; // u16 can be represented as a number in TypeScript
   configAuthority: web3.PublicKey | null; // Option<Pubkey> translates to PublicKey or null
-  timeLock: number; // u32 can be represented as a number in TypeScript
-  memo: string | null; // Option<String> translates to string or null
 };
 
 /**
@@ -39,6 +35,8 @@ export type InitSponsorWithSelfCustodyAccounts = {
   userAccount: web3.PublicKey;
   eventAccount: web3.PublicKey;
   multisig: web3.PublicKey;
+  treasury: web3.PublicKey;
+  programConfigPda: web3.PublicKey;
   sponsorAccount: web3.PublicKey;
   squadsProgram: web3.PublicKey;
   sponsorTeamAccount: web3.PublicKey;
@@ -100,8 +98,6 @@ export type InitCubikSponsorArgs = {
   membersKeys: web3.PublicKey[]; // Array of public keys
   threshold: number; // u16 can be represented as a number in TypeScript
   configAuthority: web3.PublicKey | null; // Option<Pubkey> translates to PublicKey or null
-  timeLock: number; // u32 can be represented as a number in TypeScript
-  memo: string | null; // Option<String> translates to string or null
 };
 
 /**
@@ -111,6 +107,8 @@ export type InitCubikSponsorArgs = {
  * @property createKey - The public key used for creation.
  * @property userAccount - The public key of the user account.
  * @property subAdminAccount - The public key of the sub admin account.
+ * @property treasury - The public key of the treasury.
+ * @property programConfigPda - The public key of the programConfigPda.
  * @property eventAccount - The public key of the event account.
  * @property multisig - The public key of the multisig.
  * @property sponsorAccount - The public key of the sponsor account.
@@ -124,6 +122,8 @@ export type InitCubikSponsorAccounts = {
   createKey: web3.PublicKey;
   userAccount: web3.PublicKey;
   subAdminAccount: web3.PublicKey;
+  treasury: web3.PublicKey;
+  programConfigPda: web3.PublicKey;
   eventAccount: web3.PublicKey;
   multisig: web3.PublicKey;
   sponsorAccount: web3.PublicKey;

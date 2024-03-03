@@ -1,4 +1,4 @@
-import { Wallet, web3 } from '@coral-xyz/anchor';
+import { Wallet, web3 } from "@coral-xyz/anchor";
 import {
   PROGRAM_ID,
   adminPair,
@@ -6,13 +6,13 @@ import {
   createLocalhostConnection,
   generateFundedKeypair,
   generateKeypair,
-} from '../../utils';
-import { getAdminPDA, getAdminSubAdminPDA } from '../../pda';
+} from "../../utils";
+import { getAdminPDA, getAdminSubAdminPDA } from "../../pda";
 
-describe('SubAdmin', () => {
+describe("SubAdmin", () => {
   const admin = adminPair();
   const adminCreateKey = new web3.PublicKey(
-    '9ykrLmqn4NKNuBRiWdHaCQ6rF2hFvXYKdbkphPMDZXPh'
+    "9ykrLmqn4NKNuBRiWdHaCQ6rF2hFvXYKdbkphPMDZXPh",
   );
   const connection = createLocalhostConnection();
   let newSubAdmin: web3.Keypair;
@@ -21,7 +21,7 @@ describe('SubAdmin', () => {
     newSubAdmin = await generateFundedKeypair(connection);
     // admin = await generateFundedKeypair(connection);
   });
-  it('SubAdmin level 3', async () => {
+  it("SubAdmin level 3", async () => {
     const wallet = new Wallet(admin);
     const program = createCubikProgram(wallet);
     const tx = await program.methods
@@ -31,7 +31,7 @@ describe('SubAdmin', () => {
         adminAccount: getAdminPDA()[0],
         subAdminAccount: getAdminSubAdminPDA(
           admin.publicKey,
-          createKey.publicKey
+          createKey.publicKey,
         )[0],
         createKey: createKey.publicKey,
       })
@@ -41,7 +41,7 @@ describe('SubAdmin', () => {
 
     console.log(tx);
   });
-  it('SubAdmin Create - level 1', async () => {
+  it("SubAdmin Create - level 1", async () => {
     const wallet = new Wallet(admin);
 
     const program = createCubikProgram(wallet);
@@ -52,7 +52,7 @@ describe('SubAdmin', () => {
         adminAccount: getAdminPDA()[0],
         subAdminAccount: getAdminSubAdminPDA(
           newSubAdmin.publicKey,
-          createKey.publicKey
+          createKey.publicKey,
         )[0],
         createKey: createKey.publicKey,
       })
@@ -61,8 +61,8 @@ describe('SubAdmin', () => {
     console.log(tx);
   });
 
-  describe('Add Event', () => {
-    it('Success: Add Event', async () => {
+  describe("Add Event", () => {
+    it("Success: Add Event", async () => {
       const wallet = new Wallet(admin);
 
       const program = createCubikProgram(wallet);
@@ -73,11 +73,11 @@ describe('SubAdmin', () => {
           authority: admin.publicKey,
           signerSubAdminAccount: getAdminSubAdminPDA(
             admin.publicKey,
-            adminCreateKey
+            adminCreateKey,
           )[0],
           subAdminAccount: getAdminSubAdminPDA(
             newSubAdmin.publicKey,
-            createKey.publicKey
+            createKey.publicKey,
           )[0],
         })
         .rpc();
@@ -90,13 +90,13 @@ describe('SubAdmin', () => {
       const program = createCubikProgram(wallet);
 
       const subAdminAccount = await program.account.subAdmin.fetch(
-        getAdminSubAdminPDA(newSubAdmin.publicKey, createKey.publicKey)[0]
+        getAdminSubAdminPDA(newSubAdmin.publicKey, createKey.publicKey)[0],
       );
       console.log(subAdminAccount);
     });
   });
-  describe.skip('Remove Event', () => {
-    it('Error: Remove Event', async () => {
+  describe.skip("Remove Event", () => {
+    it("Error: Remove Event", async () => {
       const wallet = new Wallet(newSubAdmin);
 
       const program = createCubikProgram(wallet);
@@ -107,17 +107,17 @@ describe('SubAdmin', () => {
           authority: newSubAdmin.publicKey,
           signerSubAdminAccount: getAdminSubAdminPDA(
             newSubAdmin.publicKey,
-            createKey.publicKey
+            createKey.publicKey,
           )[0],
           subAdminAccount: getAdminSubAdminPDA(
             newSubAdmin.publicKey,
-            createKey.publicKey
+            createKey.publicKey,
           )[0],
         })
         .rpc();
       console.log(tx);
     });
-    it('Success: Remove Event', async () => {
+    it("Success: Remove Event", async () => {
       const wallet = new Wallet(admin);
 
       const program = createCubikProgram(wallet);
@@ -128,11 +128,11 @@ describe('SubAdmin', () => {
           authority: admin.publicKey,
           signerSubAdminAccount: getAdminSubAdminPDA(
             admin.publicKey,
-            adminCreateKey
+            adminCreateKey,
           )[0],
           subAdminAccount: getAdminSubAdminPDA(
             newSubAdmin.publicKey,
-            createKey.publicKey
+            createKey.publicKey,
           )[0],
         })
         .rpc();
@@ -144,12 +144,12 @@ describe('SubAdmin', () => {
       const program = createCubikProgram(wallet);
 
       const subAdminAccount = await program.account.subAdmin.fetch(
-        getAdminSubAdminPDA(newSubAdmin.publicKey, createKey.publicKey)[0]
+        getAdminSubAdminPDA(newSubAdmin.publicKey, createKey.publicKey)[0],
       );
       console.log(subAdminAccount);
     });
   });
-  it.skip('Close SubAdmin', async () => {
+  it.skip("Close SubAdmin", async () => {
     const wallet = new Wallet(admin);
 
     const program = createCubikProgram(wallet);
@@ -160,11 +160,11 @@ describe('SubAdmin', () => {
         authority: admin.publicKey,
         closeSubAdminAccount: getAdminSubAdminPDA(
           newSubAdmin.publicKey,
-          createKey.publicKey
+          createKey.publicKey,
         )[0],
         subAdminAccount: getAdminSubAdminPDA(
           admin.publicKey,
-          adminCreateKey
+          adminCreateKey,
         )[0],
       })
       .rpc();

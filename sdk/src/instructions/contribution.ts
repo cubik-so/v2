@@ -13,7 +13,7 @@ export const contribution = (sdk: CubikSDK) => {
       accounts: ContributionSolAccounts
     ) => {
       const ix = await sdk.program.methods
-        .contributionSol(args.amount, args.split)
+        .contributionSol(args.amount)
         .accounts(accounts)
         .instruction();
 
@@ -24,7 +24,7 @@ export const contribution = (sdk: CubikSDK) => {
       accounts: ContributionSplAccounts
     ) => {
       const ix = await sdk.program.methods
-        .contributionSpl(args.amount, args.split)
+        .contributionSpl(args.amount)
         .accounts(accounts)
         .instruction();
 

@@ -7,8 +7,10 @@ use instructions::*;
 pub mod state;
 use state::*;
 
+// declare_id!("CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7");
+// declare_id!("D4QbbabmtqmkjJFcE2qnHihuXa4NT7Ap2tqqh5nyCG4T");
 // declare_id!("GsKHdvSBodD3ZGMAMWZ6sSwNZAixsE6XZ4xKA4KyEwc");
-declare_id!("CUbkXMRWxumGzDwf43ysyFm3da77JRuUqLF1bmW4tGoZ");
+declare_id!("4GgcGdn4mVtudPoX3a4xYv62ed4GKbuqn1AcxU5tU4SD");
 
 #[program]
 pub mod cubik {
@@ -126,8 +128,6 @@ pub mod cubik {
         members_keys: Vec<Pubkey>,
         threshold: u16,
         config_authority: Option<Pubkey>,
-        time_lock: u32,
-        memo: Option<String>,
     ) -> Result<()> {
         init_sponsor_with_self_custody_handler(
             ctx,
@@ -135,8 +135,6 @@ pub mod cubik {
             members_keys,
             threshold,
             config_authority,
-            time_lock,
-            memo,
         )?;
         Ok(())
     }
@@ -155,8 +153,6 @@ pub mod cubik {
         members_keys: Vec<Pubkey>,
         threshold: u16,
         config_authority: Option<Pubkey>,
-        time_lock: u32,
-        memo: Option<String>,
     ) -> Result<()> {
         init_cubik_sponsor_handler(
             ctx,
@@ -164,8 +160,6 @@ pub mod cubik {
             members_keys,
             threshold,
             config_authority,
-            time_lock,
-            memo,
         )?;
         Ok(())
     }
