@@ -13,8 +13,6 @@ pub fn init_sponsor_with_self_custody_handler(
     members_keys: Vec<Pubkey>,
     threshold: u16,
     config_authority: Option<Pubkey>,
-    time_lock: u32,
-    memo: Option<String>,
 ) -> Result<()> {
     let sponsor_account = &mut ctx.accounts.sponsor_account;
     let sponsor_team_account = &mut ctx.accounts.sponsor_team_account;
@@ -57,9 +55,9 @@ pub fn init_sponsor_with_self_custody_handler(
         squads_multisig_program::MultisigCreateArgsV2 {
             config_authority,
             members,
-            memo,
+            memo: None,
             threshold,
-            time_lock,
+            time_lock: 0,
             rent_collector: None,
         },
     )?;
@@ -118,8 +116,6 @@ pub fn init_cubik_sponsor_handler(
     members_keys: Vec<Pubkey>,
     threshold: u16,
     config_authority: Option<Pubkey>,
-    time_lock: u32,
-    memo: Option<String>,
 ) -> Result<()> {
     let sponsor_account = &mut ctx.accounts.sponsor_account;
     let sponsor_team_account = &mut ctx.accounts.sponsor_team_account;
@@ -162,9 +158,9 @@ pub fn init_cubik_sponsor_handler(
         squads_multisig_program::MultisigCreateArgsV2 {
             config_authority,
             members,
-            memo,
+            time_lock: 0,
             threshold,
-            time_lock,
+            memo: None,
             rent_collector: None,
         },
     )?;

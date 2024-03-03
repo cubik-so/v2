@@ -128,8 +128,6 @@ pub mod cubik {
         members_keys: Vec<Pubkey>,
         threshold: u16,
         config_authority: Option<Pubkey>,
-        time_lock: u32,
-        memo: Option<String>,
     ) -> Result<()> {
         init_sponsor_with_self_custody_handler(
             ctx,
@@ -137,8 +135,6 @@ pub mod cubik {
             members_keys,
             threshold,
             config_authority,
-            time_lock,
-            memo,
         )?;
         Ok(())
     }
@@ -157,8 +153,6 @@ pub mod cubik {
         members_keys: Vec<Pubkey>,
         threshold: u16,
         config_authority: Option<Pubkey>,
-        time_lock: u32,
-        memo: Option<String>,
     ) -> Result<()> {
         init_cubik_sponsor_handler(
             ctx,
@@ -166,8 +160,6 @@ pub mod cubik {
             members_keys,
             threshold,
             config_authority,
-            time_lock,
-            memo,
         )?;
         Ok(())
     }
