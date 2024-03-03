@@ -44,7 +44,7 @@ export const project = (sdk: CubikSDK) => {
       accounts: UpdateProjectStatusAccounts
     ) => {
       const ix = await sdk.program.methods
-        .updateProjectStatus(args.status) // @todo: enum issue
+        .updateProjectStatus(args.status)
         .accounts(accounts)
         .instruction();
 

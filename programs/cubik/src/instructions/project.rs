@@ -65,7 +65,7 @@ pub fn create_project_handler(
             memo,
             threshold,
             time_lock,
-            rent_collector: rent_collector,
+            rent_collector,
         },
     )?;
 
@@ -113,6 +113,12 @@ pub fn close_project_handler(_ctx: Context<CloseProjectContext>) -> Result<()> {
 #[derive(Accounts)]
 #[instruction(
     counter: u64,
+    members_keys: Vec<Pubkey>,
+    threshold: u16,
+    config_authority: Option<Pubkey>,
+    time_lock: u32,
+    memo: Option<String>,
+    rent_collector: Option<Pubkey>,
 )]
 pub struct CreateProjectContext<'info> {
     #[account(mut)]
