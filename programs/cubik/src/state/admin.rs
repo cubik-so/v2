@@ -20,6 +20,7 @@ pub struct AdminUser {
 #[derive(Default, InitSpace)]
 pub struct AdminEvent {
     pub authority: Pubkey,
-    pub events: Pubkey,
+    pub is_admin: bool,
+    pub event: Pubkey,
     pub bump: u8,
 }
