@@ -1,4 +1,4 @@
-import { BN, web3 } from "@coral-xyz/anchor";
+import { BN, web3 } from '@coral-xyz/anchor';
 
 /**
  * @name ContributionSolArgs
@@ -8,7 +8,6 @@ import { BN, web3 } from "@coral-xyz/anchor";
  */
 export type ContributionSolArgs = {
   amount: BN;
-  split: BN;
 };
 
 /**
@@ -37,7 +36,6 @@ export type ContributionSolAccounts = {
  */
 export type ContributionSplArgs = {
   amount: BN;
-  split: BN;
 };
 
 /**
