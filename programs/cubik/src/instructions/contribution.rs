@@ -34,8 +34,6 @@ pub fn contribution_spl_handler(ctx: Context<ContributionSPL>, amount: u64) -> R
 
     anchor_spl::token::transfer(cpi_ctx_trans, amount)?;
 
-    event_join.donation = event_join.donation + amount;
-
     emit!(NewContributionSPL {
         amount: amount,
         event_account: ctx.accounts.event_account.key(),
@@ -61,6 +59,7 @@ pub fn contribution_sol_handler(ctx: Context<ContributionSOL>, amount: u64) -> R
         Errors::InvalidProjectVerification
     );
     let receiver = &ctx.accounts.receiver;
+
     let transfer_instruction = system_instruction::transfer(
         ctx.accounts.authority.key,
         &project_account.vault_pubkey,
@@ -87,7 +86,7 @@ pub fn contribution_sol_handler(ctx: Context<ContributionSOL>, amount: u64) -> R
 }
 
 #[derive(Accounts)]
-#[instruction(amount: u64,split: u64)]
+
 pub struct ContributionSPL<'info> {
     #[account(mut, constraint = authority.key() == user_account.authority.key())]
     pub authority: Signer<'info>,
@@ -134,7 +133,6 @@ pub struct ContributionSPL<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(amount: u64,split: u64)]
 pub struct ContributionSOL<'info> {
     #[account(mut, constraint = authority.key() == user_account.authority.key())]
     pub authority: Signer<'info>,
