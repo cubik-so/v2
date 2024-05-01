@@ -1,0 +1,104 @@
+use crate::constant::*;
+use crate::errors::*;
+use crate::state::*;
+use anchor_lang::prelude::*;
+use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
+use anchor_spl::token::Mint;
+use anchor_spl::token::Token;
+use anchor_spl::token::{self, TokenAccount};
+
+#[derive(AnchorSerialize, AnchorDeserialize)]
+pub struct ContributionSPLArgs {
+    pub amount: u64,     // Amount of token with decimals
+    pub amount_usd: u64, // Amount in USD 1 USD = 10^6
+}
+
+#[derive(Accounts)]
+pub struct ContributionSPL<'info> {
+    #[account(mut)]
+    pub authority: Signer<'info>,
+
+    #[account(mut)]
+    pub token_mint: Box<Account<'info, Mint>>,
+
+    #[account(mut, constraint = token_ata_sender.mint ==  token_mint.key(), constraint = token_ata_sender.owner == authority.key())]
+    pub token_ata_sender: Box<Account<'info, TokenAccount>>,
+
+    #[account(mut, constraint = token_ata_receiver.mint ==  token_mint.key(), constraint = token_ata_receiver.owner == project_account.vault_pubkey.key())]
+    pub token_ata_receiver: Box<Account<'info, TokenAccount>>,
+
+    #[account(mut,
+        seeds = [PROJECT_PREFIX,project_account.create_key.key().as_ref()],
+        bump = project_account.bump
+    )]
+    pub project_account: Box<Account<'info, Project>>,
+
+    #[account(mut,
+        seeds=[b"event", event_account.event_key.key().as_ref()],
+        bump=event_account.bump
+    )]
+    pub event_account: Box<Account<'info, Event>>,
+
+    #[account(mut,
+    seeds = [b"event_join".as_ref(),event_account.key().as_ref(),project_account.key().as_ref()],
+    bump= event_join_account.bump
+    )]
+    pub event_join_account: Box<Account<'info, EventJoin>>,
+
+    #[account(address = system_program::ID)]
+    pub system_program: Program<'info, System>,
+
+    #[account(address = token::ID)]
+    pub token_program: Program<'info, Token>,
+}
+
+impl ContributionSPL<'_> {
+    pub fn validate(&self, args: ContributionSPLArgs) -> Result<()> {
+        if args.amount_usd < MIN_USD {
+            return Err(Errors::AmountTooLow.into());
+        }
+
+        require!(
+            self.event_join_account.status == EventProjectStatus::Approved,
+            Errors::InvalidProjectVerification
+        );
+
+        require!(
+            self.project_account.status == ProjectVerification::Verified,
+            Errors::InvalidProjectVerification
+        );
+
+        Ok(())
+    }
+
+    #[access_control(ctx.accounts.validate(args))]
+    pub fn contribution_spl(
+        ctx: Context<ContributionSPL>,
+        args: ContributionSPLArgs,
+    ) -> Result<()> {
+        let event_join = &mut ctx.accounts.event_join_account.clone();
+        let project_account = &ctx.accounts.project_account.clone();
+
+        let transfer_instruction = anchor_spl::token::Transfer {
+            from: ctx.accounts.token_ata_sender.to_account_info(),
+            to: ctx.accounts.token_ata_receiver.to_account_info(),
+            authority: ctx.accounts.authority.to_account_info(),
+        };
+
+        let cpi_ctx_trans = CpiContext::new(
+            ctx.accounts.token_program.to_account_info(),
+            transfer_instruction,
+        );
+
+        anchor_spl::token::transfer(cpi_ctx_trans, args.amount)?;
+
+        // emit!(NewContributionSPL {
+        //     amount: amount,
+        //     event_account: ctx.accounts.event_account.key(),
+        //     event_join_account: ctx.accounts.event_join_account.key(),
+        //     project_account: ctx.accounts.project_account.key(),
+        //     token: ctx.accounts.token_mint.key()
+        // });
+        Ok(())
+    }
+}

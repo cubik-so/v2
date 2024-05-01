@@ -22,4 +22,8 @@ pub enum Errors {
     InvalidLevel,
     #[msg("Error: Invalid Members Length")]
     InvalidMembersLength,
+    #[msg("Error: Invalid Project Creator")]
+    InvalidProjectCreator,
+    #[msg("Error: Amount too low")]
+    AmountTooLow,
 }

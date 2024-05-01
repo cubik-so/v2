@@ -55,14 +55,19 @@ pub struct UpdateEventJoin {
 }
 #[event]
 pub struct NewContributionSOL {
+    pub authority: Pubkey,
+    pub amount_usd: u64,
     pub amount: u64,
     pub event_join_account: Pubkey,
     pub event_account: Pubkey,
     pub project_account: Pubkey,
 }
+
 #[event]
 pub struct NewContributionSPL {
     pub amount: u64,
+    pub authority: Pubkey,
+    pub amount_usd: u64,
     pub token: Pubkey,
     pub event_join_account: Pubkey,
     pub event_account: Pubkey,
