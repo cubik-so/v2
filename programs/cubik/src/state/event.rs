@@ -12,6 +12,8 @@ pub struct Event {
     pub metadata: String, // todo - fix size
     //  createKey for the event
     pub create_key: Pubkey,
+    // Voting Ending slot
+    pub ending_slot: u64,
     // Bump for the event PDA seed
     pub bump: u8,
 }
@@ -25,4 +27,13 @@ impl Default for EventType {
     fn default() -> Self {
         EventType::QFROUND
     }
+}
+
+#[account]
+#[derive(Default, InitSpace)]
+pub struct EventTeam {
+    // Event account
+    pub authority: Pubkey,
+    // Team name
+    pub bump: u8,
 }

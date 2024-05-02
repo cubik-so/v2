@@ -2,7 +2,7 @@ use crate::constant::*;
 use crate::errors::*;
 use crate::state::*;
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
+use anchor_lang::solana_program::{self, system_program};
 
 /// todo - Add Docs
 #[derive(Accounts)]
@@ -34,9 +34,6 @@ impl ProjectClose<'_> {
 
     #[access_control(ctx.accounts.validate())]
     pub fn project_close(ctx: Context<Self>) -> Result<()> {
-        let project_account = &mut ctx.accounts.project_account;
-
-        project_account.state = ProjectState::Closed;
         Ok(())
     }
 }

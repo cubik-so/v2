@@ -2,7 +2,7 @@ use crate::constant::*;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_instruction;
-use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
+use anchor_lang::solana_program::system_program;
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct ProjectTipSOLArgs {
@@ -28,8 +28,6 @@ pub struct ProjectTipSOL<'info> {
     // Misc Accounts
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
-    #[account(address = solana_program::sysvar::rent::ID)]
-    pub rent: Sysvar<'info, Rent>,
 }
 
 impl ProjectTipSOL<'_> {

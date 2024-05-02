@@ -1,11 +1,12 @@
 use std::str::FromStr;
 
-use anchor_lang::solana_program::{native_token::LAMPORTS_PER_SOL, pubkey::Pubkey};
+use anchor_lang::solana_program::pubkey::Pubkey;
 
 // Constants for the PDA seed.
 pub const PROJECT_PREFIX: &[u8] = b"project";
 pub const EVENT_PREFIX: &[u8] = b"event";
-
+pub const TEAM_PREFIX: &[u8] = b"team";
+pub const EVENT_PARTICIPANT: &[u8] = b"eventparticipant";
 // Variables
 pub const CONFIG_AUTHORITY: Pubkey =
     Pubkey::from_str("8qpemLRMyZC4gX34vewYWHfeekKGcHqWzd5etppsQ5tY").unwrap();
