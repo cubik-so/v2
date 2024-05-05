@@ -14,7 +14,7 @@ pub struct EventParticipantCreate<'info> {
     #[account(init,
         payer = authority,
         space = 8 + EventParticipant::INIT_SPACE,
-        seeds = [EVENT_PARTICIPANT,event_account.key().as_ref(),project_account.key().as_ref()],
+        seeds = [EVENT_PARTICIPANT_PREFIX,event_account.key().as_ref(),project_account.key().as_ref()],
         bump
     )]
     pub event_participant_account: Box<Account<'info, EventParticipant>>,

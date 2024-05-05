@@ -1,37 +1,74 @@
-// #[derive(Accounts)]
-// pub struct InviteEventJoinContext<'info> {
-//     #[account(mut,
-//         constraint = authority.key() == sub_admin_account.authority.key() @ Errors::InvalidSigner,
-//         constraint = sub_admin_account.level == 3 @Errors::InvalidAdmin,
-//     )]
-//     pub authority: Signer<'info>,
+use crate::constant::*;
+use crate::errors::Errors;
+use crate::state::*;
+use anchor_lang::prelude::*;
+use anchor_lang::system_program::{self};
 
-//     #[account(init,
-//         payer = authority,
-//         space = 8 + EventJoin::INIT_SPACE,
-//         seeds = [b"event_join".as_ref(),event_account.key().as_ref(),project_account.key().as_ref()],
-//         bump
-//     )]
-//     pub event_join_account: Box<Account<'info, EventJoin>>,
+#[derive(Accounts)]
+pub struct EventParticipantInvite<'info> {
+    #[account(mut)]
+    pub manager: Signer<'info>,
 
-//     #[account(mut,
-//         seeds = [b"admin".as_ref(), sub_admin_account.authority.key().as_ref(), sub_admin_account.create_key.key().as_ref()],
-//         bump = sub_admin_account.bump
-//     )]
-//     pub sub_admin_account: Box<Account<'info, SubAdmin>>,
+    #[account(mut,
+            seeds=[ADMIN_PREFIX],
+            bump = admin_account.bump
+        )]
+    pub admin_account: Box<Account<'info, Admin>>,
 
-//     #[account(mut,
-//             seeds=[b"project",project_account.create_key.key().as_ref(),project_account.counter.to_le_bytes().as_ref()],
-//             bump = project_account.bump
-//         )]
-//     pub project_account: Box<Account<'info, Project>>,
+    #[account(init,
+        payer = manager,
+        space = 8 + EventParticipant::INIT_SPACE,
+        seeds = [EVENT_PARTICIPANT_PREFIX,event_account.key().as_ref(),project_account.key().as_ref()],
+        bump
+    )]
+    pub event_participant_account: Box<Account<'info, EventParticipant>>,
 
-//     #[account(mut,seeds=[b"event",event_account.event_key.key().as_ref()],bump=event_account.bump)]
-//     pub event_account: Box<Account<'info, Event>>,
+    #[account(mut,
+            seeds=[PROJECT_PREFIX,project_account.create_key.key().as_ref()],
+            bump = project_account.bump
+        )]
+    pub project_account: Box<Account<'info, Project>>,
 
-//     // Misc Accounts
-//     #[account(address = system_program::ID)]
-//     pub system_program: Program<'info, System>,
-//     #[account(address = solana_program::sysvar::rent::ID)]
-//     pub rent: Sysvar<'info, Rent>,
-// }
+    #[account(mut,
+            seeds = [EVENT_PREFIX,event_account.create_key.as_ref()],
+            bump = event_account.bump
+        )]
+    pub event_account: Box<Account<'info, Event>>,
+
+    #[account(address = system_program::ID)]
+    pub system_program: Program<'info, System>,
+}
+
+impl EventParticipantInvite<'_> {
+    // TODO - Validate the code and improve
+    pub fn validate(&self) -> Result<()> {
+        let signer = *self.manager.key;
+
+        let managers = *self.admin_account.managers;
+
+        let mut is_manager: bool = false;
+
+        for manager in managers.iter() {
+            if manager == signer {
+                is_manager = true
+            }
+        }
+
+        if is_manager == false {
+            Err(Errors::InvalidAdmin)
+        }
+
+        Ok(())
+    }
+
+    #[access_control(ctx.accounts.validate())]
+    pub fn event_participant_invite(ctx: Context<Self>) -> Result<()> {
+        let event_participant_account = &mut ctx.accounts.event_participant_account;
+
+        event_participant_account.authority = *ctx.accounts.project_account.creator.key();
+        event_participant_account.status = EventProjectStatus::PendingApproval;
+        event_participant_account.bump = ctx.bumps.event_participant_account;
+
+        Ok(())
+    }
+}

@@ -1,4 +1,5 @@
-pub mod admin;
+pub mod admin_config;
+pub mod admin_create;
 pub mod contribution_sol;
 pub mod contribution_spl;
 pub mod event_create;
@@ -13,9 +14,9 @@ pub mod project_tip_spl;
 pub mod project_transfer;
 pub mod project_update;
 pub mod sponsor;
-pub mod subadmin;
 
-pub use admin::*;
+pub use admin_config::*;
+pub use admin_create::*;
 pub use contribution_sol::*;
 pub use contribution_spl::*;
 pub use event_create::*;
@@ -30,4 +31,3 @@ pub use project_tip_spl::*;
 pub use project_transfer::*;
 pub use project_update::*;
 pub use sponsor::*;
-pub use subadmin::*;

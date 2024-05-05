@@ -21,5 +21,10 @@ pub struct AdminCreate<'info> {
 }
 
 impl AdminCreate<'_> {
-    fn admin_create(ctx: Context<Self>) -> Result<()> {}
+    fn admin_create(ctx: Context<Self>) -> Result<()> {
+        let admin_account = &mut ctx.accounts.admin_account;
+        admin_account.authority = ctx.accounts.authority.key();
+        admin_account.bump = ctx.bumps.admin_account;
+        Ok(())
+    }
 }
