@@ -107,7 +107,7 @@ impl ProjectCreate<'_> {
         project_account.metadata = args.metadata;
         project_account.status = ProjectVerification::UnderReview;
         project_account.create_key = ctx.accounts.create_key.key();
-        project_account.multisig_pda = ctx.accounts.multisig.key();
+        project_account.reciver = vault_pubkey.key();
         project_account.vault_pubkey = vault_pubkey.key();
         project_account.bump = ctx.bumps.project_account;
 

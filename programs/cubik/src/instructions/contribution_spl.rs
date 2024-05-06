@@ -2,7 +2,7 @@ use crate::constant::*;
 use crate::errors::*;
 use crate::state::*;
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
+use anchor_lang::solana_program::system_program;
 use anchor_spl::token::Mint;
 use anchor_spl::token::Token;
 use anchor_spl::token::{self, TokenAccount};
@@ -34,16 +34,16 @@ pub struct ContributionSPL<'info> {
     pub project_account: Box<Account<'info, Project>>,
 
     #[account(mut,
-        seeds=[b"event", event_account.event_key.key().as_ref()],
+        seeds=[EVENT_PREFIX, event_account.create_key.key().as_ref()],
         bump=event_account.bump
     )]
     pub event_account: Box<Account<'info, Event>>,
 
     #[account(mut,
-    seeds = [b"event_join".as_ref(),event_account.key().as_ref(),project_account.key().as_ref()],
-    bump= event_join_account.bump
+        seeds = [EVENT_PARTICIPANT_PREFIX,event_account.key().as_ref(),project_account.key().as_ref()],
+        bump = event_participant_account.bump
     )]
-    pub event_join_account: Box<Account<'info, EventJoin>>,
+    pub event_participant_account: Box<Account<'info, EventParticipant>>,
 
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
@@ -59,7 +59,7 @@ impl ContributionSPL<'_> {
         }
 
         require!(
-            self.event_join_account.status == EventProjectStatus::Approved,
+            self.event_participant_account.status == EventProjectStatus::Approved,
             Errors::InvalidProjectVerification
         );
 

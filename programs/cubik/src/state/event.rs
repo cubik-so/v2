@@ -12,6 +12,8 @@ pub struct Event {
     pub metadata: String, // todo - fix size
     //  createKey for the event
     pub create_key: Pubkey,
+    // Voting Start slot
+    pub start_slot: u64,
     // Voting Ending slot
     pub ending_slot: u64,
     // Bump for the event PDA seed

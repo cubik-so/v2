@@ -4,11 +4,14 @@ use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct ProjectUpdateArgs {}
+pub struct ProjectUpdateArgs {
+    reciver: Option<Pubkey>,
+    metadata: Option<String>,
+}
 
 #[derive(Accounts)]
 pub struct ProjectUpdate<'info> {
-    #[account(mut)]
+    #[account(mut, constraint = creator.key() == project_account.creator.key() )]
     pub creator: Signer<'info>,
 
     #[account(mut,
@@ -23,7 +26,16 @@ pub struct ProjectUpdate<'info> {
 }
 
 impl ProjectUpdate<'_> {
-    fn project_update(ctx: Context<Self>) -> Result<()> {
+    fn project_update(ctx: Context<Self>, args: ProjectUpdateArgs) -> Result<()> {
+        let project_account = &mut ctx.accounts.project_account;
+
+        if args.metadata.is_some() {
+            project_account.metadata = args.metadata.unwrap();
+        }
+
+        if args.reciver.is_some() {
+            project_account.reciver = args.reciver.unwrap();
+        }
         Ok(())
     }
 }

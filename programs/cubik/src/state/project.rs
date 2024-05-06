@@ -7,8 +7,8 @@ pub struct Project {
     pub creator: Pubkey,
     /// Current verification status of the project.
     pub status: ProjectVerification,
-    // Pubkey of the project multisig account.
-    pub multisig_pda: Pubkey,
+    /// Pubkey of the project reciver
+    pub reciver: Pubkey,
     /// Public key of the account used to store the project's funds or assets.
     pub vault_pubkey: Pubkey,
     /// Public key used as a seed to generate the project's PDA.

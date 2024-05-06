@@ -27,16 +27,16 @@ pub struct ContributionSOL<'info> {
     pub project_account: Box<Account<'info, Project>>,
 
     #[account(mut,
-        seeds=[b"event", event_account.event_key.key().as_ref()],
+        seeds=[EVENT_PREFIX, event_account.create_key.key().as_ref()],
         bump=event_account.bump
     )]
     pub event_account: Box<Account<'info, Event>>,
 
     #[account(mut,
-    seeds = [b"event_join".as_ref(),event_account.key().as_ref(),project_account.key().as_ref()],
-    bump= event_join_account.bump
+        seeds = [EVENT_PARTICIPANT_PREFIX,event_account.key().as_ref(),project_account.key().as_ref()],
+        bump = event_participant_account.bump
     )]
-    pub event_join_account: Box<Account<'info, EventJoin>>,
+    pub event_participant_account: Box<Account<'info, EventParticipant>>,
 
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
@@ -53,7 +53,7 @@ impl ContributionSOL<'_> {
         }
 
         require!(
-            self.event_join_account.status == EventProjectStatus::Approved,
+            self.event_participant_account.status == EventProjectStatus::Approved,
             Errors::InvalidProjectVerification
         );
 
@@ -70,7 +70,7 @@ impl ContributionSOL<'_> {
         args: ContributionSOLArgs,
     ) -> Result<()> {
         let project_account = &ctx.accounts.project_account;
-        let event_join = &mut ctx.accounts.event_join_account;
+        let event_participant_account = &mut ctx.accounts.event_participant_account;
 
         let receiver = &ctx.accounts.receiver;
 

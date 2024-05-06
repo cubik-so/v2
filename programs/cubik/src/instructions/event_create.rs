@@ -6,6 +6,7 @@ use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct EventCreateArgs {
     metadata: String,
+    start_slot: u64,
     ending_slot: u64,
 }
 

@@ -7,6 +7,7 @@ use anchor_lang::system_program::{self};
 pub struct EventUpdateArgs {
     metadata: Option<String>,
     ending_slot: Option<u64>,
+    start_slot: Option<u64>,
 }
 
 #[derive(Accounts)]

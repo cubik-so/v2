@@ -44,19 +44,19 @@ impl EventParticipantInvite<'_> {
     pub fn validate(&self) -> Result<()> {
         let signer = *self.manager.key;
 
-        let managers = *self.admin_account.managers;
+        // let managers = *self.admin_account.managers;
 
-        let mut is_manager: bool = false;
+        // let mut is_manager: bool = false;
 
-        for manager in managers.iter() {
-            if manager == signer {
-                is_manager = true
-            }
-        }
+        // for manager in managers.iter() {
+        //     if manager == &signer {
+        //         is_manager = true
+        //     }
+        // }
 
-        if is_manager == false {
-            Err(Errors::InvalidAdmin)
-        }
+        // if is_manager == false {
+        //     Err(Errors::InvalidAdmin)
+        // }
 
         Ok(())
     }
