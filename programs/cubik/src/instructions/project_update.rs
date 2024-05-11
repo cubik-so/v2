@@ -1,4 +1,4 @@
-use crate::constant::*;
+use crate::constant;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};

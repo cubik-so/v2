@@ -11,7 +11,7 @@ pub struct ProjectClose<'info> {
     pub creator: Signer<'info>,
 
     #[account(mut,
-        close = creator,
+    close = creator,
     seeds = [PROJECT_PREFIX, project_account.create_key.as_ref()],
     bump = project_account.bump
     )]
