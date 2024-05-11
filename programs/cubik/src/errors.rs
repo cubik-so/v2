@@ -2,8 +2,6 @@ use anchor_lang::prelude::*;
 
 #[error_code]
 pub enum Errors {
-    #[msg("Error: Maximum length of 32 characters exceeded")]
-    MaxLengthExceeded,
     #[msg("Error: Mismatch in signer credentials")]
     InvalidSigner,
     #[msg("Error: Invalid Signer")]
@@ -18,12 +16,12 @@ pub enum Errors {
     InvalidTip,
     #[msg("Error: Invalid receiver")]
     InvalidReceiver,
-    #[msg("Error: Invalid Level for SubAdmin")]
-    InvalidLevel,
     #[msg("Error: Invalid Members Length")]
     InvalidMembersLength,
     #[msg("Error: Invalid Project Creator")]
     InvalidProjectCreator,
+    #[msg("Error: Invalid Event Creator")]
+    InvalidEventCreator,
     #[msg("Error: Amount too low")]
     AmountTooLow,
 }

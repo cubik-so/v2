@@ -1,7 +1,6 @@
-use crate::constant::*;
 use crate::state::*;
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
+use anchor_lang::solana_program::system_program;
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct EventCreateArgs {
@@ -40,11 +39,6 @@ pub struct EventCreate<'info> {
 }
 
 impl EventCreate<'_> {
-    fn validate(&self) -> Result<()> {
-        Ok(())
-    }
-
-    #[access_control(ctx.accounts.validate())]
     pub fn event_create(ctx: Context<Self>, args: EventCreateArgs) -> Result<()> {
         let event_account = &mut ctx.accounts.event_account;
         let event_team_account = &mut ctx.accounts.event_team_account;

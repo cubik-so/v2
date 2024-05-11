@@ -1,4 +1,4 @@
-use crate::constant::*;
+use crate::errors::Errors;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
@@ -12,7 +12,7 @@ pub struct EventUpdateArgs {
 
 #[derive(Accounts)]
 pub struct EventUpdate<'info> {
-    #[account(mut)]
+    #[account(mut, constraint = authority.key() == event_team_account.authority.key() @Errors::InvalidEventCreator)]
     pub authority: Signer<'info>,
 
     #[account(mut,
@@ -32,12 +32,7 @@ pub struct EventUpdate<'info> {
 }
 
 impl EventUpdate<'_> {
-    fn validate(&self) -> Result<()> {
-        Ok(())
-    }
-
-    #[access_control(ctx.accounts.validate())]
-    fn event_update(ctx: Context<Self>, args: EventUpdateArgs) -> Result<()> {
+    pub fn event_update(ctx: Context<Self>, args: EventUpdateArgs) -> Result<()> {
         let event_account = &mut ctx.accounts.event_account;
 
         if args.ending_slot.is_some() {
@@ -47,6 +42,10 @@ impl EventUpdate<'_> {
         if args.metadata.is_some() {
             event_account.metadata = args.metadata.unwrap()
         };
+
+        if args.start_slot.is_some() {
+            event_account.start_slot = args.start_slot.unwrap()
+        }
 
         Ok(())
     }

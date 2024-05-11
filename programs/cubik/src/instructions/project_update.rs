@@ -1,4 +1,4 @@
-use crate::constant;
+use crate::errors::Errors;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
@@ -11,7 +11,7 @@ pub struct ProjectUpdateArgs {
 
 #[derive(Accounts)]
 pub struct ProjectUpdate<'info> {
-    #[account(mut, constraint = creator.key() == project_account.creator.key() )]
+    #[account(mut, constraint = creator.key() == project_account.creator.key() @Errors::InvalidProjectCreator )]
     pub creator: Signer<'info>,
 
     #[account(mut,
@@ -26,7 +26,7 @@ pub struct ProjectUpdate<'info> {
 }
 
 impl ProjectUpdate<'_> {
-    fn project_update(ctx: Context<Self>, args: ProjectUpdateArgs) -> Result<()> {
+    pub fn project_update(ctx: Context<Self>, args: ProjectUpdateArgs) -> Result<()> {
         let project_account = &mut ctx.accounts.project_account;
 
         if args.metadata.is_some() {

@@ -45,11 +45,6 @@ pub struct ProjectCreate<'info> {
 }
 /// todo - Add Docs
 impl ProjectCreate<'_> {
-    fn validate(&self) -> Result<()> {
-        Ok(())
-    }
-
-    #[access_control(ctx.accounts.validate())]
     pub fn project_create(ctx: Context<Self>, args: ProjectCreateArgs) -> Result<()> {
         let project_account = &mut ctx.accounts.project_account;
 

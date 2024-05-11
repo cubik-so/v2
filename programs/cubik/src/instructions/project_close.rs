@@ -1,13 +1,12 @@
-use crate::constant::*;
 use crate::errors::*;
 use crate::state::*;
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::{self, system_program};
+use anchor_lang::solana_program::system_program;
 
 /// todo - Add Docs
 #[derive(Accounts)]
 pub struct ProjectClose<'info> {
-    #[account(mut)]
+    #[account(mut,constraint = creator.key() == project_account.creator.key() @Errors::InvalidProjectCreator)]
     pub creator: Signer<'info>,
 
     #[account(mut,
@@ -23,17 +22,7 @@ pub struct ProjectClose<'info> {
 
 /// todo - Add Docs
 impl ProjectClose<'_> {
-    fn validate(&self) -> Result<()> {
-        require_eq!(
-            self.creator.key(),
-            self.project_account.creator.key(),
-            Errors::InvalidProjectCreator
-        );
-        Ok(())
-    }
-
-    #[access_control(ctx.accounts.validate())]
-    pub fn project_close(ctx: Context<Self>) -> Result<()> {
+    pub fn project_close(_ctx: Context<Self>) -> Result<()> {
         Ok(())
     }
 }
