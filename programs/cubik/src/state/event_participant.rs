@@ -2,10 +2,12 @@ use anchor_lang::prelude::*;
 
 #[account]
 #[derive(Default, InitSpace)]
-pub struct EventJoin {
+pub struct EventParticipant {
+    //
     pub authority: Pubkey,
+    //
     pub status: EventProjectStatus,
-    pub donation: u64,
+    //
     pub bump: u8,
 }
 

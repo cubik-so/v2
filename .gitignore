@@ -14,3 +14,5 @@ wallets.json
 .env
 wallets
 tests/other
+
+tests/test.json
