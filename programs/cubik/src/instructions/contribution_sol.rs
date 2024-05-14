@@ -1,14 +1,12 @@
-use crate::constant::*;
 use crate::errors::*;
+use crate::event::NewContributionSOL;
 use crate::state::*;
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::system_instruction;
-use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
+use anchor_lang::solana_program::system_program;
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct ContributionSOLArgs {
-    pub amount: u64,     // Amount in SOL 1 SOL = 10^9
-    pub amount_usd: u64, // Amount in USD 1 USD = 10^6
+    pub amount: u64, // Amount in SOL 1 SOL = 10^9
 }
 
 #[derive(Accounts)]
@@ -16,8 +14,8 @@ pub struct ContributionSOL<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
 
-    /// CHECK: Receiver is the project vault
-    #[account(mut, constraint = project_account.vault_pubkey.key() == receiver.key())]
+    /// CHECK: Receiver is the project account reciver
+    #[account(mut, constraint = project_account.reciver.key() == receiver.key())]
     pub receiver: AccountInfo<'info>,
 
     #[account(mut,
@@ -48,19 +46,21 @@ impl ContributionSOL<'_> {
         if args.amount < MIN_SOL {
             return Err(Errors::AmountTooLow.into());
         }
-        if args.amount_usd < MIN_USD {
-            return Err(Errors::AmountTooLow.into());
-        }
 
         require!(
             self.event_participant_account.status == EventProjectStatus::Approved,
             Errors::InvalidProjectVerification
         );
 
-        require!(
-            self.project_account.status == ProjectVerification::Verified,
-            Errors::InvalidProjectVerification
-        );
+        // Not Reqired right now
+        //
+        // require!(
+        //     self.project_account.status == ProjectVerification::Verified,
+        //     Errors::InvalidProjectVerification
+        // );
+
+        // TODO: - Add check for slots start and end
+
         Ok(())
     }
 
@@ -76,7 +76,7 @@ impl ContributionSOL<'_> {
 
         let transfer_instruction = system_instruction::transfer(
             ctx.accounts.authority.key,
-            &project_account.vault_pubkey,
+            &project_account.reciver,
             args.amount,
         );
 
@@ -89,6 +89,13 @@ impl ContributionSOL<'_> {
             ],
             &[],
         )?;
+
+        emit!(NewContributionSOL {
+            amount: args.amount,
+            authority: ctx.accounts.authority.key(),
+            event_key: ctx.accounts.event_account.create_key.key(),
+            project_create_key: ctx.accounts.project_account.create_key.key(),
+        });
 
         Ok(())
     }

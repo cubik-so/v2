@@ -65,7 +65,7 @@ impl EventParticipantInvite<'_> {
     pub fn event_participant_invite(ctx: Context<Self>) -> Result<()> {
         let event_participant_account = &mut ctx.accounts.event_participant_account;
 
-        event_participant_account.authority = *ctx.accounts.project_account.creator.key();
+        event_participant_account.authority = ctx.accounts.project_account.creator.key();
         event_participant_account.status = EventProjectStatus::PendingApproval;
         event_participant_account.bump = ctx.bumps.event_participant_account;
 

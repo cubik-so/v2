@@ -1,10 +1,8 @@
 use crate::constant::*;
+use crate::errors::Errors;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
-
-#[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct EventParticipantArgs {}
 
 #[derive(Accounts)]
 pub struct EventParticipantCreate<'info> {
@@ -37,13 +35,21 @@ pub struct EventParticipantCreate<'info> {
 }
 
 impl EventParticipantCreate<'_> {
-    fn event_participant_create(ctx: Context<Self>, args: EventParticipantArgs) -> Result<()> {
-        let event_participant_account = &mut ctx.accounts.event_participant_account;
+    fn validate(&self) -> Result<()> {
+        require_eq!(
+            *self.authority.key,
+            self.project_account.creator.key(),
+            Errors::InvalidProjectCreator
+        );
+        Ok(())
+    }
 
+    #[access_control(ctx.accounts.validate())]
+    pub fn event_participant_create(ctx: Context<Self>) -> Result<()> {
+        let event_participant_account = &mut ctx.accounts.event_participant_account;
         event_participant_account.authority = *ctx.accounts.authority.key;
         event_participant_account.status = EventProjectStatus::PendingApproval;
         event_participant_account.bump = ctx.bumps.event_participant_account;
-
         Ok(())
     }
 }

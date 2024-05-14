@@ -64,4 +64,54 @@ pub mod cubik {
         EventUpdate::event_update(ctx, args)?;
         Ok(())
     }
+
+    // Event Team
+    pub fn event_team_create(
+        ctx: Context<EventTeamCreate>,
+        args: EventTeamCreateArgs,
+    ) -> Result<()> {
+        EventTeamCreate::event_team_create(ctx, args)?;
+        Ok(())
+    }
+
+    // Project Participanting in the event
+    pub fn event_participant_create(ctx: Context<EventParticipantCreate>) -> Result<()> {
+        EventParticipantCreate::event_participant_create(ctx)?;
+        Ok(())
+    }
+
+    pub fn event_participant_invite(ctx: Context<EventParticipantInvite>) -> Result<()> {
+        EventParticipantInvite::event_participant_invite(ctx)?;
+        Ok(())
+    }
+
+    // Tipping Sol to Project
+    pub fn project_tip_sol(ctx: Context<ProjectTipSOL>, args: ProjectTipSOLArgs) -> Result<()> {
+        ProjectTipSOL::project_tip_sol(ctx, args)?;
+        Ok(())
+    }
+
+    // Tipping any SPL token to the project
+    pub fn project_tip_spl(ctx: Context<ProjectTipSPL>, args: ProjectTipSPLArgs) -> Result<()> {
+        ProjectTipSPL::project_tip_spl(ctx, args);
+        Ok(())
+    }
+
+    // Event Contribution SOL
+    pub fn contribution_sol(
+        ctx: Context<ContributionSOL>,
+        args: ContributionSOLArgs,
+    ) -> Result<()> {
+        ContributionSOL::contribution_sol(ctx, args)?;
+        Ok(())
+    }
+
+    // Event Contribution SPL
+    pub fn contribution_spl(
+        ctx: Context<ContributionSPL>,
+        args: ContributionSPLArgs,
+    ) -> Result<()> {
+        ContributionSPL::contribution_spl(ctx, args)?;
+        Ok(())
+    }
 }

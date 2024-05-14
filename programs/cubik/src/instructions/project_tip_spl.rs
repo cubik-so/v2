@@ -1,13 +1,12 @@
-use crate::constant::{};
+use crate::event::NewTipSPL;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
+use anchor_spl::token::accessor::amount;
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
-
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct ProjectTipSPLArgs {
-    pub amount: u64,     // Amount of token with decimals
-    pub amount_usd: u64, // Amount in USD ( 1USD = 10^6 )
+    pub amount: u64, // Amount of token with decimals
 }
 
 #[derive(Accounts)]
@@ -21,7 +20,7 @@ pub struct ProjectTipSPL<'info> {
     #[account(mut, constraint = token_ata_sender.mint ==  token_mint.key(), constraint = token_ata_sender.owner == authority.key())]
     pub token_ata_sender: Box<Account<'info, TokenAccount>>,
 
-    #[account(mut, constraint = token_ata_receiver.mint ==  token_mint.key(), constraint = token_ata_receiver.owner == project_account.vault_pubkey.key())]
+    #[account(mut, constraint = token_ata_receiver.mint ==  token_mint.key(), constraint = token_ata_receiver.owner == project_account.reciver.key())]
     pub token_ata_receiver: Box<Account<'info, TokenAccount>>,
 
     #[account(mut,
@@ -59,6 +58,12 @@ impl ProjectTipSPL<'_> {
         );
         anchor_spl::token::transfer(cpi_ctx_trans, args.amount)?;
 
+        emit!(NewTipSPL {
+            amount: args.amount,
+            authority: ctx.accounts.authority.key(),
+            token: ctx.accounts.token_mint.key(),
+            project_create_key:ctx.accounts.project_account.create_key.key();
+        });
         Ok(())
     }
 }

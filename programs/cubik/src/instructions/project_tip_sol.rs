@@ -1,13 +1,11 @@
-use crate::constant::*;
+use crate::event::NewTipSOL;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_instruction;
 use anchor_lang::solana_program::system_program;
-
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct ProjectTipSOLArgs {
-    pub amount: u64,     // Amount of token with decimals
-    pub amount_usd: u64, // Amount in USD ( 1USD = 10^6 )
+    pub amount: u64, // Amount of token with decimals
 }
 
 #[derive(Accounts)]
@@ -16,7 +14,7 @@ pub struct ProjectTipSOL<'info> {
     pub authority: Signer<'info>,
 
     /// CHECK: Receiver is the project account
-    #[account(mut, constraint = project_account.vault_pubkey.key() == receiver.key())]
+    #[account(mut, constraint = project_account.reciver.key() == receiver.key())]
     pub receiver: AccountInfo<'info>,
 
     #[account(mut,
@@ -41,7 +39,7 @@ impl ProjectTipSOL<'_> {
         let receiver = &ctx.accounts.receiver;
         let transfer_instruction = system_instruction::transfer(
             ctx.accounts.authority.key,
-            &project_account.vault_pubkey,
+            &project_account.reciver,
             args.amount,
         );
 
@@ -54,6 +52,12 @@ impl ProjectTipSOL<'_> {
             ],
             &[],
         )?;
+
+        emit!(NewTipSOL {
+            amount: args.amount,
+            authority: ctx.accounts.authority.key(),
+            project_create_key: ctx.accounts.project_account.create_key.key(),
+        });
         Ok(())
     }
 }

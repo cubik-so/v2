@@ -1,5 +1,5 @@
-use crate::constant::*;
 use crate::errors::*;
+use crate::event::NewContributionSPL;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
@@ -9,8 +9,7 @@ use anchor_spl::token::{self, TokenAccount};
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct ContributionSPLArgs {
-    pub amount: u64,     // Amount of token with decimals
-    pub amount_usd: u64, // Amount in USD 1 USD = 10^6
+    pub amount: u64, // Amount of token with decimals
 }
 
 #[derive(Accounts)]
@@ -24,7 +23,7 @@ pub struct ContributionSPL<'info> {
     #[account(mut, constraint = token_ata_sender.mint ==  token_mint.key(), constraint = token_ata_sender.owner == authority.key())]
     pub token_ata_sender: Box<Account<'info, TokenAccount>>,
 
-    #[account(mut, constraint = token_ata_receiver.mint ==  token_mint.key(), constraint = token_ata_receiver.owner == project_account.vault_pubkey.key())]
+    #[account(mut, constraint = token_ata_receiver.mint ==  token_mint.key(), constraint = token_ata_receiver.owner == project_account.reciver.key())]
     pub token_ata_receiver: Box<Account<'info, TokenAccount>>,
 
     #[account(mut,
@@ -54,19 +53,19 @@ pub struct ContributionSPL<'info> {
 
 impl ContributionSPL<'_> {
     pub fn validate(&self, args: ContributionSPLArgs) -> Result<()> {
-        if args.amount_usd < MIN_USD {
-            return Err(Errors::AmountTooLow.into());
-        }
-
         require!(
             self.event_participant_account.status == EventProjectStatus::Approved,
             Errors::InvalidProjectVerification
         );
 
-        require!(
-            self.project_account.status == ProjectVerification::Verified,
-            Errors::InvalidProjectVerification
-        );
+        // Not Reqired right now
+        //
+        // require!(
+        //     self.project_account.status == ProjectVerification::Verified,
+        //     Errors::InvalidProjectVerification
+        // );
+
+        // TODO: - Add check for slots start and end
 
         Ok(())
     }
@@ -76,7 +75,6 @@ impl ContributionSPL<'_> {
         ctx: Context<ContributionSPL>,
         args: ContributionSPLArgs,
     ) -> Result<()> {
-        let event_join = &mut ctx.accounts.event_join_account.clone();
         let project_account = &ctx.accounts.project_account.clone();
 
         let transfer_instruction = anchor_spl::token::Transfer {
@@ -92,13 +90,13 @@ impl ContributionSPL<'_> {
 
         anchor_spl::token::transfer(cpi_ctx_trans, args.amount)?;
 
-        // emit!(NewContributionSPL {
-        //     amount: amount,
-        //     event_account: ctx.accounts.event_account.key(),
-        //     event_join_account: ctx.accounts.event_join_account.key(),
-        //     project_account: ctx.accounts.project_account.key(),
-        //     token: ctx.accounts.token_mint.key()
-        // });
+        emit!(NewContributionSPL {
+            amount: args.amount,
+            authority: ctx.accounts.authority.key(),
+            event_key: ctx.accounts.event_account.create_key.key(),
+            project_create_key: ctx.accounts.project_account.create_key.key(),
+            token: ctx.accounts.token_mint.key(),
+        });
         Ok(())
     }
 }
