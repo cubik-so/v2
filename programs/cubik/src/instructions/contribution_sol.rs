@@ -60,7 +60,15 @@ impl ContributionSOL<'_> {
         //     Errors::InvalidProjectVerification
         // );
 
-        // TODO: - Add check for slots start and end
+        let current_slot = Clock::get()?.slot;
+
+        if current_slot > self.event_account.ending_slot {
+            return err!(Errors::EventEnded);
+        }
+
+        if current_slot < self.event_account.start_slot {
+            return err!(Errors::EventNotStarted);
+        }
 
         Ok(())
     }

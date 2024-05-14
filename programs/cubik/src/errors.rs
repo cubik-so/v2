@@ -24,4 +24,8 @@ pub enum Errors {
     InvalidEventCreator,
     #[msg("Error: Amount too low")]
     AmountTooLow,
+    #[msg("Error: Event has not Started")]
+    EventNotStarted,
+    #[msg("Error: Event has ended")]
+    EventEnded,
 }

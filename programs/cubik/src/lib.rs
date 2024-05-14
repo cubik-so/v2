@@ -93,7 +93,7 @@ pub mod cubik {
 
     // Tipping any SPL token to the project
     pub fn project_tip_spl(ctx: Context<ProjectTipSPL>, args: ProjectTipSPLArgs) -> Result<()> {
-        ProjectTipSPL::project_tip_spl(ctx, args);
+        ProjectTipSPL::project_tip_spl(ctx, args)?;
         Ok(())
     }
 
@@ -112,6 +112,19 @@ pub mod cubik {
         args: ContributionSPLArgs,
     ) -> Result<()> {
         ContributionSPL::contribution_spl(ctx, args)?;
+        Ok(())
+    }
+
+    pub fn sponsor_create(ctx: Context<SponsorCreate>, args: SponsorCreateArgs) -> Result<()> {
+        SponsorCreate::sponsor_create(ctx, args)?;
+        Ok(())
+    }
+
+    pub fn sponsor_create_custody(
+        ctx: Context<SponsorCreateCustody>,
+        args: SponsorCreateCustodyArgs,
+    ) -> Result<()> {
+        SponsorCreateCustody::sponsor_create_custody(ctx, args)?;
         Ok(())
     }
 }

@@ -16,6 +16,9 @@ pub struct Event {
     pub start_slot: u64,
     // Voting Ending slot
     pub ending_slot: u64,
+
+    // Vault Pubkey
+    pub vault_pubkey: Pubkey,
     // Bump for the event PDA seed
     pub bump: u8,
 }

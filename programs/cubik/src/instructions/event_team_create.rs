@@ -35,7 +35,7 @@ pub struct EventTeamCreate<'info> {
 
 impl EventTeamCreate<'_> {
     fn validate(&self) -> Result<()> {
-        require_eq!(
+        require_keys_eq!(
             *self.authority.key,
             self.event_account.authority.key(),
             Errors::InvalidSigner

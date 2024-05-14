@@ -8,3 +8,7 @@ pub struct Admin {
     pub managers: Vec<Pubkey>,
     pub bump: u8,
 }
+
+pub fn find_key(keys: Vec<Pubkey>, key: Pubkey) -> Option<Pubkey> {
+    keys.into_iter().find(|k| *k == key)
+}

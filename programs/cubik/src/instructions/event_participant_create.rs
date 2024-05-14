@@ -36,7 +36,7 @@ pub struct EventParticipantCreate<'info> {
 
 impl EventParticipantCreate<'_> {
     fn validate(&self) -> Result<()> {
-        require_eq!(
+        require_keys_eq!(
             *self.authority.key,
             self.project_account.creator.key(),
             Errors::InvalidProjectCreator

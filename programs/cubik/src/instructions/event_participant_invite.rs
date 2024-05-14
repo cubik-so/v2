@@ -1,4 +1,3 @@
-use crate::constant::*;
 use crate::errors::Errors;
 use crate::state::*;
 use anchor_lang::prelude::*;
@@ -40,23 +39,13 @@ pub struct EventParticipantInvite<'info> {
 }
 
 impl EventParticipantInvite<'_> {
-    // TODO - Validate the code and improve
     pub fn validate(&self) -> Result<()> {
         let signer = *self.manager.key;
 
-        // let managers = *self.admin_account.managers;
-
-        // let mut is_manager: bool = false;
-
-        // for manager in managers.iter() {
-        //     if manager == &signer {
-        //         is_manager = true
-        //     }
-        // }
-
-        // if is_manager == false {
-        //     Err(Errors::InvalidAdmin)
-        // }
+        if let Some(signer) = find_key(self.admin_account.managers.clone(), signer) {
+        } else {
+            return err!(Errors::InvalidSigner);
+        }
 
         Ok(())
     }

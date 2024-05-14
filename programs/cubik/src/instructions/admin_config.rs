@@ -27,7 +27,7 @@ pub struct AdminConfig<'info> {
 
 impl AdminConfig<'_> {
     pub fn validate(&self) -> Result<()> {
-        require_eq!(
+        require_keys_eq!(
             self.authority.key(),
             self.admin_account.authority.key(),
             Errors::InvalidAdmin

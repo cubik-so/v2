@@ -13,6 +13,8 @@ pub mod project_tip_sol;
 pub mod project_tip_spl;
 pub mod project_transfer;
 pub mod project_update;
+pub mod sponsor_create;
+pub mod sponsor_create_custody;
 
 pub use admin_config::*;
 pub use admin_create::*;
@@ -29,3 +31,5 @@ pub use project_tip_sol::*;
 pub use project_tip_spl::*;
 pub use project_transfer::*;
 pub use project_update::*;
+pub use sponsor_create::*;
+pub use sponsor_create_custody::*;
