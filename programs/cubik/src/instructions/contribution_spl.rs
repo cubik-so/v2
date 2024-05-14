@@ -7,7 +7,7 @@ use anchor_spl::token::Mint;
 use anchor_spl::token::Token;
 use anchor_spl::token::{self, TokenAccount};
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy)]
 pub struct ContributionSPLArgs {
     pub amount: u64, // Amount of token with decimals
 }

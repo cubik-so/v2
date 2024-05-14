@@ -5,7 +5,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
 use solana_program::system_instruction;
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy)]
 pub struct ContributionSOLArgs {
     pub amount: u64, // Amount in SOL 1 SOL = 10^9
 }

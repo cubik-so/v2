@@ -62,7 +62,7 @@ impl ProjectTipSPL<'_> {
             amount: args.amount,
             authority: ctx.accounts.authority.key(),
             token: ctx.accounts.token_mint.key(),
-            project_create_key:ctx.accounts.project_account.create_key.key();
+            project_create_key: ctx.accounts.project_account.create_key.key(),
         });
         Ok(())
     }
