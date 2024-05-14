@@ -3,6 +3,7 @@ use crate::event::NewContributionSOL;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
+use solana_program::system_instruction;
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct ContributionSOLArgs {
