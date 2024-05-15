@@ -4,7 +4,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
 use squads_multisig_program::{Member, Permission, Permissions, SEED_PREFIX, SEED_VAULT};
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct SponsorCreateCustodyArgs {
     pub metadata: String,
     pub member: Pubkey,
@@ -54,7 +54,7 @@ pub struct SponsorCreateCustody<'info> {
 }
 
 impl SponsorCreateCustody<'_> {
-    pub fn validate(&self, args: SponsorCreateCustodyArgs) -> Result<()> {
+    pub fn validate(&self, args: &SponsorCreateCustodyArgs) -> Result<()> {
         require_keys_neq!(args.member, *self.authority.key);
 
         let current_slot = Clock::get()?.slot;
@@ -65,7 +65,7 @@ impl SponsorCreateCustody<'_> {
         Ok(())
     }
 
-    #[access_control(ctx.accounts.validate(args))]
+    #[access_control(ctx.accounts.validate(&args))]
     pub fn sponsor_create_custody(
         ctx: Context<SponsorCreateCustody>,
         args: SponsorCreateCustodyArgs,
@@ -123,7 +123,7 @@ impl SponsorCreateCustody<'_> {
             squads_multisig_program::MultisigCreateArgsV2 {
                 config_authority: None,
                 members,
-                memo: args.memo,
+                memo: None,
                 threshold: 2,
                 time_lock: 0,
                 rent_collector: Some(VAULT_AUTHORITY),
