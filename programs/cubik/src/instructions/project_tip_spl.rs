@@ -1,9 +1,9 @@
 use crate::event::NewTipSPL;
 use crate::state::*;
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
-use anchor_spl::token::accessor::amount;
+use anchor_lang::solana_program::system_program;
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
+
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct ProjectTipSPLArgs {
     pub amount: u64, // Amount of token with decimals

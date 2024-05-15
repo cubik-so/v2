@@ -15,6 +15,7 @@ pub struct SponsorCreateCustodyArgs {
 pub struct SponsorCreateCustody<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
+
     #[account(mut)]
     pub create_key: Signer<'info>,
 
@@ -64,6 +65,7 @@ impl SponsorCreateCustody<'_> {
         Ok(())
     }
 
+    #[access_control(ctx.accounts.validate(args))]
     pub fn sponsor_create_custody(
         ctx: Context<SponsorCreateCustody>,
         args: SponsorCreateCustodyArgs,

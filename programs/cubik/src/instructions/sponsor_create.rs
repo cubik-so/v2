@@ -44,6 +44,7 @@ impl SponsorCreate<'_> {
         Ok(())
     }
 
+    #[access_control(ctx.accounts.validate())]
     pub fn sponsor_create(ctx: Context<SponsorCreate>, args: SponsorCreateArgs) -> Result<()> {
         let sponsor_account = &mut ctx.accounts.sponsor_account;
 

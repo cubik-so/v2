@@ -1,4 +1,3 @@
-use crate::constant::*;
 use crate::errors::Errors;
 use crate::state::*;
 use anchor_lang::prelude::*;
@@ -37,7 +36,7 @@ pub struct EventParticipantCreate<'info> {
 impl EventParticipantCreate<'_> {
     fn validate(&self) -> Result<()> {
         require_keys_eq!(
-            *self.authority.key,
+            self.authority.key(),
             self.project_account.creator.key(),
             Errors::InvalidProjectCreator
         );

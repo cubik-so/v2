@@ -5,7 +5,7 @@ use anchor_lang::solana_program::system_program;
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct AdminConfigArgs {
-    manager_keys: Option<Vec<Pubkey>>,
+    team_keys: Option<Vec<Pubkey>>,
 }
 
 #[derive(Accounts)]
@@ -39,8 +39,8 @@ impl AdminConfig<'_> {
     pub fn admin_config(ctx: Context<Self>, args: AdminConfigArgs) -> Result<()> {
         let admin_account = &mut ctx.accounts.admin_account;
 
-        if args.manager_keys.is_some() {
-            admin_account.managers = args.manager_keys.unwrap();
+        if args.team_keys.is_some() {
+            admin_account.team = args.team_keys.unwrap();
         }
         Ok(())
     }
