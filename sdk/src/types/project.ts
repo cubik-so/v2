@@ -110,12 +110,14 @@ export type ProjectStatusHandlerArgs = {
  *
  */
 export type TransferProjectAccounts = {
-  authority: web3.PublicKey; // Current authority (owner) of the project
+  creator : web3.PublicKey;
   projectAccount: web3.PublicKey; // Project account public key
-  transferUserAccount: web3.PublicKey; // New owner's user account
   systemProgram: web3.PublicKey; // System program ID
 };
 
+export type TransferProjectArgs = {
+  newCreator : web3.PublicKey;
+}
 /**
  * @name UpdateProjectStatusAccounts
  * @description The accounts required for updating the status of a project.
@@ -125,13 +127,16 @@ export type TransferProjectAccounts = {
  * @property systemProgram - The public key of the system program.
  * @property rent - The public key of the rent sysvar.
  */
-export type UpdateProjectStatusAccounts = {
-  authority: web3.PublicKey;
-  subAdminAccount: web3.PublicKey;
+export type UpdateProjectAccounts = {
+  creator : web3.PublicKey;
   projectAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  rent: web3.PublicKey;
 };
+
+export type ProjectUpdateArgs = {
+  receiver: web3.PublicKey | null;
+  metadata: string | null;
+}
 
 /**
  * @name CloseProjectAccounts

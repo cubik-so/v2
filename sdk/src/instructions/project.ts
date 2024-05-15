@@ -4,9 +4,10 @@ import { PROJECT_PREFIX } from "../constants";
 import {
   CreateProjectAccounts,
   CreateProjectArgs,
-  ProjectStatusHandlerArgs,
   TransferProjectAccounts,
-  UpdateProjectStatusAccounts,
+  TransferProjectArgs,
+  UpdateProjectAccounts,
+  ProjectUpdateArgs,
 } from "../types";
 
 export const project = (sdk: CubikSDK) => {
@@ -21,25 +22,21 @@ export const project = (sdk: CubikSDK) => {
         .instruction();
     },
 
-    transfer: async (accounts: TransferProjectAccounts) => {
-      const ix = await sdk.program.methods
-        .transferProject()
+    transfer: async (accounts: TransferProjectAccounts, args: TransferProjectArgs) => {
+      return await sdk.program.methods
+        .projectTransfer(args)
         .accounts(accounts)
         .instruction();
-
-      return ix;
     },
 
-    updateStatus: async (
-      args: ProjectStatusHandlerArgs,
-      accounts: UpdateProjectStatusAccounts
+    update: async (
+      accounts: UpdateProjectAccounts,
+      args: ProjectUpdateArgs
     ) => {
-      const ix = await sdk.program.methods
-        .updateProjectStatus(args.status)
+      return await sdk.program.methods
+        .projectUpdate(args)
         .accounts(accounts)
         .instruction();
-
-      return ix;
     },
 
     get: async (pda: web3.PublicKey) => {
