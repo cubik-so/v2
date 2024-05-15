@@ -2,9 +2,6 @@ import { AnchorProvider, BN, Program, Wallet, web3 } from "@coral-xyz/anchor";
 import { Cubik as CubikIDLType } from "./types";
 import { idl } from "./constants";
 import { project } from "./instructions/project";
-import { user } from "./instructions/user";
-import { admin } from "./instructions/admin";
-import { subAdmin } from "./instructions/subadmin";
 import { sponsor } from "./instructions/sponsor";
 import { event } from "./instructions/event";
 import { contribution } from "./instructions/contribution";
@@ -30,20 +27,8 @@ export class CubikSDK {
     ) as Program<CubikIDLType>;
   }
 
-  public get user() {
-    return user(this);
-  }
-
   public get project() {
     return project(this);
-  }
-
-  public get admin() {
-    return admin(this);
-  }
-
-  public get subAdmin() {
-    return subAdmin(this);
   }
 
   public get sponsor() {

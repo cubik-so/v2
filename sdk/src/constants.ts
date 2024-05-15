@@ -22,3 +22,5 @@ export const createCubikProgram = (
     new web3.PublicKey(programId)
   ) as unknown as anchor.Program<Cubik>;
 };
+
+export const PROJECT_PREFIX = Buffer.from("project");

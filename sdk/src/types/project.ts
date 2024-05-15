@@ -1,4 +1,4 @@
-import { BN, web3 } from '@coral-xyz/anchor';
+import { BN, web3 } from "@coral-xyz/anchor";
 
 /**
  * @name CreateProjectArgs
@@ -25,13 +25,8 @@ import { BN, web3 } from '@coral-xyz/anchor';
  *
  */
 export type CreateProjectArgs = {
-  counter: BN;
-  membersKeys: web3.PublicKey[];
-  threshold: number;
-  configAuthority: web3.PublicKey | null;
-  timeLock: number;
   memo: string | null;
-  rentCollector: web3.PublicKey;
+  metadata: string;
 };
 
 /**
@@ -63,10 +58,9 @@ export type CreateProjectArgs = {
  *
  */
 export type CreateProjectAccounts = {
-  owner: web3.PublicKey; // User who is creating the project
+  creator: web3.PublicKey; // User who is creating the project
   createKey: web3.PublicKey; // random keypair
   projectAccount: web3.PublicKey; // Project PDA
-  userAccount: web3.PublicKey; // User PDA
   treasury: web3.PublicKey;
   programConfigPda: web3.PublicKey;
   multisig: web3.PublicKey; // Multisig PDA

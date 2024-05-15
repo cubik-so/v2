@@ -1,33 +1,24 @@
-import { BN, web3 } from '@coral-xyz/anchor';
-import { CubikSDK } from '..';
+import { web3 } from "@coral-xyz/anchor";
+import { CubikSDK } from "..";
+import { PROJECT_PREFIX } from "../constants";
 import {
   CreateProjectAccounts,
   CreateProjectArgs,
   ProjectStatusHandlerArgs,
   TransferProjectAccounts,
   UpdateProjectStatusAccounts,
-} from '../types';
+} from "../types";
 
 export const project = (sdk: CubikSDK) => {
   return {
     create: async (
-      args: CreateProjectArgs,
-      accounts: CreateProjectAccounts
+      accounts: CreateProjectAccounts,
+      args: CreateProjectArgs
     ) => {
-      const ix = await sdk.program.methods
-        .createProject(
-          args.counter,
-          args.membersKeys,
-          args.threshold,
-          args.configAuthority,
-          args.timeLock,
-          args.memo,
-          args.rentCollector
-        )
+      return await sdk.program.methods
+        .projectCreate(args)
         .accounts(accounts)
         .instruction();
-
-      return ix;
     },
 
     transfer: async (accounts: TransferProjectAccounts) => {
@@ -55,13 +46,9 @@ export const project = (sdk: CubikSDK) => {
       return await sdk.program.account.project.fetch(pda);
     },
 
-    getPDA: (createKey: web3.PublicKey, counter: number) => {
+    getPDA: (createKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from('project'),
-          createKey.toBuffer(),
-          new BN(counter).toArrayLike(Buffer, 'le', 8),
-        ],
+        [PROJECT_PREFIX, createKey.toBuffer()],
         sdk.programId
       );
     },
