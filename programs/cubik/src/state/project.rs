@@ -6,7 +6,7 @@ pub struct Project {
     /// The public key of the project's creator.
     pub creator: Pubkey,
     /// Current verification status of the project.
-    pub status: ProjectVerification,
+    // pub status: ProjectVerification,
     /// Pubkey of the project reciver
     pub reciver: Pubkey,
     /// Public key of the account used to store the project's funds or assets.

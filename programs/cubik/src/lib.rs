@@ -5,7 +5,6 @@ pub mod instructions;
 pub mod state;
 
 use instructions::*;
-use state::*;
 
 declare_id!("ADohpkV8Cm4vzPGss4977oncQwD7R6Ac66iw6t4sZWmc");
 // declare_id!("CUbkXMRWxumGzDwf43ysyFm3da77JRuUqLF1bmW4tGoZ");
@@ -39,18 +38,6 @@ pub mod cubik {
     // Closing Project Account
     pub fn project_close(ctx: Context<ProjectClose>) -> Result<()> {
         ProjectClose::project_close(ctx)?;
-        Ok(())
-    }
-
-    // Updates Admin Config
-    pub fn admin_config(ctx: Context<AdminConfig>, args: AdminConfigArgs) -> Result<()> {
-        AdminConfig::admin_config(ctx, args)?;
-        Ok(())
-    }
-
-    // Creates Admin Account
-    pub fn admin_create(ctx: Context<AdminCreate>) -> Result<()> {
-        AdminCreate::admin_create(ctx)?;
         Ok(())
     }
 

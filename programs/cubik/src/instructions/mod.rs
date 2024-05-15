@@ -1,10 +1,9 @@
-pub mod admin_config;
-pub mod admin_create;
 pub mod contribution_sol;
 pub mod contribution_spl;
 pub mod event_create;
 pub mod event_participant_create;
 pub mod event_participant_invite;
+pub mod event_team_close;
 pub mod event_team_create;
 pub mod event_update;
 pub mod project_close;
@@ -16,13 +15,12 @@ pub mod project_update;
 pub mod sponsor_create;
 pub mod sponsor_create_custody;
 
-pub use admin_config::*;
-pub use admin_create::*;
 pub use contribution_sol::*;
 pub use contribution_spl::*;
 pub use event_create::*;
 pub use event_participant_create::*;
 pub use event_participant_invite::*;
+pub use event_team_close::*;
 pub use event_team_create::*;
 pub use event_update::*;
 pub use project_close::*;

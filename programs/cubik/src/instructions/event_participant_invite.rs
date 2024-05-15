@@ -5,14 +5,8 @@ use anchor_lang::system_program::{self};
 
 #[derive(Accounts)]
 pub struct EventParticipantInvite<'info> {
-    #[account(mut)]
+    #[account(mut, constraint = team.key() == event_team_account.authority.key() @Errors::InvalidSigner)]
     pub team: Signer<'info>,
-
-    #[account(mut,
-            seeds=[ADMIN_PREFIX],
-            bump = admin_account.bump
-        )]
-    pub admin_account: Box<Account<'info, Admin>>,
 
     #[account(init,
         payer = team,
@@ -34,19 +28,18 @@ pub struct EventParticipantInvite<'info> {
         )]
     pub event_account: Box<Account<'info, Event>>,
 
+    #[account(mut,
+        seeds = [EVENT_PREFIX,event_account.key().as_ref(),TEAM_PREFIX,team.key().as_ref()],
+        bump = event_team_account.bump
+    )]
+    pub event_team_account: Box<Account<'info, EventTeam>>,
+
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
 }
 
 impl EventParticipantInvite<'_> {
     pub fn validate(&self) -> Result<()> {
-        let signer = *self.team.key;
-
-        if let Some(signer) = find_key(self.admin_account.team.clone(), signer) {
-        } else {
-            return err!(Errors::InvalidSigner);
-        }
-
         Ok(())
     }
 
