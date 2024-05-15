@@ -5,7 +5,7 @@ use anchor_lang::system_program::{self};
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct ProjectUpdateArgs {
-    reciver: Option<Pubkey>,
+    receiver: Option<Pubkey>,
     metadata: Option<String>,
 }
 
@@ -33,8 +33,8 @@ impl ProjectUpdate<'_> {
             project_account.metadata = args.metadata.unwrap();
         }
 
-        if args.reciver.is_some() {
-            project_account.reciver = args.reciver.unwrap();
+        if args.receiver.is_some() {
+            project_account.reciver = args.receiver.unwrap();
         }
         Ok(())
     }

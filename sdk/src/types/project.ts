@@ -147,8 +147,7 @@ export type ProjectUpdateArgs = {
  * @property rent - The public key of the rent sysvar.
  */
 export type CloseProjectAccounts = {
-  authority: web3.PublicKey;
+  creator : web3.PublicKey;
   projectAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  rent: web3.PublicKey;
 };

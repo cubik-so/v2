@@ -8,6 +8,7 @@ import {
   TransferProjectArgs,
   UpdateProjectAccounts,
   ProjectUpdateArgs,
+  CloseProjectAccounts
 } from "../types";
 
 export const project = (sdk: CubikSDK) => {
@@ -38,6 +39,17 @@ export const project = (sdk: CubikSDK) => {
         .accounts(accounts)
         .instruction();
     },
+
+    close: async (
+      accounts: CloseProjectAccounts
+    ) => {
+      return await sdk.program.methods
+        .projectClose()
+        .accounts(accounts)
+        .instruction();
+    },
+
+
 
     get: async (pda: web3.PublicKey) => {
       return await sdk.program.account.project.fetch(pda);
