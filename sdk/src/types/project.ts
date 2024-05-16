@@ -5,25 +5,12 @@ import { BN, web3 } from "@coral-xyz/anchor";
  * @description
  * The arguments required to create a project.
  *
- * @property counter - The project's counter.
- * @property membersKeys - The public keys of the members.
- * @property threshold - The threshold for multisig.
- * @property configAuthority - The optional public key of the config authority.
- * @property timeLock - The time lock in seconds.
  * @property memo - The optional memo for the project.
+ * @property metadata - Metadata required to create project
  *
  * @category types
- * @example
- * const args: CreateProjectArgs = {
- *  counter: new BN(0),
- *  membersKeys: [member1, member2, member3],
- *  threshold: 2,
- *  configAuthority: null,
- *  timeLock: 0,
- *  memo: null,
- * };
- *
  */
+
 export type CreateProjectArgs = {
   memo: string | null;
   metadata: string;
@@ -32,31 +19,20 @@ export type CreateProjectArgs = {
 /**
  * @name CreateProjectAccounts
  * @description
- * The accounts required to create a project.
+ * Accounts necessary for project creation, specifying the roles and keys involved in the process.
  *
- * @property owner - The public key of the owner who is creating the project.
- * @property createKey - A signer key used in the creation of the project.
- * @property projectAccount - The public key of the project account.
- * @property treasury - The public key of the treasury.
- * @property programConfigPda - The public key of the programConfigPda.
- * @property userAccount - The public key of the user account associated with the project.
- * @property multisig - The public key of the multisig account (UncheckedAccount).
- * @property squadsProgram - The public key of the squads program.
- * @property systemProgram - The public key of the system program.
+ * @property creator - PublicKey of the user initiating the project creation.
+ * @property createKey - A signer PublicKey used during the project creation process.
+ * @property projectAccount - The PublicKey of the project's account.
+ * @property treasury - The PublicKey of the treasury account associated with the project.
+ * @property programConfigPda - PublicKey of the program configuration PDA.
+ * @property multisig - PublicKey of a multisig account used for project management.
+ * @property squadsProgram - PublicKey of the Squads program.
+ * @property systemProgram - PublicKey of the System program.
  *
  * @category types
- * @example
- * const accounts: CreateProjectAccounts = {
- *  owner: userKeypair.publicKey,
- *  createKey: createKey.publicKey,
- *  projectAccount: projectPDA,
- *  userAccount: userPDA,
- *  multisig: multisig.publicKey,
- *  squadsProgram: squadsProgramId,
- *  systemProgram: anchor.web3.SystemProgram.programId,
- * };
- *
  */
+
 export type CreateProjectAccounts = {
   creator: web3.PublicKey; // User who is creating the project
   createKey: web3.PublicKey; // random keypair
@@ -68,70 +44,68 @@ export type CreateProjectAccounts = {
   systemProgram: web3.PublicKey; // System program id
 };
 
-/**
- * @name ProjectVerification
- * @description Enum representing the various states of project verification.
- */
-export enum ProjectVerification {
-  // Replace these with the actual states from your Rust enum
-  Unverified,
-  UnderReview,
-  Verified,
-  // Add other states as necessary
-}
 
-/**
- * @name ProjectStatusHandlerArgs
- * @description The arguments required to update a project's status.
- * @property status - The new status of the project, represented by the ProjectVerification enum.
- */
-export type ProjectStatusHandlerArgs = {
-  status: any; // Enum representing project verification statuses
-};
 
 /**
  * @name TransferProjectAccounts
  * @description
- * The accounts required to transfer a project.
+ * Accounts needed for the process of transferring project ownership.
  *
- * @property authority - The current authority (owner) of the project.
- * @property projectAccount - The public key of the project account.
- * @property transferUserAccount - The new owner's user account.
- * @property systemProgram - The system program id.
- *
+ * @property creator - PublicKey of the creator.
+ * @property projectAccount - PublicKey of the project account.
+ * @property systemProgram - PublicKey of the System program, essential for transaction execution.
+ * 
  * @category types
- * @example
- * const accounts: TransferProjectAccounts = {
- *  authority: userKeypair.publicKey,
- *  projectAccount: projectPDA,
- *  transferUserAccount: newOwner,
- *  systemProgram: anchor.web3.SystemProgram.programId,
- * };
- *
  */
+
 export type TransferProjectAccounts = {
   creator : web3.PublicKey;
   projectAccount: web3.PublicKey; // Project account public key
   systemProgram: web3.PublicKey; // System program ID
 };
 
+/**
+ * @name TransferProjectArgs
+ * @description
+ * Arguments required for transferring the ownership of a project. This includes specifying the new owner's public key.
+ *
+ * @property newCreator - The PublicKey of the new owner to whom the project will be transferred.
+ *
+ * @category types
+ */
 export type TransferProjectArgs = {
   newCreator : web3.PublicKey;
 }
+
+
 /**
  * @name UpdateProjectStatusAccounts
- * @description The accounts required for updating the status of a project.
- * @property authority - The public key of the authority executing the action.
- * @property subAdminAccount - The public key of the sub-admin account.
- * @property projectAccount - The public key of the project account.
- * @property systemProgram - The public key of the system program.
- * @property rent - The public key of the rent sysvar.
+ * @description 
+ * Accounts required for updating the status of a project in the system.
+ * 
+ * @property creator - PublicKey of the creator.
+ * @property projectAccount - PublicKey of the project account.
+ * @property systemProgram - PublicKey of the System program.
+ * 
+ * @category types
  */
+
 export type UpdateProjectAccounts = {
   creator : web3.PublicKey;
   projectAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
 };
+
+/**
+ * @name ProjectUpdateArgs
+ * @description
+ * Arguments required for updating project details.
+ *
+ * @property receiver - Optional PublicKey of the receiver account.
+ * @property metadata - Optional The new or updated metadata string for the project.
+ *
+ * @category types
+ */
 
 export type ProjectUpdateArgs = {
   receiver: web3.PublicKey | null;
@@ -140,12 +114,16 @@ export type ProjectUpdateArgs = {
 
 /**
  * @name CloseProjectAccounts
- * @description The accounts required for closing a project.
- * @property authority - The public key of the authority executing the closure.
- * @property projectAccount - The public key of the project account being closed.
- * @property systemProgram - The public key of the system program.
- * @property rent - The public key of the rent sysvar.
+ * @description 
+ * Accounts necessary for closing a project.
+ * 
+ * @property creator - PublicKey of the creator.
+ * @property projectAccount - PublicKey of the project account.
+ * @property systemProgram - PublicKey of the System program.
+ * 
+ * @category types
  */
+
 export type CloseProjectAccounts = {
   creator : web3.PublicKey;
   projectAccount: web3.PublicKey;
