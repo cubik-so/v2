@@ -2,135 +2,135 @@ import { BN, web3 } from "@coral-xyz/anchor";
 
 /**
  * @name CreateEventHandlerArgs
- * @description The arguments required to create an event.
- * @property matchingPool - The matching pool amount for the event.
+ *
+ * @description
+ * Arguments required to create an event in the system.
+ *
+ * @property metadata - A string containing metadata about the event.
+ * @property startSlot - The starting slot on the blockchain for the event.
+ * @property endingSlot - The ending slot on the blockchain for the event.
+ * @property memo - Optional memo about the event (nullable).
  */
+
 export type CreateEventHandlerArgs = {
-  matchingPool: BN;
-  event_admin_signer: web3.PublicKey;
+  metadata: string;
+  startSlot: BN;
+  endingSlot: BN;
+  memo: string | null;
 };
+
 
 /**
  * @name CreateEventAccounts
  * @description The accounts required for creating an event.
- * @property authority - The public key of the authority executing the action.
- * @property eventAccount - The public key of the event account.
- * @property subAdminAccount - The public key of the sub-admin account.
- * @property eventKey - The public key of the event key.
- * @property systemProgram - The public key of the system program.
- * @property rent - The public key of the rent sysvar.
+ * @property authority - The public key of the authority.
+ * @property createKey - The public key used for event creation.
+ * @property eventTeamAccount - A team account associated with the event.
+ * @property eventAccount - The event account associated with the event.
+ * @property programConfigPda - Program Derived Address (PDA) for configuration.
+ * @property treasury - Treasury Account holding the event.
+ * @property multisig - Account for multi-signature.
+ * @property squadProgram - Public key of squad program.
+ * @property systemProgram -  The public key of the system program.
  */
+
 export type CreateEventAccounts = {
   authority: web3.PublicKey;
+  createKey: web3.PublicKey;
+  eventTeamAccount: web3.PublicKey;
   eventAccount: web3.PublicKey;
-  subAdminAccount: web3.PublicKey;
-  userAccount: web3.PublicKey;
-  eventKey: web3.PublicKey;
+  programConfigPda: web3.PublicKey;
+  treasury: web3.PublicKey;
+  multisig: web3.PublicKey;
+  squadProgram: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  rent: web3.PublicKey;
-};
-
-/**
- * @name CreateEventJoinAccounts
- * @description The accounts required for creating an event join.
- * @property authority - The public key of the authority executing the action.
- * @property eventJoinAccount - The public key of the event join account.
- * @property eventAccount - The public key of the event account.
- * @property projectAccount - The public key of the project account.
- * @property systemProgram - The public key of the system program.
- * @property rent - The public key of the rent sysvar.
- */
-export type CreateEventJoinAccounts = {
-  authority: web3.PublicKey;
-  eventJoinAccount: web3.PublicKey;
-  eventAccount: web3.PublicKey;
-  projectAccount: web3.PublicKey;
-  systemProgram: web3.PublicKey;
-  rent: web3.PublicKey;
-};
-
-// Define this enum based on your Rust code for EventProjectStatus
-export enum EventProjectStatus {
-  PendingApproval,
-  Approved,
-  // ...other statuses
-}
-
-// /**
-//  * @name UpdateEventStatusArgs
-//  * @description The arguments required to update an event's status.
-//  * @property status - The new status of the event.
-//  */
-// export type UpdateEventStatusArgs = {
-//   status: EventProjectStatus;
-// };
-
-/**
- * @name UpdateEventStatusAccounts
- * @description The accounts required for updating an event's status.
- * @property authority - The public key of the authority executing the action.
- * @property eventAccount - The public key of the event account.
- * @property eventJoinAccount - The public key of the event join account.
- * @property projectAccount - The public key of the project account.
- * @property subAdminAccount - The public key of the sub-admin account.
- * @property systemProgram - The public key of the system program.
- * @property rent - The public key of the rent sysvar.
- */
-export type UpdateEventStatusAccounts = {
-  authority: web3.PublicKey;
-  eventAccount: web3.PublicKey;
-  eventJoinAccount: web3.PublicKey;
-  projectAccount: web3.PublicKey;
-  subAdminAccount: web3.PublicKey;
-  systemProgram: web3.PublicKey;
-  rent: web3.PublicKey;
 };
 
 /**
  * @name UpdateEventArgs
- * @description The arguments required to update an event.
- * @property matchingPool - The matching pool amount for the event.
+ * @description Arguments required to update an existing event.
+ * @property metadata - Optional new metadata for the event.
+ * @property endingSlot - Optional new ending slot on the blockchain for the event (nullable).
+ * @property startSlot - Optional new starting slot on the blockchain for the event (nullable).
  */
 export type UpdateEventArgs = {
-  matchingPool: BN;
+  metadata: string | null;
+  endingSlot: BN | null;
+  startSlot: BN | null;
 };
 
 /**
  * @name UpdateEventAccounts
- * @description The accounts required for updating an event.
+ * @description Accounts required for updating an event, focusing on authorization and the specific event to be updated.
  * @property authority - The public key of the authority executing the action.
- * @property eventAccount - The public key of the event account.
- * @property systemProgram - The public key of the system program.
- * @property rent - The public key of the rent sysvar.
+ * @property eventTeamAccount - A team-specific account that might have additional permissions or roles.
+ * @property eventAccount - The main account associated with the event.
+ * @property systemProgram - Reference to the system program.
  */
 export type UpdateEventAccounts = {
   authority: web3.PublicKey;
+  eventTeamAccount: web3.PublicKey;
   eventAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  rent: web3.PublicKey;
 };
 
 /**
- * @name InviteEventJoinAccounts
- * @description The accounts required for inviting to join an event.
- * @property authority - The public key of the authority executing the invitation.
- * @property eventJoinAccount - The public key of the event join account.
- * @property subAdminAccount - The public key of the sub-admin account.
- * @property projectAccount - The public key of the project account.
- * @property eventAccount - The public key of the event account.
- * @property systemProgram - The public key of the system program.
- * @property rent - The public key of the rent sysvar.
+ * @name EventTeamCreateAccounts
+ * @description Accounts required to add a new team member to an event's managing team.
+ * @property authority - The public key of the authority executing the action.
+ * @property eventAccount - The public key of the main event account.
+ * @property eventTeamAccount - The public key of the existing event team account.
+ * @property systemProgram - Reference to the system program.
  */
-export type InviteEventJoinAccounts = {
+export type EventTeamCreateAccounts = {
   authority: web3.PublicKey;
-  eventJoinAccount: web3.PublicKey;
-  subAdminAccount: web3.PublicKey;
+  eventAccount: web3.PublicKey;
+  eventTeamAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
+};
+
+/**
+ * @name EventTeamCreateArgs
+ * @description Arguments for adding a new team member to an event's team.
+ * @property newTeamMember - The public key of the new team member being added.
+ */
+export type EventTeamCreateArgs = {
+  newTeamMember: web3.PublicKey;
+};
+
+/**
+ * @name EventParticipantCreateAccounts
+ * @description Accounts required to register a participant for an event.
+ * @property authority - The public key of the authority executing the action.
+ * @property eventParticipantAccount - The public key of the participant's account.
+ * @property projectAccount - The public key of the associated project account.
+ * @property eventAccount - The public key of the event account.
+ * @property systemProgram - Reference to the system program.
+ */
+
+export type EventParticipantCreateAccounts = {
+  authority: web3.PublicKey;
+  eventParticipantAccount: web3.PublicKey;
   projectAccount: web3.PublicKey;
   eventAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
-  rent: web3.PublicKey;
 };
 
-export type UpdateEventStatusArgs = {
-  status: any;
+/**
+ * @name EventParticipantInviteAccounts
+ * @description Accounts required to invite a participant to join an event.
+ * @property team - The public key of the team inviting the participant.
+ * @property eventParticipantAccount - The public key of the participant's account.
+ * @property projectAccount - The public key of the associated project account.
+ * @property eventAccount - The public key of the event account.
+ * @property eventTeamAccount - The public key of the event team account.
+ * @property systemProgram - Reference to the system program.
+ */
+export type EventParticipantInviteAccounts = {
+  team: web3.PublicKey;
+  eventParticipantAccount: web3.PublicKey;
+  projectAccount: web3.PublicKey;
+  eventAccount: web3.PublicKey;
+  eventTeamAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
 };
