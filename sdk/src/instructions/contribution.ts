@@ -1,34 +1,30 @@
-import { CubikSDK } from '..';
+import { CubikSDK } from "..";
 import {
   ContributionSolAccounts,
   ContributionSolArgs,
   ContributionSplAccounts,
   ContributionSplArgs,
-} from '../types';
+} from "../types";
 
 export const contribution = (sdk: CubikSDK) => {
   return {
     sol: async (
-      args: ContributionSolArgs,
-      accounts: ContributionSolAccounts
+      accounts: ContributionSolAccounts,
+      args: ContributionSolArgs
     ) => {
-      const ix = await sdk.program.methods
-        .contributionSol(args.amount)
+      return await sdk.program.methods
+        .contributionSol(args)
         .accounts(accounts)
         .instruction();
-
-      return ix;
     },
     spl: async (
-      args: ContributionSplArgs,
-      accounts: ContributionSplAccounts
+      accounts: ContributionSplAccounts,
+      args: ContributionSplArgs
     ) => {
-      const ix = await sdk.program.methods
-        .contributionSpl(args.amount)
+      return await sdk.program.methods
+        .contributionSpl(args)
         .accounts(accounts)
         .instruction();
-
-      return ix;
     },
   };
 };
