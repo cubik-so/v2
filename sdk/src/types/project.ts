@@ -129,3 +129,60 @@ export type CloseProjectAccounts = {
   projectAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
 };
+
+/**
+ * @name TipSolAccounts
+ * @description Accounts required for tipping using SOL.
+ * @property authority - The public key of the user authority.
+ * @property receiver - The public key of the user receiver.
+ * @property projectAccount - The public key of the project account associated with the transaction.
+ * @property systemProgram - Reference to the Solana system program, used for transferring SOL.
+ */
+export type TipSolAccounts = {
+  authority: web3.PublicKey,
+  receiver: web3.PublicKey,
+  projectAccount: web3.PublicKey,
+  systemProgram: web3.PublicKey,
+}
+
+/**
+ * @name TipSolArgs
+ * @description Arguments needed for a transaction to tip SOL.
+ * @property amount - The amount of SOL to be tipped, specified in lamports (1 SOL = 1,000,000,000 lamports).
+ */
+
+export type TipSolArgs = {
+ amount : BN
+}
+
+
+/**
+ * @name TipSPLAccounts
+ * @description Accounts required for tipping using SPL tokens. SPL tokens require more accounts due to the nature of token transfers in Solana.
+ * @property authority - The public key of the user sending the tip.
+ * @property tokenMint - The public key of the SPL token mint.
+ * @property tokenAtaSender - The token account of the sender from which tokens will be debited.
+ * @property tokenAtaReceiver - The token account of the receiver to which tokens will be credited.
+ * @property projectAccount - The public key of the project account associated with the transaction.
+ * @property systemProgram - Reference to the Solana system program, used for transactions.
+ * @property tokenProgram - Reference to the Solana token program, used for SPL token transactions.
+ */
+export type TipSPLAccounts = {
+  authority: web3.PublicKey,
+  tokenMint: web3.PublicKey,
+  tokenAtaSender: web3.PublicKey,
+  tokenAtaReceiver : web3.PublicKey,
+  projectAccount: web3.PublicKey,
+  systemProgram: web3.PublicKey,
+  tokenProgram: web3.PublicKey,
+
+}
+
+/**
+ * @name TipSPLArgs
+ * @description Arguments needed for a transaction to tip SPL tokens.
+ * @property amount - The amount of SPL tokens to be tipped, specified as a BN (BigNumber).
+ */
+export type TipSPLArgs = {
+ amount : BN
+}

@@ -8,7 +8,11 @@ import {
   TransferProjectArgs,
   UpdateProjectAccounts,
   ProjectUpdateArgs,
-  CloseProjectAccounts
+  CloseProjectAccounts,
+  TipSolAccounts,
+  TipSolArgs,
+  TipSPLAccounts,
+  TipSPLArgs
 } from "../types";
 
 export const project = (sdk: CubikSDK) => {
@@ -49,7 +53,25 @@ export const project = (sdk: CubikSDK) => {
         .instruction();
     },
 
+    tipSol: async (
+      accounts: TipSolAccounts,
+      args : TipSolArgs
+    ) => {
+      return await sdk.program.methods
+        .projectTipSol(args)
+        .accounts(accounts)
+        .instruction();
+    },
 
+    tipSPL : async (
+      accounts: TipSPLAccounts,
+      args : TipSPLArgs
+    ) => {
+      return await sdk.program.methods
+        .projectTipSol(args)
+        .accounts(accounts)
+        .instruction();
+    },
 
     get: async (pda: web3.PublicKey) => {
       return await sdk.program.account.project.fetch(pda);
