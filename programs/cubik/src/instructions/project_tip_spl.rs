@@ -1,4 +1,4 @@
-use crate::event::NewTipSPL;
+use crate::event::TipSPLEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
@@ -58,7 +58,7 @@ impl ProjectTipSPL<'_> {
         );
         anchor_spl::token::transfer(cpi_ctx_trans, args.amount)?;
 
-        emit!(NewTipSPL {
+        emit!(TipSPLEvent {
             amount: args.amount,
             authority: ctx.accounts.authority.key(),
             token: ctx.accounts.token_mint.key(),

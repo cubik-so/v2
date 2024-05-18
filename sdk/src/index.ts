@@ -18,6 +18,9 @@ export class CubikSDK {
     connection: web3.Connection,
     opts: web3.ConfirmOptions
   ) {
+    const connec = new web3.Connection("", {
+      wsEndpoint: "<triton-url>",
+    });
     this.provider = new AnchorProvider(connection, wallet, opts);
     this.programId = programId;
     this.program = new Program(

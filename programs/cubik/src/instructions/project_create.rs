@@ -1,6 +1,7 @@
+use crate::event::ProjectCreateEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::{self, system_program, sysvar::rent::Rent};
+use anchor_lang::solana_program::{system_program, sysvar::rent::Rent};
 use squads_multisig_program::{Member, Permission, Permissions, SEED_PREFIX, SEED_VAULT};
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
@@ -98,7 +99,7 @@ impl ProjectCreate<'_> {
         )?;
 
         project_account.creator = ctx.accounts.creator.key();
-        project_account.metadata = args.metadata;
+        project_account.metadata = args.metadata.clone();
 
         // project_account.status = ProjectVerification::UnderReview;
         project_account.create_key = ctx.accounts.create_key.key();
@@ -106,6 +107,13 @@ impl ProjectCreate<'_> {
         project_account.vault_pubkey = vault_pubkey.key();
         project_account.bump = ctx.bumps.project_account;
 
+        emit!(ProjectCreateEvent {
+            create_key: ctx.accounts.create_key.key(),
+            creator: ctx.accounts.creator.key(),
+            project_account: ctx.accounts.project_account.key(),
+            reciver: vault_pubkey.key(),
+            metadata: args.metadata,
+        });
         Ok(())
     }
 }

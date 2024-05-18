@@ -1,9 +1,10 @@
 use crate::errors::Errors;
+use crate::event::ProjectUpdateEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct ProjectUpdateArgs {
     reciver: Option<Pubkey>,
     metadata: Option<String>,
@@ -30,12 +31,20 @@ impl ProjectUpdate<'_> {
         let project_account = &mut ctx.accounts.project_account;
 
         if args.metadata.is_some() {
-            project_account.metadata = args.metadata.unwrap();
+            project_account.metadata = args.metadata.clone().unwrap();
         }
 
         if args.reciver.is_some() {
             project_account.reciver = args.reciver.unwrap();
         }
+
+        emit!(ProjectUpdateEvent {
+            create_key: ctx.accounts.project_account.create_key.key(),
+            creator: ctx.accounts.project_account.creator.key(),
+            project_account: ctx.accounts.project_account.key(),
+            metadata: args.metadata,
+            reciver: args.reciver
+        });
         Ok(())
     }
 }

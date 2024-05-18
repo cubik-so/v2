@@ -1,4 +1,5 @@
 use crate::errors::*;
+use crate::event::ProjectCloseEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
@@ -22,7 +23,12 @@ pub struct ProjectClose<'info> {
 
 /// todo - Add Docs
 impl ProjectClose<'_> {
-    pub fn project_close(_ctx: Context<Self>) -> Result<()> {
+    pub fn project_close(ctx: Context<Self>) -> Result<()> {
+        emit!(ProjectCloseEvent {
+            create_key: ctx.accounts.project_account.create_key.key(),
+            creator: ctx.accounts.project_account.creator.key(),
+            project_account: ctx.accounts.project_account.key()
+        });
         Ok(())
     }
 }

@@ -5,9 +5,7 @@ use anchor_lang::prelude::*;
 pub struct Project {
     /// The public key of the project's creator.
     pub creator: Pubkey,
-    /// Current verification status of the project.
-    // pub status: ProjectVerification,
-    /// Pubkey of the project reciver
+    /// Pubkey where funds go
     pub reciver: Pubkey,
     /// Public key of the account used to store the project's funds or assets.
     pub vault_pubkey: Pubkey,
@@ -20,20 +18,24 @@ pub struct Project {
     pub bump: u8,
 }
 
-/// Defines possible states of project verification.
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq, Eq, Debug, InitSpace)]
-pub enum ProjectVerification {
-    /// The project is currently undergoing review.
-    UnderReview,
-    /// The project has been successfully verified.
-    Verified,
-    /// Verification of the project failed.
-    VerificationFailed,
-}
+//
+//  NOT IN USE FOR NOW
+//
 
-/// Provides a default value for the `ProjectVerification` enum.
-impl Default for ProjectVerification {
-    fn default() -> Self {
-        ProjectVerification::UnderReview
-    }
-}
+// Defines possible states of project verification.
+// #[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq, Eq, Debug, InitSpace)]
+// pub enum ProjectVerification {
+//     /// The project is currently undergoing review.
+//     UnderReview,
+//     /// The project has been successfully verified.
+//     Verified,
+//     /// Verification of the project failed.
+//     VerificationFailed,
+// }
+
+// /// Provides a default value for the `ProjectVerification` enum.
+// impl Default for ProjectVerification {
+//     fn default() -> Self {
+//         ProjectVerification::UnderReview
+//     }
+// }

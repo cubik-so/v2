@@ -1,5 +1,5 @@
 use crate::errors::*;
-use crate::event::NewContributionSOL;
+use crate::event::ContributionSOLEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
@@ -79,7 +79,6 @@ impl ContributionSOL<'_> {
         args: ContributionSOLArgs,
     ) -> Result<()> {
         let project_account = &ctx.accounts.project_account;
-        let event_participant_account = &mut ctx.accounts.event_participant_account;
 
         let receiver = &ctx.accounts.receiver;
 
@@ -99,7 +98,7 @@ impl ContributionSOL<'_> {
             &[],
         )?;
 
-        emit!(NewContributionSOL {
+        emit!(ContributionSOLEvent {
             amount: args.amount,
             authority: ctx.accounts.authority.key(),
             event_key: ctx.accounts.event_account.create_key.key(),

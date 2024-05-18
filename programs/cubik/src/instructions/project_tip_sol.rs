@@ -1,4 +1,4 @@
-use crate::event::NewTipSOL;
+use crate::event::TipSOLEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_instruction;
@@ -53,7 +53,7 @@ impl ProjectTipSOL<'_> {
             &[],
         )?;
 
-        emit!(NewTipSOL {
+        emit!(TipSOLEvent {
             amount: args.amount,
             authority: ctx.accounts.authority.key(),
             project_create_key: ctx.accounts.project_account.create_key.key(),

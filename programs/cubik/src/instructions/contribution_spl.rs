@@ -1,5 +1,5 @@
 use crate::errors::*;
-use crate::event::NewContributionSPL;
+use crate::event::ContributionSPLEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
@@ -52,7 +52,7 @@ pub struct ContributionSPL<'info> {
 }
 
 impl ContributionSPL<'_> {
-    pub fn validate(&self, args: ContributionSPLArgs) -> Result<()> {
+    pub fn validate(&self, _args: ContributionSPLArgs) -> Result<()> {
         require!(
             self.event_participant_account.status == EventProjectStatus::Approved,
             Errors::InvalidProjectVerification
@@ -83,8 +83,6 @@ impl ContributionSPL<'_> {
         ctx: Context<ContributionSPL>,
         args: ContributionSPLArgs,
     ) -> Result<()> {
-        let project_account = &ctx.accounts.project_account.clone();
-
         let transfer_instruction = anchor_spl::token::Transfer {
             from: ctx.accounts.token_ata_sender.to_account_info(),
             to: ctx.accounts.token_ata_receiver.to_account_info(),
@@ -98,7 +96,7 @@ impl ContributionSPL<'_> {
 
         anchor_spl::token::transfer(cpi_ctx_trans, args.amount)?;
 
-        emit!(NewContributionSPL {
+        emit!(ContributionSPLEvent {
             amount: args.amount,
             authority: ctx.accounts.authority.key(),
             event_key: ctx.accounts.event_account.create_key.key(),
