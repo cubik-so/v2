@@ -1,4 +1,5 @@
 import { CubikSDK } from "..";
+import { EVENT_PREFIX, SPONSOR_PREFIX } from "../constants";
 import {
   SponsorCreateAccounts,
   SponsorCreateArgs,
@@ -35,21 +36,21 @@ export const sponsor = (sdk: CubikSDK) => {
 
     getPDA: (createKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from("sponsor"),createKey.toBuffer()],
+        [SPONSOR_PREFIX,createKey.toBuffer()],
         sdk.programId
       );
     },
 
     getSponsorPDA: (eventKey: web3.PublicKey , createKey : web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from("sponsor"), eventKey.toBuffer(), createKey.toBuffer()],
+        [SPONSOR_PREFIX, eventKey.toBuffer(), createKey.toBuffer()],
         sdk.programId
       );
     },
 
     getEventPDA: (eventAccount: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from("event"), eventAccount.toBuffer()],
+        [EVENT_PREFIX, eventAccount.toBuffer()],
         sdk.programId
       );
     },
