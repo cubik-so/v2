@@ -72,6 +72,15 @@ pub mod cubik {
         Ok(())
     }
 
+    // Update event participant status
+    pub fn event_participant_update(
+        ctx: Context<EventParticipantUpdate>,
+        args: EventParticipantUpdateArgs,
+    ) -> Result<()> {
+        EventParticipantUpdate::event_participant_update(ctx, args)?;
+        Ok(())
+    }
+
     // Tipping Sol to Project
     pub fn project_tip_sol(ctx: Context<ProjectTipSOL>, args: ProjectTipSOLArgs) -> Result<()> {
         ProjectTipSOL::project_tip_sol(ctx, args)?;

@@ -1,4 +1,5 @@
 use crate::errors::Errors;
+use crate::event::SponsorCreateEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
@@ -133,9 +134,18 @@ impl SponsorCreateCustody<'_> {
         // Sponsor Account
         sponsor_account.authority = ctx.accounts.authority.key();
         sponsor_account.vault_key = vault_pubkey;
-        sponsor_account.metadata = args.metadata;
+        sponsor_account.metadata = args.metadata.clone();
         sponsor_account.create_key = ctx.accounts.create_key.key();
         sponsor_account.bump = ctx.bumps.sponsor_account;
+
+        emit!(SponsorCreateEvent {
+            authority: ctx.accounts.authority.key(),
+            create_key: ctx.accounts.create_key.key(),
+            event_account: ctx.accounts.event_account.key(),
+            sponsor_account: ctx.accounts.sponsor_account.key(),
+            metadata: args.metadata,
+            vault_key: vault_pubkey
+        });
 
         Ok(())
     }

@@ -1,4 +1,5 @@
 use crate::errors::Errors;
+use crate::event::EventTeamCloseEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
@@ -49,7 +50,11 @@ impl EventTeamClose<'_> {
 
         Ok(())
     }
-    pub fn event_team_close() -> Result<()> {
+    pub fn event_team_close(ctx: Context<Self>) -> Result<()> {
+        emit!(EventTeamCloseEvent {
+            authority: ctx.accounts.authority.key(),
+            event_team_account: ctx.accounts.event_team_account.key(),
+        });
         Ok(())
     }
 }

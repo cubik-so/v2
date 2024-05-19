@@ -1,4 +1,5 @@
 use crate::errors::Errors;
+use crate::event::EventParticipantCreateEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
@@ -49,6 +50,11 @@ impl EventParticipantCreate<'_> {
         event_participant_account.authority = *ctx.accounts.authority.key;
         event_participant_account.status = EventProjectStatus::PendingApproval;
         event_participant_account.bump = ctx.bumps.event_participant_account;
+
+        emit!(EventParticipantCreateEvent {
+            authority: ctx.accounts.authority.key(),
+            event_participant_account: ctx.accounts.event_participant_account.key(),
+        });
         Ok(())
     }
 }

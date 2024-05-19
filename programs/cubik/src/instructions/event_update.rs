@@ -1,9 +1,10 @@
 use crate::errors::Errors;
+use crate::event::EventTeamUpdateEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct EventUpdateArgs {
     metadata: Option<String>,
     ending_slot: Option<u64>,
@@ -40,13 +41,20 @@ impl EventUpdate<'_> {
         };
 
         if args.metadata.is_some() {
-            event_account.metadata = args.metadata.unwrap()
+            event_account.metadata = args.metadata.clone().unwrap()
         };
 
         if args.start_slot.is_some() {
             event_account.start_slot = args.start_slot.unwrap()
         }
 
+        emit!(EventTeamUpdateEvent {
+            authority: ctx.accounts.authority.key(),
+            event_team_account: ctx.accounts.event_team_account.key(),
+            ending_slot: args.ending_slot,
+            start_slot: args.start_slot,
+            metadata: args.metadata,
+        });
         Ok(())
     }
 }

@@ -1,19 +1,22 @@
 use crate::errors::Errors;
-use crate::event::EventParticipantInviteEvent;
+use crate::event::EventParticipantUpdateEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
 
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct EventParticipantUpdateArgs {
+    status: EventProjectStatus,
+}
+
 #[derive(Accounts)]
-pub struct EventParticipantInvite<'info> {
+pub struct EventParticipantUpdate<'info> {
     #[account(mut, constraint = team.key() == event_team_account.authority.key() @Errors::InvalidSigner)]
     pub team: Signer<'info>,
 
-    #[account(init,
-        payer = team,
-        space = 8 + EventParticipant::INIT_SPACE,
+    #[account(mut,
         seeds = [EVENT_PARTICIPANT_PREFIX,event_account.key().as_ref(),project_account.key().as_ref()],
-        bump
+        bump  = event_participant_account.bump
     )]
     pub event_participant_account: Box<Account<'info, EventParticipant>>,
 
@@ -39,24 +42,25 @@ pub struct EventParticipantInvite<'info> {
     pub system_program: Program<'info, System>,
 }
 
-impl EventParticipantInvite<'_> {
+impl EventParticipantUpdate<'_> {
     pub fn validate(&self) -> Result<()> {
         Ok(())
     }
 
     #[access_control(ctx.accounts.validate())]
-    pub fn event_participant_invite(ctx: Context<Self>) -> Result<()> {
+    pub fn event_participant_update(
+        ctx: Context<Self>,
+        args: EventParticipantUpdateArgs,
+    ) -> Result<()> {
         let event_participant_account = &mut ctx.accounts.event_participant_account;
 
-        event_participant_account.authority = ctx.accounts.project_account.creator.key();
-        event_participant_account.status = EventProjectStatus::PendingApproval;
-        event_participant_account.bump = ctx.bumps.event_participant_account;
+        event_participant_account.status = args.status.clone();
 
-        emit!(EventParticipantInviteEvent {
+        emit!(EventParticipantUpdateEvent {
             event_participant_account: event_participant_account.key(),
             event_team_key: ctx.accounts.team.key(),
+            status: args.status,
         });
-
         Ok(())
     }
 }

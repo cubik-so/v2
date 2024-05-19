@@ -1,5 +1,7 @@
 use anchor_lang::prelude::*;
 
+use crate::state::EventProjectStatus;
+
 // Project events
 #[event]
 pub struct ProjectCreateEvent {
@@ -64,4 +66,58 @@ pub struct ContributionSPLEvent {
     pub token: Pubkey,
     pub event_key: Pubkey,
     pub project_create_key: Pubkey,
+}
+
+#[event]
+pub struct EventCreateEvent {
+    pub authority: Pubkey,
+    pub metadata: String,
+    pub create_key: Pubkey,
+    pub event_account: Pubkey,
+}
+#[event]
+pub struct EventParticipantCreateEvent {
+    pub authority: Pubkey,
+    pub event_participant_account: Pubkey,
+}
+#[event]
+pub struct EventParticipantInviteEvent {
+    pub event_team_key: Pubkey,
+    pub event_participant_account: Pubkey,
+}
+
+#[event]
+pub struct EventParticipantUpdateEvent {
+    pub event_team_key: Pubkey,
+    pub status: EventProjectStatus,
+    pub event_participant_account: Pubkey,
+}
+
+#[event]
+pub struct EventTeamCloseEvent {
+    pub authority: Pubkey,
+    pub event_team_account: Pubkey,
+}
+#[event]
+pub struct EventTeamCreateEvent {
+    pub authority: Pubkey,
+    pub event_team_account: Pubkey,
+}
+#[event]
+pub struct EventTeamUpdateEvent {
+    pub authority: Pubkey,
+    pub event_team_account: Pubkey,
+    pub metadata: Option<String>,
+    pub ending_slot: Option<u64>,
+    pub start_slot: Option<u64>,
+}
+
+#[event]
+pub struct SponsorCreateEvent {
+    pub authority: Pubkey,
+    pub event_account: Pubkey,
+    pub sponsor_account: Pubkey,
+    pub create_key: Pubkey,
+    pub vault_key: Pubkey,
+    pub metadata: String,
 }

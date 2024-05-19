@@ -1,9 +1,9 @@
-use crate::state::*;
+use crate::{event::EventCreateEvent, state::*};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
 use squads_multisig_program::{Member, Permission, Permissions, SEED_PREFIX, SEED_VAULT};
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct EventCreateArgs {
     metadata: String,
     start_slot: u64,
@@ -110,7 +110,7 @@ impl EventCreate<'_> {
 
         // Event Account
         event_account.authority = *ctx.accounts.authority.key;
-        event_account.metadata = args.metadata;
+        event_account.metadata = args.metadata.clone();
         event_account.event_type = EventType::QFROUND;
         event_account.create_key = *ctx.accounts.create_key.key;
         event_account.ending_slot = args.ending_slot;
@@ -121,6 +121,12 @@ impl EventCreate<'_> {
         event_team_account.authority = *ctx.accounts.authority.key;
         event_team_account.bump = ctx.bumps.event_team_account;
 
+        emit!(EventCreateEvent {
+            authority: *ctx.accounts.authority.key,
+            create_key: *ctx.accounts.create_key.key,
+            event_account: ctx.accounts.event_account.key(),
+            metadata: args.metadata
+        });
         Ok(())
     }
 }

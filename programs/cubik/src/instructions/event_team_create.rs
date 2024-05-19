@@ -1,4 +1,5 @@
 use crate::errors::Errors;
+use crate::event::EventTeamCreateEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
@@ -51,6 +52,10 @@ impl EventTeamCreate<'_> {
         new_team_account.authority = args.new_team_member;
         new_team_account.bump = ctx.bumps.event_team_account;
 
+        emit!(EventTeamCreateEvent {
+            authority: ctx.accounts.authority.key(),
+            event_team_account: ctx.accounts.event_team_account.key(),
+        });
         Ok(())
     }
 }

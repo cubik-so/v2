@@ -1,4 +1,5 @@
 use crate::errors::*;
+use crate::event::ProjectTransferEvent;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
@@ -29,6 +30,13 @@ impl ProjectTransfer<'_> {
         let project_account = &mut ctx.accounts.project_account;
 
         project_account.creator = args.new_creator;
+
+        emit!(ProjectTransferEvent {
+            create_key: project_account.create_key.key(),
+            creator: project_account.creator.key(),
+            new_creator: args.new_creator.key(),
+            project_account: project_account.key(),
+        });
         Ok(())
     }
 }
