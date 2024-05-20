@@ -1,6 +1,6 @@
 [package]
 name = "cubik"
-version = "0.0.0"
+version = "0.2.0"
 description = "Created with Anchor"
 edition = "2021"
 
