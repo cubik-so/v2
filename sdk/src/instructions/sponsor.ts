@@ -30,7 +30,7 @@ export const sponsor = (sdk: CubikSDK) => {
         .instruction();
     },
 
-    getSponsor: async (pda: web3.PublicKey) => {
+    get: async (pda: web3.PublicKey) => {
       return await sdk.program.account.sponsor.fetch(pda);
     },
 
