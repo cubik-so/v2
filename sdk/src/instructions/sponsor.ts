@@ -34,19 +34,14 @@ export const sponsor = (sdk: CubikSDK) => {
       return await sdk.program.account.sponsor.fetch(pda);
     },
 
-    getPDA: (createKey: web3.PublicKey) => {
-      return web3.PublicKey.findProgramAddressSync(
-        [SPONSOR_PREFIX, createKey.toBuffer()],
-        sdk.programId
-      );
-    },
 
-    getSponsorPDA: (eventKey: web3.PublicKey, createKey: web3.PublicKey) => {
+    getPDA: (eventKey: web3.PublicKey, createKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
         [SPONSOR_PREFIX, eventKey.toBuffer(), createKey.toBuffer()],
         sdk.programId
       );
     },
+
     event: {
       getPDA: (eventAccount: web3.PublicKey) => {
         return web3.PublicKey.findProgramAddressSync(

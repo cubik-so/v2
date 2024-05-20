@@ -31,14 +31,16 @@ export const event = (sdk: CubikSDK) => {
         .instruction();
     },
 
-    teamCreate: async (
-      accounts: EventTeamCreateAccounts,
-      args: EventTeamCreateArgs
-    ) => {
-      return await sdk.program.methods
-        .eventTeamCreate(args)
-        .accounts(accounts)
-        .instruction();
+    team: {
+      create: async (
+        accounts: EventTeamCreateAccounts,
+        args: EventTeamCreateArgs
+      ) => {
+        return await sdk.program.methods
+          .eventTeamCreate(args)
+          .accounts(accounts)
+          .instruction();
+      },
     },
 
     participant: {
@@ -54,6 +56,10 @@ export const event = (sdk: CubikSDK) => {
           .eventParticipantInvite()
           .accounts(accounts)
           .instruction();
+      },
+
+      get: async (pda: web3.PublicKey) => {
+        return await sdk.program.account.event.fetch(pda);
       },
 
       getPDA: (
