@@ -3,96 +3,89 @@ import { CubikSDK } from "..";
 import {
   CreateEventAccounts,
   CreateEventHandlerArgs,
-  CreateEventJoinAccounts,
-  InviteEventJoinAccounts,
+  EventParticipantCreateAccounts,
+  EventParticipantInviteAccounts,
+  EventTeamCreateAccounts,
+  EventTeamCreateArgs,
   UpdateEventAccounts,
   UpdateEventArgs,
-  UpdateEventStatusAccounts,
-  UpdateEventStatusArgs,
 } from "../types";
+import { EVENT_PARTICIPANT_PREFIX, EVENT_PREFIX } from "../constants";
 
 export const event = (sdk: CubikSDK) => {
   return {
     create: async (
-      args: CreateEventHandlerArgs,
-      accounts: CreateEventAccounts
+      accounts: CreateEventAccounts,
+      args: CreateEventHandlerArgs
     ) => {
-      const ix = await sdk.program.methods
-        .createEvent(args.matchingPool, args.event_admin_signer)
+      return await sdk.program.methods
+        .eventCreate(args)
         .accounts(accounts)
         .instruction();
-
-      return ix;
     },
 
-    createEventJoin: async (accounts: CreateEventJoinAccounts) => {
-      const ix = await sdk.program.methods
-        .createEventJoin()
+    update: async (accounts: UpdateEventAccounts, args: UpdateEventArgs) => {
+      return await sdk.program.methods
+        .eventUpdate(args)
         .accounts(accounts)
         .instruction();
-
-      return ix;
     },
 
-    update: async (args: UpdateEventArgs, accounts: UpdateEventAccounts) => {
-      const ix = await sdk.program.methods
-        .updateEvent(args.matchingPool)
-        .accounts(accounts)
-        .instruction();
-      return ix;
+    team: {
+      create: async (
+        accounts: EventTeamCreateAccounts,
+        args: EventTeamCreateArgs
+      ) => {
+        return await sdk.program.methods
+          .eventTeamCreate(args)
+          .accounts(accounts)
+          .instruction();
+      },
     },
 
-    updateStatus: async (
-      args: UpdateEventStatusArgs,
-      accounts: UpdateEventStatusAccounts
-    ) => {
-      const ix = await sdk.program.methods
-        .updateEventJoinStatus(args.status)
-        .accounts({
-          authority: accounts.authority,
-          eventAccount: accounts.eventAccount,
-          eventJoinAccount: accounts.eventJoinAccount,
-          projectAccount: accounts.projectAccount,
-          subAdminAccount: accounts.subAdminAccount,
-          rent: accounts.rent,
-          systemProgram: accounts.systemProgram,
-        })
-        .instruction();
-      return ix;
-    },
-    inviteEventJoin: async (accounts: InviteEventJoinAccounts) => {
-      const ix = await sdk.program.methods
-        .inviteEventJoin()
-        .accounts(accounts)
-        .instruction();
-      return ix;
+    participant: {
+      create: async (accounts: EventParticipantCreateAccounts) => {
+        return await sdk.program.methods
+          .eventParticipantCreate()
+          .accounts(accounts)
+          .instruction();
+      },
+
+      invite: async (accounts: EventParticipantInviteAccounts) => {
+        return await sdk.program.methods
+          .eventParticipantInvite()
+          .accounts(accounts)
+          .instruction();
+      },
+
+      get: async (pda: web3.PublicKey) => {
+        return await sdk.program.account.event.fetch(pda);
+      },
+
+      getPDA: (
+        eventAccount: web3.PublicKey,
+        projectAccount: web3.PublicKey
+      ) => {
+        return web3.PublicKey.findProgramAddressSync(
+          [
+            EVENT_PARTICIPANT_PREFIX,
+            eventAccount.toBuffer(),
+            projectAccount.toBuffer(),
+          ],
+          sdk.programId
+        );
+      },
     },
 
     getPDA: (eventKey: web3.PublicKey) => {
       return web3.PublicKey.findProgramAddressSync(
-        [Buffer.from("event"), eventKey.toBuffer()],
+        [EVENT_PREFIX, eventKey.toBuffer()],
         sdk.programId
       );
-    },
-    getEventJoin: (pda: web3.PublicKey) => {
-      return sdk.program.account.eventJoin.fetch(pda);
     },
 
     get: (pda: web3.PublicKey) => {
       return sdk.program.account.event.fetch(pda);
-    },
-    getEventJoinPDA: (
-      eventAccount: web3.PublicKey,
-      projectAccount: web3.PublicKey
-    ) => {
-      return web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("event_join"),
-          eventAccount.toBuffer(),
-          projectAccount.toBuffer(),
-        ],
-        sdk.programId
-      );
     },
   };
 };
