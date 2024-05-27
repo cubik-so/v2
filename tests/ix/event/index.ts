@@ -118,7 +118,16 @@ describe("Event", () => {
         .rpc({ maxRetries: 3, commitment: "confirmed" });
     });
   });
-  describe("Event Team Close", () => {});
+
+  describe("Event Team Close", () => {
+    const wallet = new Wallet(keypair);
+    const program = createCubikProgram(wallet);
+
+    it("Event Participant Update", async () => {
+      const tx = await program.methods.eve;
+    });
+  });
+
   describe("Event Participant Create", () => {
     const wallet = new Wallet(keypair);
     const program = createCubikProgram(wallet);
@@ -145,7 +154,42 @@ describe("Event", () => {
       console.log(tx);
     });
   });
-  describe("Event Participant Update", () => {});
+
+  describe("Event Participant Update", () => {
+    const wallet = new Wallet(keypair);
+    const program = createCubikProgram(wallet);
+
+    it("Event Participant Update", async () => {
+      const eventAccount = getEventPDA(createKey.publicKey)[0];
+      const projectAccount = getProjectPDA(createKey.publicKey)[0];
+      const eventTeamAccount = getEventTeamPDA(
+        eventAccount,
+        wallet.publicKey
+      )[0];
+
+      const tx = await program.methods
+        .eventParticipantUpdate({
+          status: {
+            approved,
+          },
+        })
+        .accounts({
+          eventAccount: eventAccount,
+          eventParticipantAccount: getEventParticipantPDA(
+            eventAccount,
+            projectAccount
+          )[0],
+          eventTeamAccount: eventTeamAccount,
+          projectAccount: projectAccount,
+          systemProgram: web3.SystemProgram.programId,
+          team: getTeamPDA(createKey.publicKey)[0],
+        })
+        .rpc({ maxRetries: 3, commitment: "confirmed" });
+
+      console.log(tx);
+    });
+  });
+
   describe("Event Participant Invite", () => {
     const wallet = new Wallet(keypair);
     const program = createCubikProgram(wallet);
