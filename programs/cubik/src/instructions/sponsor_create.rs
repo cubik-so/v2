@@ -52,6 +52,7 @@ impl SponsorCreate<'_> {
         sponsor_account.authority = ctx.accounts.authority.key();
         sponsor_account.vault_key = ctx.accounts.event_account.vault_pubkey.key();
         sponsor_account.create_key = ctx.accounts.create_key.key();
+        sponsor_account.event_account = ctx.accounts.event_account.key();
         sponsor_account.metadata = args.metadata.clone();
         sponsor_account.bump = ctx.bumps.sponsor_account;
 

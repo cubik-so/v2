@@ -12,7 +12,7 @@ pub struct Project {
     /// Public key used as a seed to generate the project's PDA.
     pub create_key: Pubkey,
     /// metadata of the project.
-    #[max_len(50)]
+    #[max_len(30)]
     pub metadata: String, // fix sizing here
     /// Bump for the project PDA seed.
     pub bump: u8,

@@ -8,8 +8,8 @@ pub struct Event {
     // Event type
     pub event_type: EventType,
     // Event metadata
-    #[max_len(50)]
-    pub metadata: String, // todo - fix size
+    #[max_len(30)]
+    pub metadata: String,
     //  createKey for the event
     pub create_key: Pubkey,
     // Voting Start slot

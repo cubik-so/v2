@@ -121,3 +121,14 @@ pub struct SponsorCreateEvent {
     pub vault_key: Pubkey,
     pub metadata: String,
 }
+
+#[event]
+pub struct SponsorCloseEvent {
+    pub authority: Pubkey,
+    pub sponsor_account: Pubkey,
+}
+#[event]
+pub struct SponsorUpdateEvent {
+    pub authority: Pubkey,
+    pub sponsor_account: Pubkey,
+}

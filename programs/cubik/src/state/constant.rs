@@ -13,4 +13,3 @@ pub const CONFIG_AUTHORITY: Pubkey = pubkey!("8qpemLRMyZC4gX34vewYWHfeekKGcHqWzd
 pub const VAULT_AUTHORITY: Pubkey = pubkey!("FERZ4zq1XRdLSoSj3ZGj5pjvSWRudBWAYXk6M5qBsUf2");
 
 pub const MIN_SOL: u64 = 100000; // 0.0001 SOL
-pub const MIN_USD: u64 = 100; // 0.01 USD Assuming 1 USD = 1000000
