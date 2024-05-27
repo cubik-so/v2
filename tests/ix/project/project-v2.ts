@@ -47,7 +47,7 @@ describe("Project", () => {
           multisig: multisigPDA,
           creator: wallet.publicKey,
           programConfigPda: programConfigPda,
-          projectAccount: getProjectPDA(createKey.publicKey, 0)[0],
+          projectAccount: getProjectPDA(createKey.publicKey)[0],
           squadsProgram: SQUADS_PROGRAM_ID,
           treasury: programConfig.treasury,
           systemProgram: web3.SystemProgram.programId,
