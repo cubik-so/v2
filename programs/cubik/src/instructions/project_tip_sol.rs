@@ -14,7 +14,7 @@ pub struct ProjectTipSOL<'info> {
     pub authority: Signer<'info>,
 
     /// CHECK: Receiver is the project account
-    #[account(mut, constraint = project_account.reciver.key() == receiver.key())]
+    #[account(mut, constraint = project_account.receiver.key() == receiver.key())]
     pub receiver: AccountInfo<'info>,
 
     #[account(mut,
@@ -39,7 +39,7 @@ impl ProjectTipSOL<'_> {
         let receiver = &ctx.accounts.receiver;
         let transfer_instruction = system_instruction::transfer(
             ctx.accounts.authority.key,
-            &project_account.reciver,
+            &project_account.receiver,
             args.amount,
         );
 

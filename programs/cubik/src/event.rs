@@ -9,7 +9,7 @@ pub struct ProjectCreateEvent {
     pub create_key: Pubkey,
     pub project_account: Pubkey,
     pub metadata: String,
-    pub reciver: Pubkey,
+    pub receiver: Pubkey,
 }
 #[event]
 pub struct ProjectCloseEvent {
@@ -32,7 +32,7 @@ pub struct ProjectUpdateEvent {
     pub create_key: Pubkey,
     pub project_account: Pubkey,
     pub metadata: Option<String>,
-    pub reciver: Option<Pubkey>,
+    pub receiver: Option<Pubkey>,
 }
 
 // Tipping events

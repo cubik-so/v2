@@ -29,7 +29,7 @@ impl SponsorUpdate<'_> {
     }
 
     #[access_control(ctx.accounts.validate())]
-    pub fn sponsor_create(ctx: Context<SponsorUpdate>, args: SponsorUpdateArgs) -> Result<()> {
+    pub fn sponsor_update(ctx: Context<SponsorUpdate>, args: SponsorUpdateArgs) -> Result<()> {
         let sponsor_account = &mut ctx.accounts.sponsor_account;
 
         if args.metadata.is_some() {

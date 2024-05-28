@@ -6,7 +6,7 @@ pub struct Project {
     /// The public key of the project's creator.
     pub creator: Pubkey,
     /// Pubkey where funds go
-    pub reciver: Pubkey,
+    pub receiver: Pubkey,
     /// Public key of the account used to store the project's funds or assets.
     pub vault_pubkey: Pubkey,
     /// Public key used as a seed to generate the project's PDA.
