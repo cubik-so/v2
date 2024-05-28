@@ -61,6 +61,11 @@ pub mod cubik {
         Ok(())
     }
 
+    // Event Team Close
+    pub fn event_team_close(ctx: Context<EventTeamClose>) -> Result<()> {
+        EventTeamClose::event_team_close(ctx)?;
+        Ok(())
+    }
     // Project Participanting in the event
     pub fn event_participant_create(ctx: Context<EventParticipantCreate>) -> Result<()> {
         EventParticipantCreate::event_participant_create(ctx)?;
@@ -121,6 +126,16 @@ pub mod cubik {
         args: SponsorCreateCustodyArgs,
     ) -> Result<()> {
         SponsorCreateCustody::sponsor_create_custody(ctx, args)?;
+        Ok(())
+    }
+
+    pub fn sponsor_update(ctx: Context<SponsorUpdate>, args: SponsorUpdateArgs) -> Result<()> {
+        SponsorUpdate::sponsor_update(ctx, args)?;
+        Ok(())
+    }
+
+    pub fn sponsor_close(ctx: Context<SponsorClose>) -> Result<()> {
+        SponsorClose::sponsor_close(ctx)?;
         Ok(())
     }
 }

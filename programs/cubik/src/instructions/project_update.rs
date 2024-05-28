@@ -6,7 +6,7 @@ use anchor_lang::system_program::{self};
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct ProjectUpdateArgs {
-    reciver: Option<Pubkey>,
+    receiver: Option<Pubkey>,
     metadata: Option<String>,
 }
 
@@ -34,8 +34,8 @@ impl ProjectUpdate<'_> {
             project_account.metadata = args.metadata.clone().unwrap();
         }
 
-        if args.reciver.is_some() {
-            project_account.reciver = args.reciver.unwrap();
+        if args.receiver.is_some() {
+            project_account.receiver = args.receiver.unwrap();
         }
 
         emit!(ProjectUpdateEvent {
@@ -43,7 +43,7 @@ impl ProjectUpdate<'_> {
             creator: ctx.accounts.project_account.creator.key(),
             project_account: ctx.accounts.project_account.key(),
             metadata: args.metadata,
-            reciver: args.reciver
+            receiver: args.receiver
         });
         Ok(())
     }

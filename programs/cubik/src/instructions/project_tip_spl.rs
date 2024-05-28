@@ -20,7 +20,7 @@ pub struct ProjectTipSPL<'info> {
     #[account(mut, constraint = token_ata_sender.mint ==  token_mint.key(), constraint = token_ata_sender.owner == authority.key())]
     pub token_ata_sender: Box<Account<'info, TokenAccount>>,
 
-    #[account(mut, constraint = token_ata_receiver.mint ==  token_mint.key(), constraint = token_ata_receiver.owner == project_account.reciver.key())]
+    #[account(mut, constraint = token_ata_receiver.mint ==  token_mint.key(), constraint = token_ata_receiver.owner == project_account.receiver.key())]
     pub token_ata_receiver: Box<Account<'info, TokenAccount>>,
 
     #[account(mut,

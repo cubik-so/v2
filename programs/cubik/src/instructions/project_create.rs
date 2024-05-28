@@ -103,7 +103,7 @@ impl ProjectCreate<'_> {
 
         // project_account.status = ProjectVerification::UnderReview;
         project_account.create_key = ctx.accounts.create_key.key();
-        project_account.reciver = vault_pubkey.key();
+        project_account.receiver = vault_pubkey.key();
         project_account.vault_pubkey = vault_pubkey.key();
         project_account.bump = ctx.bumps.project_account;
 
@@ -111,7 +111,7 @@ impl ProjectCreate<'_> {
             create_key: ctx.accounts.create_key.key(),
             creator: ctx.accounts.creator.key(),
             project_account: ctx.accounts.project_account.key(),
-            reciver: vault_pubkey.key(),
+            receiver: vault_pubkey.key(),
             metadata: args.metadata,
         });
         Ok(())
