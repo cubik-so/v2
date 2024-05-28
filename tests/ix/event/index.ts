@@ -69,6 +69,7 @@ describe("Event", () => {
       console.log(tx);
     });
   });
+
   describe("Event Updation", () => {
     const wallet = new Wallet(keypair);
     const program = createCubikProgram(wallet);
@@ -97,6 +98,7 @@ describe("Event", () => {
       console.log(tx);
     });
   });
+
   describe("Event Team Creation", () => {
     const wallet = new Wallet(keypair);
     const program = createCubikProgram(wallet);
@@ -119,14 +121,7 @@ describe("Event", () => {
     });
   });
 
-  describe("Event Team Close", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
-
-    it("Event Participant Update", async () => {
-      const tx = await program.methods.eve;
-    });
-  });
+  describe("Event Team Close", () => {});
 
   describe("Event Participant Create", () => {
     const wallet = new Wallet(keypair);
@@ -170,7 +165,7 @@ describe("Event", () => {
       const tx = await program.methods
         .eventParticipantUpdate({
           status: {
-            approved,
+            approved: {},
           },
         })
         .accounts({

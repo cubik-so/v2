@@ -49,7 +49,7 @@ export const getEventParticipantPDA = (
 ) => {
   return web3.PublicKey.findProgramAddressSync(
     [
-      Buffer.from("eventParticipant"),
+      Buffer.from("eventparticipant"),
       eventAccount.toBuffer(),
       projectAccount.toBuffer(),
     ],
@@ -60,6 +60,13 @@ export const getEventParticipantPDA = (
 export const getTeamPDA = (createKey: web3.PublicKey) => {
   return web3.PublicKey.findProgramAddressSync(
     [Buffer.from("team"), createKey.toBuffer()],
+    PROGRAM_ID
+  );
+};
+
+export const getSponserPDA = (createKey: web3.PublicKey) => {
+  return web3.PublicKey.findProgramAddressSync(
+    [Buffer.from("sponsor"), createKey.toBuffer()],
     PROGRAM_ID
   );
 };
