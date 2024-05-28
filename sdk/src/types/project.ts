@@ -44,8 +44,6 @@ export type CreateProjectAccounts = {
   systemProgram: web3.PublicKey; // System program id
 };
 
-
-
 /**
  * @name TransferProjectAccounts
  * @description
@@ -54,12 +52,12 @@ export type CreateProjectAccounts = {
  * @property creator - PublicKey of the creator.
  * @property projectAccount - PublicKey of the project account.
  * @property systemProgram - PublicKey of the System program, essential for transaction execution.
- * 
+ *
  * @category types
  */
 
 export type TransferProjectAccounts = {
-  creator : web3.PublicKey;
+  creator: web3.PublicKey;
   projectAccount: web3.PublicKey; // Project account public key
   systemProgram: web3.PublicKey; // System program ID
 };
@@ -74,24 +72,23 @@ export type TransferProjectAccounts = {
  * @category types
  */
 export type TransferProjectArgs = {
-  newCreator : web3.PublicKey;
-}
-
+  newCreator: web3.PublicKey;
+};
 
 /**
  * @name UpdateProjectStatusAccounts
- * @description 
+ * @description
  * Accounts required for updating the status of a project in the system.
- * 
+ *
  * @property creator - PublicKey of the creator.
  * @property projectAccount - PublicKey of the project account.
  * @property systemProgram - PublicKey of the System program.
- * 
+ *
  * @category types
  */
 
 export type UpdateProjectAccounts = {
-  creator : web3.PublicKey;
+  creator: web3.PublicKey;
   projectAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
 };
@@ -108,24 +105,24 @@ export type UpdateProjectAccounts = {
  */
 
 export type ProjectUpdateArgs = {
-  receiver: web3.PublicKey | null;
+  reciver: web3.PublicKey | null;
   metadata: string | null;
-}
+};
 
 /**
  * @name CloseProjectAccounts
- * @description 
+ * @description
  * Accounts necessary for closing a project.
- * 
+ *
  * @property creator - PublicKey of the creator.
  * @property projectAccount - PublicKey of the project account.
  * @property systemProgram - PublicKey of the System program.
- * 
+ *
  * @category types
  */
 
 export type CloseProjectAccounts = {
-  creator : web3.PublicKey;
+  creator: web3.PublicKey;
   projectAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
 };
@@ -139,11 +136,11 @@ export type CloseProjectAccounts = {
  * @property systemProgram - Reference to the Solana system program, used for transferring SOL.
  */
 export type TipSolAccounts = {
-  authority: web3.PublicKey,
-  receiver: web3.PublicKey,
-  projectAccount: web3.PublicKey,
-  systemProgram: web3.PublicKey,
-}
+  authority: web3.PublicKey;
+  receiver: web3.PublicKey;
+  projectAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
+};
 
 /**
  * @name TipSolArgs
@@ -152,9 +149,8 @@ export type TipSolAccounts = {
  */
 
 export type TipSolArgs = {
- amount : BN
-}
-
+  amount: BN;
+};
 
 /**
  * @name TipSPLAccounts
@@ -168,15 +164,14 @@ export type TipSolArgs = {
  * @property tokenProgram - Reference to the Solana token program, used for SPL token transactions.
  */
 export type TipSPLAccounts = {
-  authority: web3.PublicKey,
-  tokenMint: web3.PublicKey,
-  tokenAtaSender: web3.PublicKey,
-  tokenAtaReceiver : web3.PublicKey,
-  projectAccount: web3.PublicKey,
-  systemProgram: web3.PublicKey,
-  tokenProgram: web3.PublicKey,
-
-}
+  authority: web3.PublicKey;
+  tokenMint: web3.PublicKey;
+  tokenAtaSender: web3.PublicKey;
+  tokenAtaReceiver: web3.PublicKey;
+  projectAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
+  tokenProgram: web3.PublicKey;
+};
 
 /**
  * @name TipSPLArgs
@@ -184,5 +179,5 @@ export type TipSPLAccounts = {
  * @property amount - The amount of SPL tokens to be tipped, specified as a BN (BigNumber).
  */
 export type TipSPLArgs = {
- amount : BN
-}
+  amount: BN;
+};
