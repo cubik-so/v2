@@ -74,6 +74,39 @@ describe("Sponsor", () => {
 
     console.log(tx);
   });
-  describe("Sponsor Update", () => {});
-  describe("Sponsor close", () => {});
+  describe("Sponsor Update", () => {
+    const wallet = new Wallet(keypair);
+    const program = createCubikProgram(wallet);
+
+    it("Sponser Update Idel Case", async () => {
+      const tx = await program.methods
+        .sponsorUpdate({ metadata: "something" })
+        .accounts({
+          authority: wallet.publicKey,
+          sponsorAccount: getSponserPDA(createKey.publicKey)[0],
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .rpc({ maxRetries: 3, commitment: "confirmed" });
+
+      console.log(tx);
+    });
+  });
+  describe("Sponsor close", () => {
+    const wallet = new Wallet(keypair);
+    const program = createCubikProgram(wallet);
+
+    it("Sponser Close Idel Case", async () => {
+      const tx = await program.methods
+        .sponsorClose()
+        .accounts({
+          authority: wallet.publicKey,
+          sponsorAccount: getSponserPDA(createKey.publicKey)[0],
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .signers([wallet.payer])
+        .rpc({ maxRetries: 3, commitment: "confirmed" });
+
+      console.log(tx);
+    });
+  });
 });

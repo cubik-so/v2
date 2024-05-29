@@ -30,14 +30,14 @@ export const getEventPDA = (createKey: web3.PublicKey) => {
 
 export const getEventTeamPDA = (
   eventAccount: web3.PublicKey,
-  authority: web3.PublicKey
+  memeber: web3.PublicKey
 ) => {
   return web3.PublicKey.findProgramAddressSync(
     [
       Buffer.from("event"),
       eventAccount.toBuffer(),
       Buffer.from("team"),
-      authority.toBuffer(),
+      memeber.toBuffer(),
     ],
     PROGRAM_ID
   );

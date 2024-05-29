@@ -12,6 +12,7 @@
     "@cubik/sdk": "link:/Users/sahilpabale/Documents/cubik/v2/sdk/lib",
     "@metaplex-foundation/beet": "^0.7.2",
     "@metaplex-foundation/beet-solana": "^0.4.1",
+    "@solana/spl-token": "^0.4.6",
     "dotenv": "^16.3.1"
   },
   "devDependencies": {

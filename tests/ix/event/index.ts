@@ -16,6 +16,7 @@ import {
   createDevnetConnection,
 } from "../../utils";
 import { BN, Wallet, web3 } from "@coral-xyz/anchor";
+import { PublicKey } from "@solana/web3.js";
 
 const connection = createDevnetConnection();
 describe("Event", () => {
@@ -103,25 +104,66 @@ describe("Event", () => {
     const wallet = new Wallet(keypair);
     const program = createCubikProgram(wallet);
 
-    const eventAccount = getEventPDA(createKey.publicKey)[0];
-    const eventTeamAccount = getEventTeamPDA(eventAccount, wallet.publicKey)[0];
     it("Event Team Creation Idel Case", async () => {
+      // genrate temp user
+      const member = web3.Keypair.generate();
+
+      const eventAccount = getEventPDA(createKey.publicKey)[0];
+      const eventTeamAccount = getEventTeamPDA(
+        eventAccount,
+        createKey.publicKey
+      )[0];
+
+      const newEventTeamAccount = getEventTeamPDA(
+        eventAccount,
+        member.publicKey
+      )[0];
+
       const tx = await program.methods
         .eventTeamCreate({
-          newTeamMember: wallet.publicKey,
+          newTeamMember: member.publicKey,
         })
         .accounts({
           authority: wallet.publicKey,
           eventAccount: eventAccount,
           eventTeamAccount: eventTeamAccount,
+          newEventTeamAccount: newEventTeamAccount,
           systemProgram: web3.SystemProgram.programId,
         })
         .signers([wallet.payer, createKey])
         .rpc({ maxRetries: 3, commitment: "confirmed" });
+
+      console.log(tx);
     });
   });
 
-  describe("Event Team Close", () => {});
+  describe("Event Team Close", () => {
+    const wallet = new Wallet(keypair);
+    const program = createCubikProgram(wallet);
+
+    it("Event Team Close Idel Case", async () => {
+      const member = web3.Keypair.generate();
+
+      const eventAccount = getEventPDA(createKey.publicKey)[0];
+      const eventTeamAccount = getEventTeamPDA(
+        eventAccount,
+        member.publicKey
+      )[0];
+
+      const tx = await program.methods
+        .eventTeamClose()
+        .accounts({
+          authority: wallet.publicKey,
+          eventAccount: getEventPDA(createKey.publicKey)[0],
+          eventTeamAccount: eventTeamAccount,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .signers([wallet.payer])
+        .rpc({ maxRetries: 3, commitment: "confirmed" });
+
+      console.log(tx);
+    });
+  });
 
   describe("Event Participant Create", () => {
     const wallet = new Wallet(keypair);
@@ -211,6 +253,8 @@ describe("Event", () => {
           team: getTeamPDA(createKey.publicKey)[0],
         })
         .rpc({ maxRetries: 3, commitment: "confirmed" });
+
+      console.log(tx);
     });
   });
 });

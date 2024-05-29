@@ -1,9 +1,10 @@
-import { BN } from "bn.js";
+import { BN, min } from "bn.js";
 import { generateKeypair, adminKeypair, createCubikProgram } from "../../utils";
 import { Wallet, web3 } from "@coral-xyz/anchor";
 import { getEventPDA, getEventParticipantPDA, getProjectPDA } from "../../pda";
 import { TOKEN_PROGRAM_ID } from "@coral-xyz/anchor/dist/cjs/utils/token";
 import { PublicKey } from "@solana/web3.js";
+import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 
 describe("Contribution", () => {
   let keypair: web3.Keypair;
@@ -22,8 +23,15 @@ describe("Contribution", () => {
 
       // TODO : Mint Address
       const tokenMint = new PublicKey("");
-      const tokenAtaSender = new PublicKey("");
-      const tokenAtaReceiver = new PublicKey("");
+      const sernderATA = getAssociatedTokenAddressSync(
+        tokenMint,
+        wallet.publicKey
+      );
+      const reciverATA = getAssociatedTokenAddressSync(
+        tokenMint,
+        createKey.publicKey,
+        true
+      );
 
       const tx = await program.methods
         .contributionSpl({ amount: new BN(2) })
@@ -36,8 +44,8 @@ describe("Contribution", () => {
           )[0],
           projectAccount: projectAccount,
           systemProgram: web3.SystemProgram.programId,
-          tokenAtaReceiver: tokenAtaReceiver,
-          tokenAtaSender: tokenAtaSender,
+          tokenAtaReceiver: reciverATA,
+          tokenAtaSender: sernderATA,
           tokenMint: tokenMint,
           tokenProgram: TOKEN_PROGRAM_ID,
         })
@@ -68,11 +76,13 @@ describe("Contribution", () => {
             projectAccountPDA
           )[0],
           projectAccount: projectAccountPDA,
-          receiver: projectAccount.reciver,
+          receiver: projectAccount.receiver,
           systemProgram: web3.SystemProgram.programId,
         })
         .signers([wallet.payer])
         .rpc({ maxRetries: 3, commitment: "confirmed" });
+
+      console.log(tx);
     });
   });
 });
