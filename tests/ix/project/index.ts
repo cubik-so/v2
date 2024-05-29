@@ -12,6 +12,7 @@ import {
 import { Wallet, web3 } from "@coral-xyz/anchor";
 import { TOKEN_PROGRAM_ID } from "@coral-xyz/anchor/dist/cjs/utils/token";
 import { PublicKey } from "@solana/web3.js";
+import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 
 const connection = createDevnetConnection();
 describe("Project", () => {
@@ -63,7 +64,7 @@ describe("Project", () => {
       const tx = await program.methods
         .projectUpdate({
           metadata: "something",
-          reciver: createKey.publicKey,
+          receiver: createKey.publicKey,
         })
         .accounts({
           creator: createKey.publicKey,
@@ -82,7 +83,7 @@ describe("Project", () => {
       const tx = await program.methods
         .projectUpdate({
           metadata: "something",
-          reciver: createKey.publicKey,
+          receiver: createKey.publicKey,
         })
         .accounts({
           creator: wallet.publicKey,
@@ -124,7 +125,7 @@ describe("Project", () => {
         .accounts({
           authority: wallet.publicKey,
           projectAccount: getProjectPDA(createKey.publicKey)[0],
-          receiver: projectAccount.reciver,
+          receiver: projectAccount.receiver,
           systemProgram: web3.SystemProgram.programId,
         })
         .signers([wallet.payer])
@@ -139,8 +140,16 @@ describe("Project", () => {
 
     it("Project Tip SPL Idel Flow", async () => {
       const tokenMint = new PublicKey("");
-      const tokenAtaSender = new PublicKey("");
-      const tokenAtaReceiver = new PublicKey("");
+
+      const sernderATA = getAssociatedTokenAddressSync(
+        tokenMint,
+        wallet.publicKey
+      );
+      const reciverATA = getAssociatedTokenAddressSync(
+        tokenMint,
+        createKey.publicKey,
+        true
+      );
 
       const tx = await program.methods
         .projectTipSpl({ amount: new BN(2) })
@@ -148,8 +157,8 @@ describe("Project", () => {
           authority: wallet.publicKey,
           projectAccount: getProjectPDA(createKey.publicKey)[0],
           systemProgram: web3.SystemProgram.programId,
-          tokenAtaReceiver: tokenAtaReceiver,
-          tokenAtaSender: tokenAtaSender,
+          tokenAtaReceiver: reciverATA,
+          tokenAtaSender: sernderATA,
           tokenMint: tokenMint,
           tokenProgram: TOKEN_PROGRAM_ID,
         })
