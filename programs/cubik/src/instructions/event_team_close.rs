@@ -11,7 +11,7 @@ pub struct EventTeamClose<'info> {
 
     #[account(mut,
         close = authority,
-        seeds = [EVENT_PREFIX,event_account.key().as_ref(),TEAM_PREFIX,to_close_event_team_account.key().as_ref()],
+        seeds = [EVENT_PREFIX,event_account.key().as_ref(),TEAM_PREFIX,to_close_event_team_account.authority.key().as_ref()],
         bump = to_close_event_team_account.bump
     )]
     pub to_close_event_team_account: Box<Account<'info, EventTeam>>,
@@ -44,6 +44,7 @@ impl EventTeamClose<'_> {
 
         Ok(())
     }
+    #[access_control(ctx.accounts.validate())]
     pub fn event_team_close(ctx: Context<Self>) -> Result<()> {
         emit!(EventTeamCloseEvent {
             authority: ctx.accounts.authority.key(),

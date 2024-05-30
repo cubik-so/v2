@@ -25,7 +25,7 @@ pub struct EventTeamCreate<'info> {
 
     #[account(mut,
         seeds = [EVENT_PREFIX,event_account.key().as_ref(),TEAM_PREFIX, authority.key().as_ref()],
-        bump = event_account.bump
+        bump = event_team_account.bump
     )]
     pub event_team_account: Box<Account<'info, EventTeam>>,
 
@@ -39,7 +39,6 @@ pub struct EventTeamCreate<'info> {
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
 }
-
 impl EventTeamCreate<'_> {
     fn validate(&self) -> Result<()> {
         require_keys_eq!(
