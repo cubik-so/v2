@@ -37,17 +37,17 @@ impl EventTeamClose<'_> {
 
         // Make sure event owner can't delete his team account
         require_keys_neq!(
-            self.event_team_account.authority.key(),
+            self.to_close_event_team_account.authority.key(),
             self.event_account.authority.key(),
             Errors::InvalidSigner
         );
 
         Ok(())
     }
-    pub fn event_team_close(ctx: Context<Self>, args: EventTeamCloseArgs) -> Result<()> {
+    pub fn event_team_close(ctx: Context<Self>) -> Result<()> {
         emit!(EventTeamCloseEvent {
             authority: ctx.accounts.authority.key(),
-            event_team_account: ctx.accounts.event_team_account.key(),
+            remove_member: ctx.accounts.to_close_event_team_account.authority.key(),
         });
         Ok(())
     }
