@@ -96,7 +96,7 @@ pub struct EventParticipantUpdateEvent {
 #[event]
 pub struct EventTeamCloseEvent {
     pub authority: Pubkey,
-    pub event_team_account: Pubkey,
+    pub remove_member: Pubkey,
 }
 #[event]
 pub struct EventTeamCreateEvent {
