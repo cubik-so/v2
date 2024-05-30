@@ -4,23 +4,17 @@ use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self};
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct EventTeamCloseArgs {
-    team_member: Pubkey,
-}
-
 #[derive(Accounts)]
-#[instruction(args:EventTeamCloseArgs)]
 pub struct EventTeamClose<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
 
     #[account(mut,
         close = authority,
-        seeds = [EVENT_PREFIX,event_account.key().as_ref(),TEAM_PREFIX,args.team_member.key().as_ref()],
-        bump = event_team_account.bump
+        seeds = [EVENT_PREFIX,event_account.key().as_ref(),TEAM_PREFIX,to_close_event_team_account.key().as_ref()],
+        bump = to_close_event_team_account.bump
     )]
-    pub event_team_account: Box<Account<'info, EventTeam>>,
+    pub to_close_event_team_account: Box<Account<'info, EventTeam>>,
 
     #[account(mut,
         seeds = [EVENT_PREFIX,event_account.create_key.as_ref()],
@@ -50,7 +44,7 @@ impl EventTeamClose<'_> {
 
         Ok(())
     }
-    pub fn event_team_close(ctx: Context<Self>) -> Result<()> {
+    pub fn event_team_close(ctx: Context<Self>, args: EventTeamCloseArgs) -> Result<()> {
         emit!(EventTeamCloseEvent {
             authority: ctx.accounts.authority.key(),
             event_team_account: ctx.accounts.event_team_account.key(),

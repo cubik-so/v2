@@ -24,7 +24,7 @@ pub struct EventTeamCreate<'info> {
     pub new_event_team_account: Box<Account<'info, EventTeam>>,
 
     #[account(mut,
-        seeds = [EVENT_PREFIX,event_account.create_key.as_ref(),TEAM_PREFIX, authority.key().as_ref()],
+        seeds = [EVENT_PREFIX,event_account.key().as_ref(),TEAM_PREFIX, authority.key().as_ref()],
         bump = event_account.bump
     )]
     pub event_team_account: Box<Account<'info, EventTeam>>,
