@@ -105,7 +105,7 @@ export type UpdateProjectAccounts = {
  */
 
 export type ProjectUpdateArgs = {
-  reciver: web3.PublicKey | null;
+  receiver: web3.PublicKey | null;
   metadata: string | null;
 };
 

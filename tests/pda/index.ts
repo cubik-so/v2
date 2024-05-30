@@ -64,7 +64,7 @@ export const getTeamPDA = (createKey: web3.PublicKey) => {
   );
 };
 
-export const getSponserPDA = (createKey: web3.PublicKey) => {
+export const getSponsorPDA = (createKey: web3.PublicKey) => {
   return web3.PublicKey.findProgramAddressSync(
     [Buffer.from("sponsor"), createKey.toBuffer()],
     PROGRAM_ID
