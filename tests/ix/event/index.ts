@@ -26,11 +26,15 @@ describe("Event", () => {
     keypair = adminKeypair;
   });
 
-  describe("Event Creation", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
+  console.log("Create Key: ", createKey.publicKey.toBase58());
 
+  const newTeamMember = web3.Keypair.generate();
+  const projectCreationKey = web3.Keypair.generate();
+
+  describe("Event Creation", () => {
     it("Create Event Idel Flow", async () => {
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
       const programConfigPda = getProgramConfigPda({
         programId: SQUADS_PROGRAM_ID,
       })[0];
@@ -72,10 +76,9 @@ describe("Event", () => {
   });
 
   describe("Event Updation", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
-
     it("Create Event Update Idel Flow", async () => {
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
       const eventAccount = getEventPDA(createKey.publicKey)[0];
       const eventTeamAccount = getEventTeamPDA(
         eventAccount,
@@ -101,27 +104,25 @@ describe("Event", () => {
   });
 
   describe("Event Team Creation", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
-
     it("Event Team Creation Idel Case", async () => {
-      // genrate temp user
-      const member = web3.Keypair.generate();
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
 
       const eventAccount = getEventPDA(createKey.publicKey)[0];
+
       const eventTeamAccount = getEventTeamPDA(
         eventAccount,
-        createKey.publicKey
+        wallet.publicKey
       )[0];
 
       const newEventTeamAccount = getEventTeamPDA(
         eventAccount,
-        member.publicKey
+        newTeamMember.publicKey
       )[0];
 
       const tx = await program.methods
         .eventTeamCreate({
-          newTeamMember: member.publicKey,
+          newTeamMember: newTeamMember.publicKey,
         })
         .accounts({
           authority: wallet.publicKey,
@@ -130,7 +131,7 @@ describe("Event", () => {
           newEventTeamAccount: newEventTeamAccount,
           systemProgram: web3.SystemProgram.programId,
         })
-        .signers([wallet.payer, createKey])
+        .signers([wallet.payer])
         .rpc({ maxRetries: 3, commitment: "confirmed" });
 
       console.log(tx);
@@ -138,24 +139,22 @@ describe("Event", () => {
   });
 
   describe("Event Team Close", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
-
     it("Event Team Close Idel Case", async () => {
-      const member = web3.Keypair.generate();
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
 
       const eventAccount = getEventPDA(createKey.publicKey)[0];
-      const eventTeamAccount = getEventTeamPDA(
+      const toCloseEventTeamAccount = getEventTeamPDA(
         eventAccount,
-        member.publicKey
+        newTeamMember.publicKey
       )[0];
 
       const tx = await program.methods
         .eventTeamClose()
         .accounts({
           authority: wallet.publicKey,
-          eventAccount: getEventPDA(createKey.publicKey)[0],
-          eventTeamAccount: eventTeamAccount,
+          eventAccount: eventAccount,
+          toCloseEventTeamAccount: toCloseEventTeamAccount,
           systemProgram: web3.SystemProgram.programId,
         })
         .signers([wallet.payer])
@@ -166,12 +165,68 @@ describe("Event", () => {
   });
 
   describe("Event Participant Create", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
-
     it("Event Participant Create Idel Case", async () => {
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
+
+      // project creation
+
+      const programConfigPda = getProgramConfigPda({
+        programId: SQUADS_PROGRAM_ID,
+      })[0];
+
+      const programConfig = await ProgramConfig.fromAccountAddress(
+        connection,
+        programConfigPda
+      );
+
+      await program.methods
+        .projectCreate({
+          memo: "some",
+          metadata: "something",
+        })
+        .accounts({
+          createKey: projectCreationKey.publicKey,
+          multisig: getMultisigPDA(projectCreationKey.publicKey)[0],
+          creator: wallet.publicKey,
+          programConfigPda: programConfigPda,
+          projectAccount: getProjectPDA(projectCreationKey.publicKey)[0],
+          squadsProgram: SQUADS_PROGRAM_ID,
+          systemProgram: web3.SystemProgram.programId,
+          treasury: programConfig.treasury,
+        })
+        .signers([wallet.payer, projectCreationKey])
+        .rpc({ maxRetries: 3, commitment: "confirmed" });
+
+      // genrate event team creation
       const eventAccount = getEventPDA(createKey.publicKey)[0];
-      const projectAccount = getProjectPDA(createKey.publicKey)[0];
+      const projectAccount = getProjectPDA(projectCreationKey.publicKey)[0];
+
+      const eventTeamAccount = getEventTeamPDA(
+        eventAccount,
+        wallet.publicKey
+      )[0];
+
+      const newEventTeamAccount = getEventTeamPDA(
+        eventAccount,
+        newTeamMember.publicKey
+      )[0];
+
+      await program.methods
+        .eventTeamCreate({
+          newTeamMember: newTeamMember.publicKey,
+        })
+        .accounts({
+          authority: wallet.publicKey,
+          eventAccount: eventAccount,
+          eventTeamAccount: eventTeamAccount,
+          newEventTeamAccount: newEventTeamAccount,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .signers([wallet.payer])
+        .rpc({ maxRetries: 3, commitment: "confirmed" });
+
+      // event particapnat tx
 
       const tx = await program.methods
         .eventParticipantCreate()
@@ -185,7 +240,7 @@ describe("Event", () => {
           projectAccount: projectAccount,
           systemProgram: web3.SystemProgram.programId,
         })
-        .signers([wallet.payer, createKey])
+        .signers([wallet.payer])
         .rpc({ maxRetries: 3, commitment: "confirmed" });
 
       console.log(tx);
@@ -193,17 +248,20 @@ describe("Event", () => {
   });
 
   describe("Event Participant Update", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
-
     it("Event Participant Update", async () => {
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
+
+      // genrate event team creation
       const eventAccount = getEventPDA(createKey.publicKey)[0];
-      const projectAccount = getProjectPDA(createKey.publicKey)[0];
+      const projectAccount = getProjectPDA(projectCreationKey.publicKey)[0];
+
       const eventTeamAccount = getEventTeamPDA(
         eventAccount,
         wallet.publicKey
       )[0];
 
+      // event Participant Update Tx
       const tx = await program.methods
         .eventParticipantUpdate({
           status: {
@@ -219,21 +277,57 @@ describe("Event", () => {
           eventTeamAccount: eventTeamAccount,
           projectAccount: projectAccount,
           systemProgram: web3.SystemProgram.programId,
-          team: getTeamPDA(createKey.publicKey)[0],
+          team: wallet.publicKey,
         })
-        .rpc({ maxRetries: 3, commitment: "confirmed" });
+        .signers([wallet.payer])
+        .rpc({
+          maxRetries: 3,
+          commitment: "confirmed",
+        });
 
       console.log(tx);
     });
   });
 
   describe("Event Participant Invite", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
-
     it("Event Participant Invite Idel Case", async () => {
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
+
+      const tempProjectKey = web3.Keypair.generate();
+
+      // project creation
+
+      const programConfigPda = getProgramConfigPda({
+        programId: SQUADS_PROGRAM_ID,
+      })[0];
+
+      const programConfig = await ProgramConfig.fromAccountAddress(
+        connection,
+        programConfigPda
+      );
+
+      await program.methods
+        .projectCreate({
+          memo: "some",
+          metadata: "something",
+        })
+        .accounts({
+          createKey: tempProjectKey.publicKey,
+          multisig: getMultisigPDA(tempProjectKey.publicKey)[0],
+          creator: wallet.publicKey,
+          programConfigPda: programConfigPda,
+          projectAccount: getProjectPDA(tempProjectKey.publicKey)[0],
+          squadsProgram: SQUADS_PROGRAM_ID,
+          systemProgram: web3.SystemProgram.programId,
+          treasury: programConfig.treasury,
+        })
+        .signers([wallet.payer, tempProjectKey])
+        .rpc({ maxRetries: 3, commitment: "confirmed" });
+
       const eventAccount = getEventPDA(createKey.publicKey)[0];
-      const projectAccount = getProjectPDA(createKey.publicKey)[0];
+      const projectAccount = getProjectPDA(tempProjectKey.publicKey)[0];
+
       const eventTeamAccount = getEventTeamPDA(
         eventAccount,
         wallet.publicKey
@@ -249,9 +343,10 @@ describe("Event", () => {
           )[0],
           eventTeamAccount: eventTeamAccount,
           projectAccount: projectAccount,
+          team: wallet.publicKey,
           systemProgram: web3.SystemProgram.programId,
-          team: getTeamPDA(createKey.publicKey)[0],
         })
+        .signers([wallet.payer])
         .rpc({ maxRetries: 3, commitment: "confirmed" });
 
       console.log(tx);

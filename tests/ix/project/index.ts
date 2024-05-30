@@ -23,10 +23,9 @@ describe("Project", () => {
   });
 
   describe("Project Creation", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
-
     it("Project Creation Idel Flow", async () => {
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
       const programConfigPda = getProgramConfigPda({
         programId: SQUADS_PROGRAM_ID,
       })[0];
@@ -56,30 +55,33 @@ describe("Project", () => {
       console.log(tx);
     });
   });
-  describe("Project Updation", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
 
+  describe("Project Updation", () => {
     it("Project Updation Idel Flow", async () => {
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
+
+      const receiver = web3.Keypair.generate();
+
       const tx = await program.methods
         .projectUpdate({
           metadata: "something",
-          receiver: createKey.publicKey,
+          receiver: receiver.publicKey,
         })
         .accounts({
-          creator: createKey.publicKey,
-          projectAccount: getMultisigPDA(createKey.publicKey)[0],
+          creator: wallet.publicKey,
+          projectAccount: getProjectPDA(createKey.publicKey)[0],
           systemProgram: web3.SystemProgram.programId,
         })
         .rpc({ maxRetries: 3, commitment: "confirmed" });
       console.log(tx);
     });
   });
-  describe("Project Close", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
 
+  describe("Project Close", () => {
     it("Project Close Idel Flow", async () => {
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
       const tx = await program.methods
         .projectUpdate({
           metadata: "something",
@@ -95,11 +97,11 @@ describe("Project", () => {
       console.log(tx);
     });
   });
-  describe("Project Transfer", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
 
+  describe("Project Transfer", () => {
     it("Project Transfer Idel Flow", async () => {
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
       const tx = await program.methods
         .projectTransfer({ newCreator: createKey.publicKey })
         .accounts({
@@ -112,14 +114,17 @@ describe("Project", () => {
       console.log(tx);
     });
   });
-  describe("Project Tip SOL", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
 
+  describe("Project Tip SOL", () => {
     it("Project Tip SOL Idel Flow", async () => {
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
+
+      const projectAccountPublicKey = getProjectPDA(createKey.publicKey)[0];
       const projectAccount = await program.account.project.fetch(
-        createKey.publicKey
+        projectAccountPublicKey
       );
+
       const tx = await program.methods
         .projectTipSol({ amount: new BN(2) })
         .accounts({
@@ -135,11 +140,12 @@ describe("Project", () => {
   });
 
   describe("Project Tip SPL", () => {
-    const wallet = new Wallet(keypair);
-    const program = createCubikProgram(wallet);
-
     it("Project Tip SPL Idel Flow", async () => {
+      const wallet = new Wallet(keypair);
+      const program = createCubikProgram(wallet);
       const tokenMint = new PublicKey("");
+
+      const receiver = web3.Keypair.generate();
 
       const sernderATA = getAssociatedTokenAddressSync(
         tokenMint,
@@ -147,7 +153,7 @@ describe("Project", () => {
       );
       const reciverATA = getAssociatedTokenAddressSync(
         tokenMint,
-        createKey.publicKey,
+        receiver.publicKey,
         true
       );
 
