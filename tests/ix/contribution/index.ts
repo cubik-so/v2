@@ -171,6 +171,8 @@ describe("Contribution", () => {
         })
         .signers([wallet.payer])
         .rpc({ maxRetries: 3, commitment: "confirmed" });
+
+      console.log(tx);
     });
   });
 });

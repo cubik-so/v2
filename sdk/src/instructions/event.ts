@@ -5,6 +5,9 @@ import {
   CreateEventHandlerArgs,
   EventParticipantCreateAccounts,
   EventParticipantInviteAccounts,
+  EventParticipantUpdateAccounts,
+  EventParticipantUpdateArgs,
+  EventTeamCloseAccounts,
   EventTeamCreateAccounts,
   EventTeamCreateArgs,
   UpdateEventAccounts,
@@ -41,6 +44,13 @@ export const event = (sdk: CubikSDK) => {
           .accounts(accounts)
           .instruction();
       },
+      close: async (account: EventTeamCloseAccounts) => {
+        return await sdk.program.methods
+          .eventTeamClose()
+          .accounts(account)
+          .instruction();
+      },
+
       //TODO: getPDA is missing
     },
 
@@ -55,6 +65,16 @@ export const event = (sdk: CubikSDK) => {
       invite: async (accounts: EventParticipantInviteAccounts) => {
         return await sdk.program.methods
           .eventParticipantInvite()
+          .accounts(accounts)
+          .instruction();
+      },
+
+      update: async (
+        accounts: EventParticipantUpdateAccounts,
+        args: EventParticipantUpdateArgs
+      ) => {
+        return await sdk.program.methods
+          .eventParticipantUpdate(args)
           .accounts(accounts)
           .instruction();
       },
