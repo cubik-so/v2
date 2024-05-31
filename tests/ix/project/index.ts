@@ -83,10 +83,7 @@ describe("Project", () => {
       const wallet = new Wallet(keypair);
       const program = createCubikProgram(wallet);
       const tx = await program.methods
-        .projectUpdate({
-          metadata: "something",
-          receiver: createKey.publicKey,
-        })
+        .projectClose()
         .accounts({
           creator: wallet.publicKey,
           projectAccount: getProjectPDA(createKey.publicKey)[0],
@@ -102,13 +99,45 @@ describe("Project", () => {
     it("Project Transfer Idel Flow", async () => {
       const wallet = new Wallet(keypair);
       const program = createCubikProgram(wallet);
+
+      // create new project first
+      const programConfigPda = getProgramConfigPda({
+        programId: SQUADS_PROGRAM_ID,
+      })[0];
+
+      const programConfig = await ProgramConfig.fromAccountAddress(
+        connection,
+        programConfigPda
+      );
+
+      const newProjectCreateKey = web3.Keypair.generate();
+
+      await program.methods
+        .projectCreate({
+          memo: "some",
+          metadata: "something",
+        })
+        .accounts({
+          createKey: newProjectCreateKey.publicKey,
+          multisig: getMultisigPDA(newProjectCreateKey.publicKey)[0],
+          creator: wallet.publicKey,
+          programConfigPda: programConfigPda,
+          projectAccount: getProjectPDA(newProjectCreateKey.publicKey)[0],
+          squadsProgram: SQUADS_PROGRAM_ID,
+          systemProgram: web3.SystemProgram.programId,
+          treasury: programConfig.treasury,
+        })
+        .signers([wallet.payer, newProjectCreateKey])
+        .rpc({ maxRetries: 3, commitment: "confirmed" });
+
       const tx = await program.methods
         .projectTransfer({ newCreator: createKey.publicKey })
         .accounts({
           creator: wallet.publicKey,
-          projectAccount: getProjectPDA(createKey.publicKey)[0],
+          projectAccount: getProjectPDA(newProjectCreateKey.publicKey)[0],
           systemProgram: web3.SystemProgram.programId,
         })
+        .signers([wallet.payer])
         .rpc({ maxRetries: 3, commitment: "confirmed" });
 
       console.log(tx);

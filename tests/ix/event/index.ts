@@ -26,8 +26,6 @@ describe("Event", () => {
     keypair = adminKeypair;
   });
 
-  console.log("Create Key: ", createKey.publicKey.toBase58());
-
   const newTeamMember = web3.Keypair.generate();
   const projectCreationKey = web3.Keypair.generate();
 
@@ -252,7 +250,6 @@ describe("Event", () => {
       const wallet = new Wallet(keypair);
       const program = createCubikProgram(wallet);
 
-      // genrate event team creation
       const eventAccount = getEventPDA(createKey.publicKey)[0];
       const projectAccount = getProjectPDA(projectCreationKey.publicKey)[0];
 
