@@ -140,9 +140,9 @@ export type EventParticipantCreateAccounts = {
 
 export type EventParticipantUpdateArgs = {
   status: {
-    approved: {};
-    // pendingApproval: {};
-    // rejected: {};
+    approved: any;
+    pendingApproval: any;
+    rejected: any;
   };
 };
 

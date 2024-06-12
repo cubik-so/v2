@@ -64,3 +64,39 @@ export type SponsorCreateCustodyAccounts = {
   squadProgram: web3.PublicKey;
   systemProgram: web3.PublicKey;
 };
+
+/**
+ * @name SponsorCloseAccounts
+ * @description Accounts required for initializing a sponsor with specific custody features, ensuring additional controls and configurations.
+ * @property authority - The public key of the authority executing the initialization.
+ * @property systemProgram - Reference to the Solana system program.
+ */
+
+export type SponsorCloseAccount = {
+  authority: web3.PublicKey;
+  sponsorAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
+};
+
+/**
+ * @name SponsorUpdateAccounts
+ * @description Accounts required for initializing a sponsor with specific custody features, ensuring additional controls and configurations.
+ * @property authority - The public key of the authority executing the initialization.
+ * @property systemProgram - Reference to the Solana system program.
+ */
+
+export type SponsorUpdateAccounts = {
+  authority: web3.PublicKey;
+  sponsorAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
+};
+
+/**
+ * @name SponsorUpdateArgs
+ * @description Arguments required to initialize a sponsor with custody.
+ * @property metadata - Descriptive metadata about the sponsor.
+
+ */
+export type SponsorUpdateArgs = {
+  metadata: string;
+};

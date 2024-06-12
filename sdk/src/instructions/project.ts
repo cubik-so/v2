@@ -12,7 +12,7 @@ import {
   TipSolAccounts,
   TipSolArgs,
   TipSPLAccounts,
-  TipSPLArgs
+  TipSPLArgs,
 } from "../types";
 
 export const project = (sdk: CubikSDK) => {
@@ -27,7 +27,10 @@ export const project = (sdk: CubikSDK) => {
         .instruction();
     },
 
-    transfer: async (accounts: TransferProjectAccounts, args: TransferProjectArgs) => {
+    transfer: async (
+      accounts: TransferProjectAccounts,
+      args: TransferProjectArgs
+    ) => {
       return await sdk.program.methods
         .projectTransfer(args)
         .accounts(accounts)
@@ -44,9 +47,7 @@ export const project = (sdk: CubikSDK) => {
         .instruction();
     },
 
-    close: async (
-      accounts: CloseProjectAccounts
-    ) => {
+    close: async (accounts: CloseProjectAccounts) => {
       return await sdk.program.methods
         .projectClose()
         .accounts(accounts)
@@ -54,23 +55,16 @@ export const project = (sdk: CubikSDK) => {
     },
 
     tip: {
-      
-      sol: async (
-        accounts: TipSolAccounts,
-        args : TipSolArgs
-      ) => {
+      sol: async (accounts: TipSolAccounts, args: TipSolArgs) => {
         return await sdk.program.methods
           .projectTipSol(args)
           .accounts(accounts)
           .instruction();
       },
-  
-      spl : async (
-        accounts: TipSPLAccounts,
-        args : TipSPLArgs
-      ) => {
+
+      spl: async (accounts: TipSPLAccounts, args: TipSPLArgs) => {
         return await sdk.program.methods
-          .projectTipSol(args)
+          .projectTipSpl(args)
           .accounts(accounts)
           .instruction();
       },

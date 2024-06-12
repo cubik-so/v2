@@ -5,7 +5,6 @@ import {
   SEED_PREFIX,
   SQUADS_PROGRAM_ID,
 } from "../utils";
-import { BN } from "bn.js";
 
 export const getProjectPDA = (createKey: web3.PublicKey) => {
   return web3.PublicKey.findProgramAddressSync(
