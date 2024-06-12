@@ -1,11 +1,10 @@
-import { AnchorProvider, BN, Program, Wallet, web3 } from "@coral-xyz/anchor";
+import { AnchorProvider, Program, Wallet, web3 } from "@coral-xyz/anchor";
 import { Cubik as CubikIDLType } from "./types";
 import { idl } from "./constants";
 import { project } from "./instructions/project";
 import { sponsor } from "./instructions/sponsor";
 import { event } from "./instructions/event";
 import { contribution } from "./instructions/contribution";
-// import { donate } from "./instructions/donate";
 export * from "./types";
 export class CubikSDK {
   readonly program: Program<CubikIDLType>;
@@ -18,9 +17,6 @@ export class CubikSDK {
     connection: web3.Connection,
     opts: web3.ConfirmOptions
   ) {
-    const connec = new web3.Connection("", {
-      wsEndpoint: "<triton-url>",
-    });
     this.provider = new AnchorProvider(connection, wallet, opts);
     this.programId = programId;
     this.program = new Program(
@@ -45,8 +41,4 @@ export class CubikSDK {
   public get contribution() {
     return contribution(this);
   }
-
-  // public get donate() {
-  //   return donate(this);
-  // }
 }

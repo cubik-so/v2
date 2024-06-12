@@ -13,7 +13,11 @@ import {
   UpdateEventAccounts,
   UpdateEventArgs,
 } from "../types";
-import { EVENT_PARTICIPANT_PREFIX, EVENT_PREFIX } from "../constants";
+import {
+  EVENT_PARTICIPANT_PREFIX,
+  EVENT_PREFIX,
+  TEAM_PREFIX,
+} from "../constants";
 
 export const event = (sdk: CubikSDK) => {
   return {
@@ -50,8 +54,21 @@ export const event = (sdk: CubikSDK) => {
           .accounts(account)
           .instruction();
       },
+      get: async (pda: web3.PublicKey) => {
+        return await sdk.program.account.eventTeam.fetch(pda);
+      },
 
-      //TODO: getPDA is missing
+      getPDA: async (eventAccount: web3.PublicKey, member: web3.PublicKey) => {
+        return web3.PublicKey.findProgramAddressSync(
+          [
+            EVENT_PREFIX,
+            eventAccount.toBuffer(),
+            TEAM_PREFIX,
+            member.toBuffer(),
+          ],
+          sdk.programId
+        );
+      },
     },
 
     participant: {

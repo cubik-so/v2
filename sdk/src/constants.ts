@@ -24,8 +24,7 @@ export const createCubikProgram = (
 };
 
 export const PROJECT_PREFIX = Buffer.from("project");
-export const EVENT_PREFIX = Buffer.from('event');
+export const EVENT_PREFIX = Buffer.from("event");
+export const TEAM_PREFIX = Buffer.from("team");
 export const EVENT_PARTICIPANT_PREFIX = Buffer.from("eventparticipant");
 export const SPONSOR_PREFIX = Buffer.from("sponsor");
-
-
