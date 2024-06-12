@@ -19,7 +19,6 @@ export type CreateEventHandlerArgs = {
   memo: string | null;
 };
 
-
 /**
  * @name CreateEventAccounts
  * @description The accounts required for creating an event.
@@ -86,6 +85,7 @@ export type EventTeamCreateAccounts = {
   authority: web3.PublicKey;
   eventAccount: web3.PublicKey;
   eventTeamAccount: web3.PublicKey;
+  newEventTeamAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
 };
 
@@ -96,6 +96,22 @@ export type EventTeamCreateAccounts = {
  */
 export type EventTeamCreateArgs = {
   newTeamMember: web3.PublicKey;
+};
+
+/**
+ * @name EventTeamCloseAccounts
+ * @description Accounts required to close a team member account from an event's managing team.
+ * @property authority - The public key of the authority executing the action.
+ * @property eventAccount - The public key of the main event account.
+ * @property toCloseEventTeamAccount - The public key of the event team account to be closed.
+ * @property systemProgram - Reference to the system program.
+ */
+
+export type EventTeamCloseAccounts = {
+  authority: web3.PublicKey;
+  eventAccount: web3.PublicKey;
+  toCloseEventTeamAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
 };
 
 /**
@@ -113,6 +129,39 @@ export type EventParticipantCreateAccounts = {
   eventParticipantAccount: web3.PublicKey;
   projectAccount: web3.PublicKey;
   eventAccount: web3.PublicKey;
+  systemProgram: web3.PublicKey;
+};
+
+/**
+ * @name EventParticipantUpdateArgs
+ * @description Arguments required to update an event participant's status.
+ * @property status - The new status to update for the event participant.
+ */
+
+export type EventParticipantUpdateArgs = {
+  status: {
+    approved: any;
+    pendingApproval: any;
+    rejected: any;
+  };
+};
+
+/**
+ * @name EventParticipantUpdateAccounts
+ * @description Accounts required to update an event participant's status.
+ * @property team - The public key of the team updating the participant's status.
+ * @property eventParticipantAccount - The public key of the event participant account.
+ * @property projectAccount - The public key of the associated project account.
+ * @property eventAccount - The public key of the main event account.
+ * @property eventTeamAccount - The public key of the event team account.
+ * @property systemProgram - Reference to the system program.
+ */
+export type EventParticipantUpdateAccounts = {
+  team: web3.PublicKey;
+  eventParticipantAccount: web3.PublicKey;
+  projectAccount: web3.PublicKey;
+  eventAccount: web3.PublicKey;
+  eventTeamAccount: web3.PublicKey;
   systemProgram: web3.PublicKey;
 };
 
