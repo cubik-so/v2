@@ -5,7 +5,7 @@ import { project } from "./instructions/project";
 import { sponsor } from "./instructions/sponsor";
 import { event } from "./instructions/event";
 import { contribution } from "./instructions/contribution";
-import { donate } from "./instructions/donate";
+// import { donate } from "./instructions/donate";
 export * from "./types";
 export class CubikSDK {
   readonly program: Program<CubikIDLType>;
@@ -46,7 +46,7 @@ export class CubikSDK {
     return contribution(this);
   }
 
-  public get donate() {
-    return donate(this);
-  }
+  // public get donate() {
+  //   return donate(this);
+  // }
 }
