@@ -97,7 +97,7 @@ export const event = (sdk: CubikSDK) => {
       },
 
       get: async (pda: web3.PublicKey) => {
-        return await sdk.program.account.event.fetch(pda);
+        return await sdk.program.account.eventParticipant.fetch(pda);
       },
 
       getPDA: (
