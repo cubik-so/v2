@@ -60,6 +60,7 @@ impl EventTeamCreate<'_> {
         emit!(EventTeamCreateEvent {
             authority: ctx.accounts.authority.key(),
             new_event_team_account: ctx.accounts.new_event_team_account.key(),
+            event_account: ctx.accounts.event_account.key(),
         });
         Ok(())
     }

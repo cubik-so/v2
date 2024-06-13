@@ -49,6 +49,7 @@ impl EventTeamClose<'_> {
         emit!(EventTeamCloseEvent {
             authority: ctx.accounts.authority.key(),
             remove_member: ctx.accounts.to_close_event_team_account.authority.key(),
+            event_account: ctx.accounts.event_account.key(),
         });
         Ok(())
     }
