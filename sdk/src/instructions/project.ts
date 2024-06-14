@@ -7,12 +7,12 @@ import {
   TransferProjectAccounts,
   TransferProjectArgs,
   UpdateProjectAccounts,
-  ProjectUpdateArgs,
   CloseProjectAccounts,
   TipSolAccounts,
   TipSolArgs,
   TipSPLAccounts,
   TipSPLArgs,
+  UpdateProjectArgs,
 } from "../types";
 
 export const project = (sdk: CubikSDK) => {
@@ -39,7 +39,7 @@ export const project = (sdk: CubikSDK) => {
 
     update: async (
       accounts: UpdateProjectAccounts,
-      args: ProjectUpdateArgs
+      args: UpdateProjectArgs
     ) => {
       return await sdk.program.methods
         .projectUpdate(args)

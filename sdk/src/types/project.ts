@@ -104,7 +104,7 @@ export type UpdateProjectAccounts = {
  * @category types
  */
 
-export type ProjectUpdateArgs = {
+export type UpdateProjectArgs = {
   receiver: web3.PublicKey | null;
   metadata: string | null;
 };
