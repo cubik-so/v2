@@ -79,11 +79,15 @@ pub struct EventCreateEvent {
 pub struct EventParticipantCreateEvent {
     pub authority: Pubkey,
     pub event_participant_account: Pubkey,
+    pub event_account: Pubkey,
+    pub project_account: Pubkey,
 }
 #[event]
 pub struct EventParticipantInviteEvent {
     pub event_team_key: Pubkey,
     pub event_participant_account: Pubkey,
+    pub event_account: Pubkey,
+    pub project_account: Pubkey,
 }
 
 #[event]

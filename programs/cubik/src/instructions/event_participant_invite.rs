@@ -55,6 +55,8 @@ impl EventParticipantInvite<'_> {
         emit!(EventParticipantInviteEvent {
             event_participant_account: event_participant_account.key(),
             event_team_key: ctx.accounts.team.key(),
+            event_account: ctx.accounts.event_account.key(),
+            project_account: ctx.accounts.project_account.key()
         });
 
         Ok(())

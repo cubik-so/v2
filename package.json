@@ -6,6 +6,7 @@
     "test:all": "anchor test tests/**/*.ts",
     "test": "anchor test"
   },
+  "type": "module",
   "dependencies": {
     "@coral-xyz/anchor": "^0.29.0",
     "@cubik/sdk": "link:/Users/sahilpabale/Documents/cubik/v2/sdk/lib",

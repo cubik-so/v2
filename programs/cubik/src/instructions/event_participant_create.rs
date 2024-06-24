@@ -54,6 +54,8 @@ impl EventParticipantCreate<'_> {
         emit!(EventParticipantCreateEvent {
             authority: ctx.accounts.authority.key(),
             event_participant_account: ctx.accounts.event_participant_account.key(),
+            event_account: ctx.accounts.event_account.key(),
+            project_account: ctx.accounts.project_account.key(),
         });
         Ok(())
     }
