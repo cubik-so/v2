@@ -4,11 +4,13 @@
   "description": "",
   "main": "lib/sdk/src/index.js",
   "types": "lib/sdk/src/index.d.ts",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "exports": {
     ".": {
-      "import": "./lib/sdk/src/index.js",
-      "require": "./lib/sdk/src/index.mjs"
+      "import": "./lib/sdk/src/index.mjs",
+      "require": "./lib/sdk/src/index.js"
     }
   },
   "scripts": {
