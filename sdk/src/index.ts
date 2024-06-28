@@ -6,6 +6,7 @@ import { sponsor } from "./instructions/sponsor";
 import { event } from "./instructions/event";
 import { contribution } from "./instructions/contribution";
 export * from "./types";
+
 export class CubikSDK {
   readonly program: Program<CubikIDLType>;
   readonly provider: AnchorProvider;

@@ -1,18 +1,18 @@
 {
   "name": "@cubik-so/sdk",
-  "version": "0.7.5",
+  "version": "0.7.7",
   "description": "",
   "main": "lib/sdk/src/index.js",
   "types": "lib/sdk/src/index.d.ts",
-  "files": ["lib"],
   "exports": {
     ".": {
-      "import": "./lib/sdk/src/index.mjs",
-      "require": "./lib/sdk/src/index.js"
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "ts": "tsc --noEmit",
     "prepare:canary": "pnpm build && npm version --prerelease --preid=canary"
   },
@@ -27,6 +27,7 @@
   "dependencies": {
     "@coral-xyz/anchor": "^0.29.0",
     "@solana/web3.js": "^1.87.6",
-    "bn.js": "^5.2.1"
+    "bn.js": "^5.2.1",
+    "tsup": "^8.1.0"
   }
 }
