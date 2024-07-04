@@ -12,7 +12,7 @@ import { BN, web3 } from "@coral-xyz/anchor";
  * @property memo - Optional memo about the event (nullable).
  */
 
-export type CreateEventHandlerArgs = {
+export type CreateEventArgs = {
   metadata: string;
   startSlot: BN;
   endingSlot: BN;

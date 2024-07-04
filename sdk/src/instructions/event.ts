@@ -2,7 +2,7 @@ import { web3 } from "@coral-xyz/anchor";
 import { CubikSDK } from "..";
 import {
   CreateEventAccounts,
-  CreateEventHandlerArgs,
+  CreateEventArgs,
   EventParticipantCreateAccounts,
   EventParticipantInviteAccounts,
   EventParticipantUpdateAccounts,
@@ -21,10 +21,7 @@ import {
 
 export const event = (sdk: CubikSDK) => {
   return {
-    create: async (
-      accounts: CreateEventAccounts,
-      args: CreateEventHandlerArgs
-    ) => {
+    create: async (accounts: CreateEventAccounts, args: CreateEventArgs) => {
       return await sdk.program.methods
         .eventCreate(args)
         .accounts(accounts)
@@ -58,7 +55,7 @@ export const event = (sdk: CubikSDK) => {
         return await sdk.program.account.eventTeam.fetch(pda);
       },
 
-      getPDA: async (eventAccount: web3.PublicKey, member: web3.PublicKey) => {
+      getPDA: (eventAccount: web3.PublicKey, member: web3.PublicKey) => {
         return web3.PublicKey.findProgramAddressSync(
           [
             EVENT_PREFIX,
