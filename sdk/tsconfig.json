@@ -1,21 +1,19 @@
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "module": "es2022",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "strictPropertyInitialization": false,
-        "lib": [
-            "es2015",
-            "DOM"
-        ],
-        "allowJs": true,
-        "esModuleInterop": true,
-        "outDir": "lib",
-        "declaration": true,
-        "strict": true
-    },
-    "include": [
-        "src/**/*"
-    ],
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "strictPropertyInitialization": false,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "outDir": "lib",
+    "declaration": true,
+    "strict": true
+  },
+  "include": ["src/**/*"]
 }
