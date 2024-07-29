@@ -48,7 +48,7 @@ describe("Sponsor", () => {
         wallet.publicKey
       )[0];
 
-      const eventTx = await program.methods
+      await program.methods
         .eventCreate({
           memo: "something",
           metadata: "some",
@@ -68,8 +68,6 @@ describe("Sponsor", () => {
         })
         .signers([wallet.payer, eventCreationKey])
         .rpc({ maxRetries: 3, commitment: "confirmed" });
-
-      console.log("eventTx: " + eventTx);
 
       // sponser creation
 

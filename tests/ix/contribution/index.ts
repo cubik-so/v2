@@ -19,6 +19,13 @@ import {
 import { TOKEN_PROGRAM_ID } from "@coral-xyz/anchor/dist/cjs/utils/token";
 import { PublicKey } from "@solana/web3.js";
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
+import {
+  contributionSol,
+  contributionSpl,
+  createEvent,
+  createProject,
+} from "../../comman";
+import assert from "assert";
 
 const connection = createDevnetConnection();
 describe("Contribution", () => {
@@ -69,6 +76,233 @@ describe("Contribution", () => {
         .rpc({ maxRetries: 3, commitment: "confirmed" });
 
       console.log(tx);
+    });
+
+    it("Contribution SPL Failed Due To The Wrong Wallet Authority and Signer", async () => {
+      const ProjectOwnerKeypair = generateKeypair();
+      const ProjectOwnerWallet = new Wallet(ProjectOwnerKeypair);
+      const projectCreateKey = generateKeypair();
+
+      await createProject({
+        connection,
+        memo: "Some",
+        metadata: "https://m.cubik.so/p/9753",
+        projectCreateKey,
+        wallet: ProjectOwnerWallet,
+      });
+
+      const eventCreateKey = generateKeypair();
+      const eventKeypair = generateKeypair();
+      const eventWallet = new Wallet(eventKeypair);
+
+      await createEvent({
+        connection,
+        eventCreateKey,
+        eventEndingSlot: new BN(2),
+        eventStartingSlot: new BN(1),
+        memo: "Some",
+        metadata: "https://m.cubik.so/e/3456",
+        wallet: eventWallet,
+      });
+
+      const burnnerKeypair = generateKeypair();
+      const burnnerWallet = new Wallet(burnnerKeypair);
+
+      const contributionCreateKey = generateKeypair();
+      const contributionWallet = new Wallet(contributionCreateKey);
+      const tokenMint = new PublicKey(
+        "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+      );
+      await assert.rejects(() =>
+        contributionSpl({
+          contributedAmount: new BN(2),
+          contributionCreateKey,
+          eventCreateKey,
+          projectCreateKey,
+          tokenMint,
+          wallet: burnnerWallet,
+          authoirtyWallet: contributionWallet,
+        })
+      );
+    });
+
+    it("Contribution SPL Failed Due To The  EventCreateKey", async () => {
+      const ProjectOwnerKeypair = generateKeypair();
+      const ProjectOwnerWallet = new Wallet(ProjectOwnerKeypair);
+      const projectCreateKey = generateKeypair();
+
+      await createProject({
+        connection,
+        memo: "Some",
+        metadata: "https://m.cubik.so/p/9753",
+        projectCreateKey,
+        wallet: ProjectOwnerWallet,
+      });
+
+      const burnnerEventCreateKey = generateKeypair();
+
+      const contributionCreateKey = generateKeypair();
+      const contributionWallet = new Wallet(contributionCreateKey);
+      const tokenMint = new PublicKey(
+        "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+      );
+      await assert.rejects(() =>
+        contributionSpl({
+          contributedAmount: new BN(2),
+          contributionCreateKey,
+          eventCreateKey: burnnerEventCreateKey,
+          projectCreateKey,
+          tokenMint,
+          wallet: contributionWallet,
+          authoirtyWallet: contributionWallet,
+        })
+      );
+    });
+
+    it("Contribution SPL Failed Due To The  Wrong ProjectKey ", async () => {
+      const burnnerProjectCreateKey = generateKeypair();
+
+      const eventCreateKey = generateKeypair();
+      const eventKeypair = generateKeypair();
+      const eventWallet = new Wallet(eventKeypair);
+
+      await createEvent({
+        connection,
+        eventCreateKey,
+        eventEndingSlot: new BN(2),
+        eventStartingSlot: new BN(1),
+        memo: "Some",
+        metadata: "https://m.cubik.so/e/3456",
+        wallet: eventWallet,
+      });
+
+      const contributionCreateKey = generateKeypair();
+      const contributionWallet = new Wallet(contributionCreateKey);
+      const tokenMint = new PublicKey(
+        "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+      );
+      await assert.rejects(() =>
+        contributionSpl({
+          contributedAmount: new BN(2),
+          contributionCreateKey,
+          eventCreateKey,
+          projectCreateKey: burnnerProjectCreateKey,
+          tokenMint,
+          wallet: contributionWallet,
+          authoirtyWallet: contributionWallet,
+        })
+      );
+    });
+
+    it("Contribution SPL Failed Due To The  Wrong ProjectKey  & Event Key", async () => {
+      const burnnerProjectCreateKey = generateKeypair();
+
+      const burnnerEventCreateKey = generateKeypair();
+
+      const contributionCreateKey = generateKeypair();
+      const contributionWallet = new Wallet(contributionCreateKey);
+      const tokenMint = new PublicKey(
+        "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+      );
+      await assert.rejects(() =>
+        contributionSpl({
+          contributedAmount: new BN(2),
+          contributionCreateKey,
+          eventCreateKey: burnnerEventCreateKey,
+          projectCreateKey: burnnerProjectCreateKey,
+          tokenMint,
+          wallet: contributionWallet,
+          authoirtyWallet: contributionWallet,
+        })
+      );
+    });
+
+    it("Contribution Failed Due To The ReciverATA not found Due The Wrong Token Mint", async () => {
+      const ProjectOwnerKeypair = generateKeypair();
+      const ProjectOwnerWallet = new Wallet(ProjectOwnerKeypair);
+      const projectCreateKey = generateKeypair();
+
+      await createProject({
+        connection,
+        memo: "Some",
+        metadata: "https://m.cubik.so/p/9753",
+        projectCreateKey,
+        wallet: ProjectOwnerWallet,
+      });
+
+      const eventCreateKey = generateKeypair();
+      const eventKeypair = generateKeypair();
+      const eventWallet = new Wallet(eventKeypair);
+
+      await createEvent({
+        connection,
+        eventCreateKey,
+        eventEndingSlot: new BN(2),
+        eventStartingSlot: new BN(1),
+        memo: "Some",
+        metadata: "https://m.cubik.so/e/3456",
+        wallet: eventWallet,
+      });
+
+      const contributionCreateKey = generateKeypair();
+      const contributionWallet = new Wallet(contributionCreateKey);
+      const tokenMint = new PublicKey("EPjFWd");
+      await assert.rejects(() =>
+        contributionSpl({
+          contributedAmount: new BN(2),
+          contributionCreateKey,
+          eventCreateKey,
+          projectCreateKey,
+          tokenMint,
+          wallet: contributionWallet,
+          authoirtyWallet: contributionWallet,
+        })
+      );
+    });
+
+    it("Contribution Failed Due To The ReciverATA not found Due The Wrong contributionCreateKey", async () => {
+      const ProjectOwnerKeypair = generateKeypair();
+      const ProjectOwnerWallet = new Wallet(ProjectOwnerKeypair);
+      const projectCreateKey = generateKeypair();
+
+      await createProject({
+        connection,
+        memo: "Some",
+        metadata: "https://m.cubik.so/p/9753",
+        projectCreateKey,
+        wallet: ProjectOwnerWallet,
+      });
+
+      const eventCreateKey = generateKeypair();
+      const eventKeypair = generateKeypair();
+      const eventWallet = new Wallet(eventKeypair);
+
+      await createEvent({
+        connection,
+        eventCreateKey,
+        eventEndingSlot: new BN(2),
+        eventStartingSlot: new BN(1),
+        memo: "Some",
+        metadata: "https://m.cubik.so/e/3456",
+        wallet: eventWallet,
+      });
+
+      const burrnerContributionCreateKey = generateKeypair();
+
+      const contributionCreateKey = generateKeypair();
+      const contributionWallet = new Wallet(contributionCreateKey);
+      const tokenMint = new PublicKey("EPjFWd");
+      await assert.rejects(() =>
+        contributionSpl({
+          contributedAmount: new BN(2),
+          contributionCreateKey: burrnerContributionCreateKey,
+          eventCreateKey,
+          projectCreateKey,
+          tokenMint,
+          wallet: contributionWallet,
+          authoirtyWallet: contributionWallet,
+        })
+      );
     });
   });
   describe("Contribution SOL", () => {
@@ -174,5 +408,64 @@ describe("Contribution", () => {
 
       console.log(tx);
     });
+
+    it("Contribution SOL Failed Due To the wrong ProjectCreateskey", async () => {
+      const ProjectOwnerKeypair = generateKeypair();
+      const ProjectOwnerWallet = new Wallet(ProjectOwnerKeypair);
+      const projectCreateKey = generateKeypair();
+
+      await createProject({
+        connection,
+        memo: "Some",
+        metadata: "https://m.cubik.so/p/9753",
+        projectCreateKey,
+        wallet: ProjectOwnerWallet,
+      });
+
+      const eventCreateKey = generateKeypair();
+      const eventKeypair = generateKeypair();
+      const eventWallet = new Wallet(eventKeypair);
+
+      createEvent({
+        connection,
+        eventCreateKey,
+        eventEndingSlot: new BN(2),
+        eventStartingSlot: new BN(1),
+        memo: "Some",
+        metadata: "https://m.cubik.so/e/3456",
+        wallet: eventWallet,
+      });
+
+      const burnnerKeypair = generateKeypair();
+      const burnnerWallet = new Wallet(burnnerKeypair);
+      const burnnerCreateKey = generateKeypair();
+
+      await assert.rejects(() =>
+        contributionSol({
+          projectCreateKey: burnnerCreateKey,
+          eventCreateKey,
+          wallet: burnnerWallet,
+        })
+      );
+    });
   });
 });
+
+/*
+
+- Test Case
+
+
+-> SPL
+
+- wrong wallet for  authority
+- eventAccount Not Found
+- projectAccount not found
+- eventParicipantAccount Not Found(means bhot project account and event account is wrong) [i]
+- reciverAtA not found
+
+
+-> SOL
+- wrong projectCreate Key
+
+*/
