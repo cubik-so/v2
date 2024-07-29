@@ -26,6 +26,9 @@ export function createDevnetConnection() {
   return new web3.Connection("https://api.devnet.solana.com", "confirmed");
 }
 
+export function createLocalnetConnection() {
+  return new Connection("http://localhost:8899", "confirmed");
+}
 export const SQUADS_PROGRAM_ID = new web3.PublicKey(
   "SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf"
 );

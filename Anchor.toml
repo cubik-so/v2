@@ -6,24 +6,32 @@ skip-lint = false
 
 [programs.localnet]
 # cubik_v2 = "CSgKQkUfuv8YVMiU9j3p34zSDexFHmXjFLxaDvf7KCz7"
-cubik_v2 = "3s9zZaosL6hJFeDToXDoPN4sQgyVwLEdqzaztZXj1Nnk"
+cubik_v2 = "4MDFw9bJFXvNEATpN5vn6suY6QQtb21ySbTZ34esFWMY"
 
 
 
 
 [test.validator]
+rpc_port = 9000
+faucet_port = 9901  # Specify a different port for the faucet
+
 [[test.genesis]]
 address = "SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf"
 program = "./tests/other/squads.so"
 
+# program = "./target/deploy/cubik.so"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "devnet"
+# cluster = "devnet"
 # wallet = "/Users/sahilpabale/wallets/cubik/CBKiBsr31UR58LqdMWtWkKiPAsB4VAhWgWmW4XCicj3p.json"
-wallet = '/Users/dhruvraj/.config/solana/id.json'
+# wallet = '/Users/dhruvraj/.config/solana/id.json'
+
+cluster = "localnet"
+wallet = '/Users/satendrasingh/.config/solana/id.json'
+http = "http://127.0.0.1:9000"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/index.ts"
